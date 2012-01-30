@@ -17,9 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "exchange"
   gem.homepage = "http://github.com/beatrichartz/exchange"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "beat.richartz@gmail.com"
+  gem.summary = %Q{Simple Exchange Rate operations for your ruby app}
+  gem.description = %Q{TODO exchange deals with different apis}
+  gem.email = "exchange_gem@gmail.com"
   gem.authors = ["beatrichartz"]
   # dependencies defined in Gemfile
 end
