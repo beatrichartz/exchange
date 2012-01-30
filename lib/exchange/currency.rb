@@ -9,14 +9,14 @@ module Exchange
     
     def method_missing method, *args, &block
       if method.to_s.match(/\Ato_(\w+)/) && Exchange::Configuration.api_class::CURRENCIES.include?($1)
-        return self.convert_to($1)
+        return self.convert_to(*([$1] + args))
       end
 
       self.number.send method, *args, &block
     end
     
-    def convert_to other
-      Exchange::Currency.new(Exchange::Configuration.api_class.new.convert(number, currency, other), other)
+    def convert_to other, opts={}
+      Exchange::Currency.new(Exchange::Configuration.api_class.new.convert(number, currency, other, opts), other)
     end
     
     [:round, :ceil, :floor].each do |m|

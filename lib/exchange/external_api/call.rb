@@ -8,7 +8,7 @@ module Exchange
       
       def initialize url, options={}, &block
         if Exchange::Configuration.cache
-          result = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api_class) do
+          result = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api_class, options[:at]) do
             load_url(url, options[:retries] || 5, options[:retry_with])
           end
         else

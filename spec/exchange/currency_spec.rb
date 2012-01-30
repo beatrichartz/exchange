@@ -154,6 +154,14 @@ describe "Exchange::Currency" do
         c.currency.should == currency
       end
     end
+    it "should be able to convert via to_currency to other currencies and use historic data" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-10-09.json", fixture('api_responses/example_json_api.json'), 6)
+      {'chf' => 36.5, 'usd' => 40.0, 'dkk' => 225.12, 'sek' => 269.85, 'nok' => 232.06, 'rub' => 1205.24}.each do |currency, value|
+        c = subject.send(:"to_#{currency}", :at => Time.gm(2011,10,9))
+        c.number.should == value
+        c.currency.should == currency
+      end
+    end
     it "should pass on methods it does not understand to its number" do
       subject.to_f.should == 40
       lambda { subject.to_hell }.should raise_error(NoMethodError)

@@ -33,4 +33,19 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
       subject.convert(70, :sek, :usd).should == 10.38
     end
   end
+  describe "historic conversion" do
+    subject { Exchange::ExternalAPI::CurrencyBot.new }
+    before(:each) do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
+    end
+    it "should convert and be able to use history" do
+      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).should == 92.54
+    end
+    it "should convert negative numbers right" do
+      subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).should == -76.71
+    end
+    it "should convert when given symbols" do
+      subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).should == 10.38
+    end
+  end
 end

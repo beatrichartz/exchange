@@ -33,4 +33,19 @@ describe "Exchange::ExternalAPI::XavierMedia" do
       subject.convert(70, :sek, :usd).should == 10.35
     end
   end
+  describe "historic conversion" do
+    subject { Exchange::ExternalAPI::XavierMedia.new }
+    before(:each) do
+      mock_api("http://api.finance.xaviermedia.com/api/2011/09/09.xml", fixture('api_responses/example_xml_api.xml'))
+    end
+    it "should convert and be able to use history" do
+      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).should == 94.44
+    end
+    it "should convert negative numbers right" do
+      subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).should == -77.01
+    end
+    it "should convert when given symbols" do
+      subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).should == 10.35
+    end
+  end
 end

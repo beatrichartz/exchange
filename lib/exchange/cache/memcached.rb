@@ -9,13 +9,13 @@ module Exchange
           @@client ||= ::Memcached.new("#{Exchange::Configuration.cache_host}:#{Exchange::Configuration.cache_port}")
         end
         
-        def cached api, &block
+        def cached api, opts={}, &block
           begin
-            result = JSON.load client.get(key(api))
+            result = JSON.load client.get(key(api, opts[:at]))
           rescue ::Memcached::NotFound
             result = block.call
             if result && !result.empty?
-              client.set key(api), result.to_json, Exchange::Configuration.update == :daily ? 86400 : 3600
+              client.set key(api, opts[:at]), result.to_json, Exchange::Configuration.update == :daily ? 86400 : 3600
             end
           end
           

@@ -9,14 +9,14 @@ module Exchange
           @@client ||= ::Redis.new(:host => Exchange::Configuration.cache_host, :port => Exchange::Configuration.cache_port)
         end
         
-        def cached api, &block
-          if result = client.get(key(api))
+        def cached api, opts={}, &block
+          if result = client.get(key(api, opts[:at]))
             result = JSON.load result
           else
             result = block.call
             if result && !result.empty?
-              client.set key(api), result.to_json
-              client.expire key(api), Exchange::Configuration.update == :daily ? 86400 : 3600
+              client.set key(api, opts[:at]), result.to_json
+              client.expire key(api, opts[:at]), Exchange::Configuration.update == :daily ? 86400 : 3600
             end
           end
           
