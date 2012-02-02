@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Exchange::ExternalAPI::Base" do
   subject { Exchange::ExternalAPI::Base.new }
   before(:each) do
-    subject.rates = {'EUR' => 3.45, 'CHF' => 5.565}
-    subject.base  = 'usd'
+    subject.instance_variable_set("@rates", {'EUR' => 3.45, 'CHF' => 5.565})
+    subject.instance_variable_set("@base", 'usd')
   end
   describe "rate" do
     it "should put out an exchange rate for the two currencies" do

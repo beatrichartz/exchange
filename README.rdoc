@@ -1,8 +1,163 @@
 = exchange
 
-Description goes here.
+The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as 
+  1.eur.to_usd
+or even better 
+  1.eur.to_usd(:at => Time.now - 84600)
+which gets you an exchange at the rates of yesterday.
+
+Two open APIs are already included: Currency Bot (http://currencybot.github.com/) and Xaviermedia (http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057)
+but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it with the Exchange gem.
+
+Also, the gem allows you to use one of three available caching solutions: Memcached via the Memcached gem, Redis via the redis gem or the Rails cache.
+But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it with Exchange
+
+== Basic Operations
+
+Converting one currency to another is as easy as 1,2,3. Don't be afraid, even if it returns a currency object, all Fixed and Float operations can be applied as method missing routes to the value
+
+  1.usd.to_eur                                  #=> #<Exchange::Currency @value=0.93 @currency=:eur>
+  2.3.dkk.to_sek                                #=> #<Exchange::Currency @value=3.33 @currency=:sek>
+  45.54.nok.to_sek                              #=> #<Exchange::Currency @value=3.33 @currency=:sek>
+
+Easily convert one currency to another at a historical rate
+
+  1.52.usd.to_eur :at => '2011-01-01'           #=> #<Exchange::Currency @value=1.23 @currency=:eur>
+  3.45.eur.to_sek :at => Time.gm(2011,3,3)      #=> #<Exchange::Currency @value=19.23 @currency=:sek>
+  345.sek.to_nok :at => Time.gm(2011,3,3)       #=> #<Exchange::Currency @value=348 @currency=:nok>
+
+Access the original currency and its value after conversion
+  converted = 2.eur.to_usd                      #=> #<Exchange::Currency @value=2.12 @currency=:usd>
+  converted.from                                #=> #<Exchange::Currency @value=2 @currency=:eur>
+
+Convert one currency to another and round, ceil or floor it, it still retains currency information of the actual and previous currency
+  1.34.usd.to_eur.round                         #=> #<Exchange::Currency @value=1 @currency=:eur>
+  10.34.usd.to_nok.ceil                         #=> #<Exchange::Currency @value=45 @currency=:nok>
+  5.34.usd.to_eur.floor                         #=> #<Exchange::Currency @value=4 @currency=:eur>
+  5.34.usd.to_eur.floor.from                    #=> #<Exchange::Currency @value=5.34 @currency=:usd>
+
+You can also just instantiate currencies and apply operations
+  3.eur.round                                   #=> #<Exchange::Currency @value=3 @currency=:eur>
+
+Do multiple conversion steps at once (if in any way useful)
+  
+  3.chf.to_eur(:at => '2011-02-04').to_usd      #=> #<Exchange::Currency @value=5.3 @currency=:eur>
+
+Add, Subtract, Multiply, Divide Currencies and don't lose a dime. The result will get returned in the currency of the first argument
+  1.usd + 1.32.eur                              #=> #<Exchange::Currency @value=2.54 @currency=:usd>
+
+== Configuration
+
+You can configure the exchange gem to a variety of options, allowing you to control restrictions on operations, caching and which API the gem uses. Just set the configuration with
+
+  Exchange::Configuration.define do |c|
+    # your configuration goes here
+  end
+
+The options available are
+  
+  :cache (default :memcached)               The cache type to use. Possible Values: :redis, :memcached or :rails or false to disable caching
+  :cache_host (default '127.0.0.1')         A string with the hostname or IP to set the cache host to. Does not have to be set for Rails cache
+  :cache_port (default 11211)               An integer for the cache port. Does not have to be set for Rails cache
+  :api (default :currency_bot)              The API to use. Possible Values: :currency_bot (Open Source currency bot API) or :xavier_media (Xavier Media API)
+  :retries (default 5)                      The number of times the gem should retry to connect to the api host
+  :allow_mixed_opterations (default true)   If set to false, Operations with with different currencies raise errors.
+  :update (default :daily)                  The regularity of updates for the API. Possible values: :daily, :hourly.
+
+If your afraid of mixed currency operations, just don't allow them
+  Exchange::Configuration.allow_mixed_operations = false
+  1.usd + 1.eur                                 #=> MixedCurrencyError
+  
+Use Memcached to cache the result (default). Exchange will cache the API files with a key starting with 'exchange_'
+  Exchange::Configuration.define do |c|
+    c.cache = :memcached
+    c.cache_host = 'yourhost'
+    c.cache_port = 2423 #your port
+  end
+
+Use Redis to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
+  Exchange::Configuration.define do |c|
+    c.cache = :redis
+    c.cache_host = 'yourhost'
+    c.cache_port = 2423 #your port
+  end
+
+Use Rails to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
+  Exchange::Configuration.define do |c|
+    c.cache = :rails
+  end
+
+Use the currencybot Open Source API as a source of your conversion rates (default)
+  Exchange::Configuration.define do |c|
+    c.api = :currency_bot
+  end
+
+Use the Xaviermedia API as the source of your conversion rates
+  Exchange::Configuration.define do |c|
+    c.api = :xavier_media
+  end
+  
+== Connect your own API and Cache
+
+Easily connect to your custom API by writing an ExternalAPI Class, or use your own caching solution to cache. Please note that only open source APIs can be accepted as contributions to this gem. Private / Premium APIs have to be written as your own.
+  module Exchange
+    module ExternalAPI
+      class MyCustom < Base
+        # Define here which currencies your API can handle
+        CURRENCIES = %W(usd chf)
+        
+        # Every instance of ExternalAPI Class has to have an update function which gets the rates from the API
+        def update(opts={})
+          # assure that you will get a Time object for the historical dates
+          time = assure_time(opts[:at]) 
+
+          # call your API (shown here with a helper function that builds your API URL). Like this, your calls will get cached.
+          Call.new(api_url(time), :at => time) do |result|
+
+            # assign the currency conversion base, attention, this is readonly, so don't do self.base = 
+            @base                 = result['base']
+
+            # assign the rates, this has to be a hash with the following format: {'USD' => 1.23242, 'CHF' => 1.34323}. Attention, this is readonly.
+            @rates                = result['rates']
+
+            # timestamp the api call result. This may come in handy to assure you have the right result. Attention, this is readonly.
+            @timestamp            = result['timestamp'].to_i
+          end
+        end
+        
+        private
+
+          def api_url(time)
+            # code a helper function that builds your api url for the specified time
+          end
+
+      end
+    end
+  end
+  # Now, you can configure your API in the configuration. The Symbol will get camelcased and constantized
+  Exchange::Configuration.api = :my_custom
+  # Have fun, and don't forget to write tests.
+
+Write your own caching module to use the gem with your own custom caching solution.
+  module Cache
+    class MyCustomCache < Base
+      class << self
+        # a cache class has to have the class method "cached"
+        def cached api, opts={}, &block
+          # generate the key with key(api, opts[:at]) and you will get a unique key to store in your cache
+          # Your code goes here
+        end
+      end
+    end
+  end
+  # Now, you can configure your Caching solution in the configuration. The Symbol will get camelcased and constantized
+  Exchange::Configuration.cache = :my_custom_cache
+  # Have fun, and don't forget to write tests.
+
 
 == Contributing to exchange
+
+Please note that only open source APIs can be accepted as contributions to this gem. Private / Premium APIs have to be written as your own extension and will not be added to the gem code.
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
@@ -10,6 +165,7 @@ Description goes here.
 * Start a feature/bugfix branch.
 * Commit and push until you are happy with your contribution.
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
+* Make sure to add documentation for it. This is important so everyone else can see what your code is aiming to do
 * Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
 == Copyright

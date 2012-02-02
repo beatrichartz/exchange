@@ -18,7 +18,11 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/beatrichartz/exchange"
   gem.license = "MIT"
   gem.summary = %Q{Simple Exchange Rate operations for your ruby app}
-  gem.description = %Q{TODO exchange deals with different apis}
+  gem.description = %Q{The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as 
+    1.eur.to_usd
+  or even better 
+    1.eur.to_usd(:at => Time.now - 84600)
+  which gets you an exchange at the rates of yesterday.}
   gem.email = "exchange_gem@gmail.com"
   gem.authors = ["beatrichartz"]
   # dependencies defined in Gemfile
@@ -27,12 +31,16 @@ Jeweler::RubygemsDotOrgTasks.new
 
 task :default => :test
 
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "exchange #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
 end
+
+require 'yard'
+YARD::Rake::YardocTask.new
+
+# RSpec::Core::RakeTask.new(:rcov) do |spec|
+#   spec.pattern = 'spec/**/*_spec.rb'
+#   spec.rcov = true
+# end

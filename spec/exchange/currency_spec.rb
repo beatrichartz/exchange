@@ -12,13 +12,13 @@ describe "Exchange::Currency" do
     Exchange::Configuration.cache = :memcached
   end
   it "should initialize with a number and a currency" do
-    subject.number.should == 40
+    subject.value.should == 40
     subject.currency.should == :usd
   end
   describe "convert_to" do
     it "should be able to convert itself to other currencies" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
-      subject.convert_to(:chf).number.should == 36.5
+      subject.convert_to(:chf).value.should == 36.5
       subject.convert_to(:chf).currency.should == :chf
       subject.convert_to(:chf).should be_kind_of Exchange::Currency
     end
@@ -26,14 +26,14 @@ describe "Exchange::Currency" do
   describe "operations" do
     describe "+ other" do
       it "should be able to add an integer" do
-        (subject + 40).number.should == 80
+        (subject + 40).value.should == 80
       end
       it "should be able to add a float" do
-        (subject + 40.5).number.should == 80.5
+        (subject + 40.5).value.should == 80.5
       end
       it "should be able to add another currency value" do
         mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
-        (subject + Exchange::Currency.new(30, :chf)).number.should == 72.87
+        (subject + Exchange::Currency.new(30, :chf)).value.should == 72.87
         (subject + Exchange::Currency.new(30, :sek)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
@@ -50,14 +50,14 @@ describe "Exchange::Currency" do
     end
     describe "- other" do
       it "should be able to subtract an integer" do
-        (subject + 40).number.should == 80
+        (subject + 40).value.should == 80
       end
       it "should be able to subtract a float" do
-        (subject + 40.5).number.should == 80.5
+        (subject + 40.5).value.should == 80.5
       end
       it "should be able to subtract another currency value" do
         mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
-        (subject + Exchange::Currency.new(10, :chf)).number.should == 50.96
+        (subject + Exchange::Currency.new(10, :chf)).value.should == 50.96
         (subject + Exchange::Currency.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
@@ -74,14 +74,14 @@ describe "Exchange::Currency" do
     end
     describe "* other" do
       it "should be able to multiply by an integer" do
-        (subject * 40).number.should == 1600
+        (subject * 40).value.should == 1600
       end
       it "should be able to multiply a float" do
-        (subject * 40.5).number.should == 1620
+        (subject * 40.5).value.should == 1620
       end
       it "should be able to multiply by another currency value" do
         mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
-        (((subject * Exchange::Currency.new(10, :chf)).number * 10000.0).round.to_f / 10000.0).should == 438.4
+        (((subject * Exchange::Currency.new(10, :chf)).value * 10000.0).round.to_f / 10000.0).should == 438.4
         (subject * Exchange::Currency.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
@@ -98,14 +98,14 @@ describe "Exchange::Currency" do
     end
     describe "/ other" do
       it "should be able to multiply by an integer" do
-        (subject / 40).number.should == 1
+        (subject / 40).value.should == 1
       end
       it "should be able to multiply a float" do
-        (((subject / 40.5).number * 10000.0).round.to_f / 10000.0).should == 0.9877
+        (((subject / 40.5).value * 10000.0).round.to_f / 10000.0).should == 0.9877
       end
       it "should be able to multiply by another currency value" do
         mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
-        (((subject / Exchange::Currency.new(10, :chf)).number * 10000.0).round.to_f / 10000.0).should == 3.6496
+        (((subject / Exchange::Currency.new(10, :chf)).value * 10000.0).round.to_f / 10000.0).should == 3.6496
         (subject / Exchange::Currency.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
@@ -123,7 +123,7 @@ describe "Exchange::Currency" do
     describe "round" do
       subject { Exchange::Currency.new(40.123, :usd) }
       it "should apply it to its number" do
-        subject.round.number.should == 40
+        subject.round.value.should == 40
         subject.round.currency.should == :usd
         subject.round.should be_kind_of Exchange::Currency
       end
@@ -131,7 +131,7 @@ describe "Exchange::Currency" do
     describe "ceil" do
       subject { Exchange::Currency.new(40.123, :usd) }
       it "should apply it to its number" do
-        subject.ceil.number.should == 41
+        subject.ceil.value.should == 41
         subject.ceil.currency.should == :usd
         subject.ceil.should be_kind_of Exchange::Currency
       end
@@ -139,7 +139,7 @@ describe "Exchange::Currency" do
     describe "floor" do
       subject { Exchange::Currency.new(40.723, :usd) }
       it "should apply it to its number" do
-        subject.floor.number.should == 40
+        subject.floor.value.should == 40
         subject.floor.currency.should == :usd
         subject.floor.should be_kind_of Exchange::Currency
       end
@@ -150,7 +150,7 @@ describe "Exchange::Currency" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 6)
       {'chf' => 36.5, 'usd' => 40.0, 'dkk' => 225.12, 'sek' => 269.85, 'nok' => 232.06, 'rub' => 1205.24}.each do |currency, value|
         c = subject.send(:"to_#{currency}")
-        c.number.should == value
+        c.value.should == value
         c.currency.should == currency
       end
     end
@@ -158,7 +158,7 @@ describe "Exchange::Currency" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-10-09.json", fixture('api_responses/example_json_api.json'), 6)
       {'chf' => 36.5, 'usd' => 40.0, 'dkk' => 225.12, 'sek' => 269.85, 'nok' => 232.06, 'rub' => 1205.24}.each do |currency, value|
         c = subject.send(:"to_#{currency}", :at => Time.gm(2011,10,9))
-        c.number.should == value
+        c.value.should == value
         c.currency.should == currency
       end
     end
