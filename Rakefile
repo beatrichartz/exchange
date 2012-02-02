@@ -24,7 +24,7 @@ Jeweler::Tasks.new do |gem|
     1.eur.to_usd(:at => Time.now - 84600)
   which gets you an exchange at the rates of yesterday.}
   gem.email = "exchange_gem@gmail.com"
-  gem.authors = ["beatrichartz"]
+  gem.authors = ["Beat Richartz"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
