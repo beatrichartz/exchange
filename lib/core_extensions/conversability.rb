@@ -21,7 +21,7 @@ module Exchange
     #   -3.5.dkk.to_huf(:at => Time.now - 172800) => #<Exchange::Currency @value=-337.40 @currency=:huf>
     
     def method_missing method, *args, &block
-      return Exchange::Currency.new(self, method) if method.to_s.length == 3 && Exchange::Configuration.api_class::CURRENCIES.include?(method.to_s)
+      return Exchange::Currency.new(self, method, *args) if method.to_s.length == 3 && Exchange::Configuration.api_class::CURRENCIES.include?(method.to_s)
     
       super method, *args, &block
     end

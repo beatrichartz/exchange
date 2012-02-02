@@ -120,6 +120,51 @@ describe "Exchange::Currency" do
         Exchange::Configuration.allow_mixed_operations = true
       end
     end
+    describe "comparison" do
+      subject { Exchange::Currency.new(40.123, :usd) }
+      let(:comp1) { Exchange::Currency.new(40.123, :usd) }
+      let(:comp2) { Exchange::Currency.new(40, :usd) }
+      let(:comp3) { Exchange::Currency.new(50, :eur) }
+      let(:comp4) { Exchange::Currency.new(45, :eur) }
+      let(:comp5) { Exchange::Currency.new(66.1, :usd) }
+      let(:comp6) { Exchange::Currency.new(66.1, :usd, :at => Time.gm(2011,1,1)) }
+      before(:each) do
+        mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
+      end
+      context "with identical currencies" do
+        it "should be true if the currency and the value is the same" do
+          (subject == comp1).should be_true
+        end
+        it "should be false if the value is different" do
+          (subject == comp2).should be_false
+        end
+      end
+      context "with different currencies" do
+        it "should be true if the converted value is the same" do
+          (comp3 == comp5).should be_true
+        end
+        it "should be false if the converted value is different" do
+          (subject == comp4).should be_false
+        end
+        it "should be false if the currency is defined historic and the converted value is different" do
+          mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-01-01.json", fixture('api_responses/example_historic_json.json'), 2)
+          (comp3 == comp6).should be_false
+        end
+      end
+    end
+    describe "sorting" do
+      subject { Exchange::Currency.new(40.123, :usd) }
+      let(:comp1) { Exchange::Currency.new(40.123, :usd) }
+      let(:comp2) { Exchange::Currency.new(40, :usd) }
+      let(:comp3) { Exchange::Currency.new(50, :eur) }
+      let(:comp4) { Exchange::Currency.new(45, :eur) }
+      before(:each) do
+        mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 6)
+      end
+      it "should sort and by doing conversions" do
+        [subject, comp1, comp2, comp3, comp4].sort.should == [comp2, subject, comp1, comp4, comp3]
+      end
+    end
     describe "round" do
       subject { Exchange::Currency.new(40.123, :usd) }
       it "should apply it to its number" do
@@ -161,6 +206,10 @@ describe "Exchange::Currency" do
         c.value.should == value
         c.currency.should == currency
       end
+    end
+    it "should use the own time if defined as historic to convert" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-01-01.json", fixture('api_responses/example_json_api.json'), 2)
+      5.eur(:at => Time.gm(2011,1,1)).to_usd.value.should == 5.eur.to_usd(:at => Time.gm(2011,1,1)).value
     end
     it "should pass on methods it does not understand to its number" do
       subject.to_f.should == 40

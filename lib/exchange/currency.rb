@@ -9,6 +9,7 @@ module Exchange
   # @version 0.1
   # @since 0.1
   class Currency
+    include Comparable
     
     # @attr_reader
     # @return [Float] number The number the currency object has been instantiated from
@@ -19,7 +20,7 @@ module Exchange
     attr_reader :currency
     
     # @attr_reader
-    # @return [Time] The time at which the conversion has taken place
+    # @return [Time] The time at which the conversion has taken place or should take place if the object is involved in operations
     attr_reader :time
     
     # @attr_reader
@@ -43,7 +44,7 @@ module Exchange
     def initialize value, currency, opts={}
       @value            = value.to_f
       @currency         = currency
-      @time             = opts[:at] || Time.now
+      @time             = assure_time(opts[:at], :default => :now)
       @from             = opts[:from] if opts[:from]
     end
     
@@ -56,7 +57,8 @@ module Exchange
     
     def method_missing method, *args, &block
       if method.to_s.match(/\Ato_(\w+)/) && Exchange::Configuration.api_class::CURRENCIES.include?($1)
-        return self.convert_to(*([$1] + args))
+        args.first[:at] ||= time if args.first
+        return self.convert_to($1, args.first || {:at => self.time})
       end
 
       self.value.send method, *args, &block
@@ -97,7 +99,7 @@ module Exchange
           self.class_eval <<-EOV
             def #{op}(other)
               #{'raise Exchange::CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange::Configuration.allow_mixed_operations && other.kind_of?(Exchange::Currency) && other.currency != self.currency'}
-              @value #{op}= other.kind_of?(Exchange::Currency) ? other.convert_to(self.currency) : other
+              @value #{op}= other.kind_of?(Exchange::Currency) ? other.convert_to(self.currency, :at => other.time) : other
               self
             end
           EOV
@@ -187,6 +189,44 @@ module Exchange
     #     #=> #<Exchange::Currency @value=1.56 @currency=:nok>
     
     base_operation '/'
+    
+    def == other
+      if other.is_a?(Exchange::Currency) && other.currency == self.currency
+        other.value == self.value
+      elsif other.is_a?(Exchange::Currency)
+        other.convert_to(self.currency, :at => other.time).value == self.value
+      else
+        self.value == other
+      end
+    end
+    
+    def <=> other
+      if other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value < other.value) || (other.currency != self.currency && self.value < other.convert_to(self.currency, :at => other.time).value))
+        -1
+      elsif other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value > other.value) || (other.currency != self.currency && self.value > other.convert_to(self.currency, :at => other.time).value))
+        1
+      elsif other.is_a?(Exchange::Currency)
+        0
+      else
+        self.value <=> other
+      end
+        
+    end
+    
+    protected
+    
+      # A helper function to assure a value is an instance of time
+      # @param [Time, String, NilClass] The value to be asserted
+      # @param [Hash] opts Options for assertion
+      # @option opts [Symbol] :default If the argument is nil, you can define :default as :now to be delivered with Time.now instead of nil
+      
+      def assure_time(arg=nil, opts={})
+        if arg
+          arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
+        elsif opts[:default] == :now
+          Time.now
+        end
+      end
   
   end
   

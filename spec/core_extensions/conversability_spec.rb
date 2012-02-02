@@ -28,6 +28,11 @@ describe "Exchange::Conversability" do
       -3.eur.to_chf.value.should == -3.62
       -3.eur.to_chf.currency.should == 'chf'
     end
+    it "should allow to define a historic time in which the currency should be interpreted" do
+      3.chf(:at => Time.gm(2010,1,1)).time.yday.should == 1
+      3.chf(:at => Time.gm(2010,1,1)).time.year.should == 2010
+      3.chf(:at => '2010-01-01').time.year.should == 2010
+    end
   end
   context "with a float" do
     it "should allow to convert to a currency" do
@@ -49,6 +54,11 @@ describe "Exchange::Conversability" do
       -3.25.eur.to_chf.should be_kind_of Exchange::Currency
       -3.25.eur.to_chf.value.should == -3.92
       -3.25.eur.to_chf.currency.should == 'chf'
+    end
+    it "should allow to define a historic time in which the currency should be interpreted" do
+      3.25.chf(:at => Time.gm(2010,1,1)).time.yday.should == 1
+      3.25.chf(:at => Time.gm(2010,1,1)).time.year.should == 2010
+      3.25.chf(:at => '2010-01-01').time.year.should == 2010
     end
   end
 end

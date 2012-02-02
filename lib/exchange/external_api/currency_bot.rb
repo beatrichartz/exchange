@@ -36,7 +36,8 @@ module Exchange
         # @return [String] an api url for the time specified
       
         def api_url(time=nil)
-          [API_URL, time ? "historical/#{time.strftime("%Y-%m-%d")}.json" : 'latest.json'].join('/')
+          today = Time.now
+          [API_URL, time && (time.year != today.year && time.yday != today.yday) ? "historical/#{time.strftime("%Y-%m-%d")}.json" : 'latest.json'].join('/')
         end
         
     end

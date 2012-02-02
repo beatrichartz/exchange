@@ -25,6 +25,22 @@ Easily convert one currency to another at a historical rate
   1.52.usd.to_eur :at => '2011-01-01'           #=> #<Exchange::Currency @value=1.23 @currency=:eur>
   3.45.eur.to_sek :at => Time.gm(2011,3,3)      #=> #<Exchange::Currency @value=19.23 @currency=:sek>
   345.sek.to_nok :at => Time.gm(2011,3,3)       #=> #<Exchange::Currency @value=348 @currency=:nok>
+  
+Or even define an instance of currency as historic by adding a time.
+
+  1.52.usd(:at => '2011-01-01').to_eur          #=> #<Exchange::Currency @value=1.23 @currency=:eur>
+  3.45.eur(:at => Time.gm(2011,3,3)).to_sek     #=> #<Exchange::Currency @value=19.23 @currency=:sek>
+  345.sek(:at => Time.gm(2011,3,3)).to_nok      #=> #<Exchange::Currency @value=348 @currency=:nok>
+  
+All operations with a currency defined as historic will use the historic exchange rate
+  3.eur + 345.sek(:at => Time.gm(2011,3,3))       #Will use the March 3 2011 Rate of SEK to EUR to add the currency!
+  4.eur + 3.nok.to_sek(:at => Time.gm(2011,3,3))  #Will use the March 3 2011 Rate of SEK to EUR to add the currency!
+  
+This is also true, because it uses the same historic conversion rate
+  3.eur(:at => '201-01-01').to_usd == 3.eur.to_usd(:at => '201-01-01')
+  
+But this is false, obviously, because the second instance uses the present exchange rate
+  3.eur(:at => '201-01-01').to_usd == 3.eur.to_usd
 
 Access the original currency and its value after conversion
   converted = 2.eur.to_usd                      #=> #<Exchange::Currency @value=2.12 @currency=:usd>
@@ -38,6 +54,15 @@ Convert one currency to another and round, ceil or floor it, it still retains cu
 
 You can also just instantiate currencies and apply operations
   3.eur.round                                   #=> #<Exchange::Currency @value=3 @currency=:eur>
+
+Sort multiple currencies at once
+  [5.eur, 4.usd, 4.chf(:at => '2010-01-01')].sort   #=> [#<Exchange::Currency @value=4 @currency=:usd>, #<Exchange::Currency @value=4 @currency=:chf>, #<Exchange::Currency @value=5 @currency=:eur>]
+
+Compare without converting first
+  5.eur == 4.34.chf                             #=> true
+  50.eur == 4.34.chf                            #=> false
+  
+Define a currency object as historic. It will use historic conversion if it gets converted
 
 Do multiple conversion steps at once (if in any way useful)
   
