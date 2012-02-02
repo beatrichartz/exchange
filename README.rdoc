@@ -61,6 +61,8 @@ Sort multiple currencies at once
 Compare without converting first
   5.eur == 4.34.chf                             #=> true
   50.eur == 4.34.chf                            #=> false
+  50.eur.to_sek == 50.eur                       #=> true
+  50.eur(:at => '2011-1-1') == 50.sek           #=> false
   
 Define a currency object as historic. It will use historic conversion if it gets converted
 
