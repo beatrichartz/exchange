@@ -2,7 +2,7 @@ module Exchange
   
   # The conversability module which will get included in Fixnum and Float, giving them the currency exchange methods
   # @author Beat Richartz
-  # @version 0.1
+  # @version 0.2
   # @since 0.1
   
   module Conversability

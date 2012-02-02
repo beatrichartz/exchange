@@ -33,6 +33,7 @@ module Exchange
     # @param [Hash] opts Optional Parameters for instantiation
     # @option opts [Time] :at The time at which conversion took place
     # @option opts [String,Symbol] :from The currency object this currency object was converted from
+    # @version 0.2
     #
     # @example Instantiate a currency object of 40 US Dollars
     #   Exchange::Currency.new(40, :usd) 
@@ -219,6 +220,7 @@ module Exchange
       # @param [Time, String, NilClass] The value to be asserted
       # @param [Hash] opts Options for assertion
       # @option opts [Symbol] :default If the argument is nil, you can define :default as :now to be delivered with Time.now instead of nil
+      # @version 0.2
       
       def assure_time(arg=nil, opts={})
         if arg
