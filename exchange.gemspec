@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "exchange"
-  s.version = "0.2.3"
+  s.version = "0.2.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Beat Richartz"]
@@ -67,7 +67,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<nokogiri>, [">= 1.4.0"])
-      s.add_runtime_dependency(%q<json>, [">= 1.6.0"])
+      s.add_runtime_dependency(%q<json>, [">= 1.6.5"])
       s.add_runtime_dependency(%q<memcached>, [">= 1.3.0"])
       s.add_runtime_dependency(%q<redis>, [">= 2.2.0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
@@ -77,7 +77,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rspec>, [">= 0"])
     else
       s.add_dependency(%q<nokogiri>, [">= 1.4.0"])
-      s.add_dependency(%q<json>, [">= 1.6.0"])
+      s.add_dependency(%q<json>, [">= 1.6.5"])
       s.add_dependency(%q<memcached>, [">= 1.3.0"])
       s.add_dependency(%q<redis>, [">= 2.2.0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
@@ -88,7 +88,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<nokogiri>, [">= 1.4.0"])
-    s.add_dependency(%q<json>, [">= 1.6.0"])
+    s.add_dependency(%q<json>, [">= 1.6.5"])
     s.add_dependency(%q<memcached>, [">= 1.3.0"])
     s.add_dependency(%q<redis>, [">= 2.2.0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
