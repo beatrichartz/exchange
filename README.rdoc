@@ -34,7 +34,7 @@ Just install it as a gem :)
 
 == Basic Operations
 
-=== Converting
+=== Convert
 
 Converting one currency to another is as easy as 1,2,3. Don't be afraid, even if it returns a currency object, all Fixed and Float operations can be applied as method missing routes to the value
 
