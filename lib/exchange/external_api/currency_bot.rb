@@ -34,10 +34,12 @@ module Exchange
         # A helper function to build an api url for either a specific time or the latest available rates
         # @param [Time] time The time to build the api url for
         # @return [String] an api url for the time specified
+        # @since 0.1
+        # @version 0.2.6
       
         def api_url(time=nil)
           today = Time.now
-          [API_URL, time && (time.year != today.year && time.yday != today.yday) ? "historical/#{time.strftime("%Y-%m-%d")}.json" : 'latest.json'].join('/')
+          [API_URL, time && (time.year != today.year || time.yday != today.yday) ? "historical/#{time.strftime("%Y-%m-%d")}.json" : 'latest.json'].join('/')
         end
         
     end

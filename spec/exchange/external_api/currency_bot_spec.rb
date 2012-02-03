@@ -36,16 +36,26 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
   describe "historic conversion" do
     subject { Exchange::ExternalAPI::CurrencyBot.new }
     before(:each) do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
     end
     it "should convert and be able to use history" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
       subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).should == 92.54
     end
     it "should convert negative numbers right" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
       subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).should == -76.71
     end
     it "should convert when given symbols" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
       subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).should == 10.38
+    end
+    it "should convert right when the year is the same, but the yearday is not" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/#{Time.now.year}-0#{Time.now.month > 10 ? Time.now.month - 1 : Time.now.month + 1}-01.json", fixture('api_responses/example_json_api.json'))
+      subject.convert(70, :sek, :usd, :at => Time.gm(Time.now.year,Time.now.month > 9 ? Time.now.month - 1 : Time.now.month + 1,1)).should == 10.38
+    end
+    it "should convert right when the yearday is the same, but the year is not" do
+      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/#{Time.now.year-1}-03-01.json", fixture('api_responses/example_json_api.json'))
+      subject.convert(70, :sek, :usd, :at => Time.gm(Time.now.year - 1,3,1)).should == 10.38
     end
   end
 end
