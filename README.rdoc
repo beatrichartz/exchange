@@ -176,6 +176,8 @@ Use the Xaviermedia API as the source of your conversion rates
   
 == Connect your own API and Cache
 
+=== Your own API
+
 Easily connect to your custom API by writing an ExternalAPI Class, or use your own caching solution to cache. Please note that only open source APIs can be accepted as contributions to this gem. Private / Premium APIs have to be written as your own.
   module Exchange
     module ExternalAPI
@@ -217,6 +219,8 @@ Now, you can configure your API in the configuration. The Symbol will get camelc
   Exchange::Configuration.api = :my_custom
 
 Have fun, and don't forget to write tests.
+
+=== Your own Cache
 
 Write your own caching module to use the gem with your own custom caching solution.
   module Cache
