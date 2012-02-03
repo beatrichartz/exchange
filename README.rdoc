@@ -34,6 +34,8 @@ Just install it as a gem :)
 
 == Basic Operations
 
+=== Converting
+
 Converting one currency to another is as easy as 1,2,3. Don't be afraid, even if it returns a currency object, all Fixed and Float operations can be applied as method missing routes to the value
 
   1.usd.to_eur                                  #=> #<Exchange::Currency @value=0.93 @currency=:eur>
@@ -53,49 +55,67 @@ Or even define an instance of currency as historic by adding a time.
   345.sek(:at => Time.gm(2011,3,3)).to_nok      #=> #<Exchange::Currency @value=348 @currency=:nok>
   
 All operations with a currency defined as historic will use the historic exchange rate
+
   3.eur + 345.sek(:at => Time.gm(2011,3,3))       #Will use the March 3 2011 Rate of SEK to EUR to add the currency!
   4.eur + 3.nok.to_sek(:at => Time.gm(2011,3,3))  #Will use the March 3 2011 Rate of SEK to EUR to add the currency!
   
-This is also true, because it uses the same historic conversion rate
-  3.eur(:at => '201-01-01').to_usd == 3.eur.to_usd(:at => '201-01-01')
+Do multiple conversion steps at once (if in any way useful)
+
+  3.chf.to_eur(:at => '2011-02-04').to_usd      #=> #<Exchange::Currency @value=5.3 @currency=:eur>
   
-But this is false, obviously, because the second instance uses the present exchange rate
-  3.eur(:at => '201-01-01').to_usd == 3.eur.to_usd
-
-Access the original currency and its value after conversion
-  converted = 2.eur.to_usd                      #=> #<Exchange::Currency @value=2.12 @currency=:usd>
-  converted.from                                #=> #<Exchange::Currency @value=2 @currency=:eur>
-
-Convert one currency to another and round, ceil or floor it, it still retains currency information of the actual and previous currency
-  1.34.usd.to_eur.round                         #=> #<Exchange::Currency @value=1 @currency=:eur>
-  10.34.usd.to_nok.ceil                         #=> #<Exchange::Currency @value=45 @currency=:nok>
-  5.34.usd.to_eur.floor                         #=> #<Exchange::Currency @value=4 @currency=:eur>
-  5.34.usd.to_eur.floor.from                    #=> #<Exchange::Currency @value=5.34 @currency=:usd>
-
-You can also just instantiate currencies and apply operations
-  3.eur.round                                   #=> #<Exchange::Currency @value=3 @currency=:eur>
   
-Compare Currencies
+=== Compare
+
+Compare Currencies, they will convert implicitly
+
   2.eur > 2.usd                                 #=> true (2.usd get converted to eur and compared)
   2.nok < 2.sek                                 #=> false (2.sek get converted to nok and compared)
-
-Sort multiple currencies at once
-  [5.eur, 4.usd, 4.chf(:at => '2010-01-01')].sort   #=> [#<Exchange::Currency @value=4 @currency=:usd>, #<Exchange::Currency @value=4 @currency=:chf>, #<Exchange::Currency @value=5 @currency=:eur>]
-
-Compare without converting first
   5.eur == 4.34.chf                             #=> true
   50.eur == 4.34.chf                            #=> false
   50.eur.to_sek == 50.eur                       #=> true
   50.eur(:at => '2011-1-1') == 50.sek           #=> false
-  
-Define a currency object as historic. It will use historic conversion if it gets converted
 
-Do multiple conversion steps at once (if in any way useful)
+Sort multiple currencies at once
+
+  [5.eur, 4.usd, 4.chf(:at => '2010-01-01')].sort   #=> [#<Exchange::Currency @value=4 @currency=:usd>, #<Exchange::Currency @value=4 @currency=:chf>, #<Exchange::Currency @value=5 @currency=:eur>]
   
-  3.chf.to_eur(:at => '2011-02-04').to_usd      #=> #<Exchange::Currency @value=5.3 @currency=:eur>
+This is true, because it uses the same historic conversion rate
+
+  3.eur(:at => '201-01-01').to_usd == 3.eur.to_usd(:at => '201-01-01')
+  
+But this is false, obviously, because the second instance uses the present exchange rate
+
+  3.eur(:at => '201-01-01').to_usd == 3.eur.to_usd
+  
+=== Operate
 
 Add, Subtract, Multiply, Divide Currencies and don't lose a dime. The result will get returned in the currency of the first argument
+
   1.usd + 1.32.eur                              #=> #<Exchange::Currency @value=2.54 @currency=:usd>
+  
+If you define a currency object as historic. It will use historic conversion if it gets converted (in this example, the 1.32 eur will get converted to usd at the rate of January 1 2008)
+
+  1.usd + 1.32.eur(:at => '2008-1-1')           #=> #<Exchange::Currency @value=2.54 @currency=:usd>
+
+You can just instantiate currencies and apply operations
+
+  3.1.eur.round                                   #=> #<Exchange::Currency @value=3 @currency=:eur>
+
+Convert one currency to another and round, ceil or floor it, it still retains currency information of the actual and previous currency
+
+  1.34.usd.to_eur.round                         #=> #<Exchange::Currency @value=1 @currency=:eur>
+  10.34.usd.to_nok.ceil                         #=> #<Exchange::Currency @value=45 @currency=:nok>
+  5.34.usd.to_eur.floor                         #=> #<Exchange::Currency @value=4 @currency=:eur>
+  5.34.usd.to_eur.floor.from                    #=> #<Exchange::Currency @value=5.34 @currency=:usd>
+  
+  
+=== Retain Information
+
+Access the original currency and its value after conversion, even over multiple steps
+  converted = 2.eur.to_usd                      #=> #<Exchange::Currency @value=2.12 @currency=:usd>
+  converted.from                                #=> #<Exchange::Currency @value=2 @currency=:eur>
+  converted2 = converted.to_nok                 #=> #<Exchange::Currency @value=22.12 @currency=:nok>
+  converted2.from                               #=> #<Exchange::Currency @value=2.12 @currency=:usd>
 
 == Configuration
 
@@ -104,6 +124,9 @@ You can configure the exchange gem to a variety of options, allowing you to cont
   Exchange::Configuration.define do |c|
     # your configuration goes here
   end
+  
+
+=== Options
 
 The options available are
   
@@ -118,7 +141,9 @@ The options available are
 If your afraid of mixed currency operations, just don't allow them
   Exchange::Configuration.allow_mixed_operations = false
   1.usd + 1.eur                                 #=> MixedCurrencyError
-  
+
+=== Caching Options  
+
 Use Memcached to cache the result (default). Exchange will cache the API files with a key starting with 'exchange_'
   Exchange::Configuration.define do |c|
     c.cache = :memcached
@@ -137,6 +162,8 @@ Use Rails to cache the result. Exchange will cache the API files with a key star
   Exchange::Configuration.define do |c|
     c.cache = :rails
   end
+  
+=== API Options
 
 Use the currencybot Open Source API as a source of your conversion rates (default)
   Exchange::Configuration.define do |c|
@@ -185,9 +212,12 @@ Easily connect to your custom API by writing an ExternalAPI Class, or use your o
       end
     end
   end
-  # Now, you can configure your API in the configuration. The Symbol will get camelcased and constantized
+
+Now, you can configure your API in the configuration. The Symbol will get camelcased and constantized
+
   Exchange::Configuration.api = :my_custom
-  # Have fun, and don't forget to write tests.
+
+Have fun, and don't forget to write tests.
 
 Write your own caching module to use the gem with your own custom caching solution.
   module Cache
@@ -201,9 +231,12 @@ Write your own caching module to use the gem with your own custom caching soluti
       end
     end
   end
-  # Now, you can configure your Caching solution in the configuration. The Symbol will get camelcased and constantized
+
+Now, you can configure your Caching solution in the configuration. The Symbol will get camelcased and constantized
+
   Exchange::Configuration.cache = :my_custom_cache
-  # Have fun, and don't forget to write tests.
+
+Have fun, and don't forget to write tests.
 
 
 == Contributing to exchange
