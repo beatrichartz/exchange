@@ -1,6 +1,4 @@
-= exchange
-
-{<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange]
+= exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange]
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra, Padrino or whatever Framework you like.
 
