@@ -54,11 +54,6 @@ Or even define an instance of currency as historic by adding a time.
   3.45.eur(:at => Time.gm(2011,3,3)).to_sek     #=> #<Exchange::Currency @value=19.23 @currency=:sek>
   345.sek(:at => Time.gm(2011,3,3)).to_nok      #=> #<Exchange::Currency @value=348 @currency=:nok>
   
-All operations with a currency defined as historic will use the historic exchange rate
-
-  3.eur + 345.sek(:at => Time.gm(2011,3,3))       #Will use the March 3 2011 Rate of SEK to EUR to add the currency!
-  4.eur + 3.nok.to_sek(:at => Time.gm(2011,3,3))  #Will use the March 3 2011 Rate of SEK to EUR to add the currency!
-  
 Do multiple conversion steps at once (if in any way useful)
 
   3.chf.to_eur(:at => '2011-02-04').to_usd      #=> #<Exchange::Currency @value=5.3 @currency=:eur>
@@ -92,10 +87,14 @@ But this is false, obviously, because the second instance uses the present excha
 Add, Subtract, Multiply, Divide Currencies and don't lose a dime. The result will get returned in the currency of the first argument
 
   1.usd + 1.32.eur                              #=> #<Exchange::Currency @value=2.54 @currency=:usd>
+  1.usd - 1.32.eur                              #=> #<Exchange::Currency @value=-0.2 @currency=:usd>
+  1.usd * 1.32.eur                              #=> #<Exchange::Currency @value=3.44 @currency=:usd>
+  1.usd / 1.32.eur                              #=> #<Exchange::Currency @value=0.89 @currency=:usd>
+  
   
 If you define a currency object as historic. It will use historic conversion if it gets converted (in this example, the 1.32 eur will get converted to usd at the rate of January 1 2008)
 
-  1.usd + 1.32.eur(:at => '2008-1-1')           #=> #<Exchange::Currency @value=2.54 @currency=:usd>
+  1.usd - 1.32.eur(:at => '2008-1-1')           #=> #<Exchange::Currency @value=2.54 @currency=:usd>
 
 You can just instantiate currencies and apply operations
 
