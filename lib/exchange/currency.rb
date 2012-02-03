@@ -202,6 +202,7 @@ module Exchange
     end
     
     def <=> other
+      # TODO which historic converion should be used when two are present?
       if other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value < other.value) || (other.currency != self.currency && self.value < other.convert_to(self.currency, :at => other.time).value))
         -1
       elsif other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value > other.value) || (other.currency != self.currency && self.value > other.convert_to(self.currency, :at => other.time).value))
@@ -213,6 +214,11 @@ module Exchange
       end
         
     end
+    
+    # TODO Make this easy or hard?
+    # could have ISO Mapping, Symbol mapping, even translations
+    # def to_s
+    # end
     
     protected
     

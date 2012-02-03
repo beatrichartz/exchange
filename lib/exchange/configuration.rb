@@ -39,6 +39,8 @@ module Exchange
         self.instance_eval(&blk)
       end
       
+      #TODO Precision ?
+      
       [:api, :retries, :cache, :cache_host, :cache_port, :update, :allow_mixed_operations].each do |m|
         define_method m do
           @@config[m]

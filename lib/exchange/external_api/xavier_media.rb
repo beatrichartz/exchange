@@ -23,6 +23,7 @@ module Exchange
       def update(opts={})
         time       = assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
+        #TODO make this array dependent on the number of retries (go back 1 day for each retry)
         retry_urls = [api_url(time - 86400), api_url(time - 172800), api_url(time - 259200)]
         
         Call.new(api_url, :format => :xml, :at => time, :retry_with => retry_urls) do |result|
