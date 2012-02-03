@@ -2,22 +2,30 @@
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ruby 1.9.2 and 1.9.3. 
 
+=== Easy Conversion
+
 Imagine a conversion as easy as 
   1.eur.to_usd
 or even better 
   1.eur.to_usd(:at => Time.now - 84600)
 which gets you an exchange at the rates of yesterday.
 
+=== Only one request per day to keep you up to date
+
 Imagine the exchange rates getting cached, and you hitting the internet only daily to get new rates (hourly if you're eager to have the absolutely newest ones)
 
+=== Use two great APIs or your own
+
 Two open APIs are already included: Currency Bot (http://currencybot.github.com/) and Xaviermedia (http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057)
-but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it with the Exchange gem.
+but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it with the Exchange gem. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI to see an example of a custom API Extension
+
+=== Use great caches or your own
 
 Also, the gem allows you to use one of three available caching solutions: Memcached via the Memcached gem, Redis via the redis gem or the Rails cache.
-But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it with Exchange
+But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it with Exchange. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache for an example of a cache extension
 
 == Installation
-=== Rails / Bundler
+=== Bundler / Rails
 Add it to your Gemfile  
   gem "exchange", ">=0.2.5"
 === Manually
