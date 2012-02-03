@@ -35,8 +35,6 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
   end
   describe "historic conversion" do
     subject { Exchange::ExternalAPI::CurrencyBot.new }
-    before(:each) do
-    end
     it "should convert and be able to use history" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
       subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).should == 92.54
