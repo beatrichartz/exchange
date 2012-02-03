@@ -36,7 +36,7 @@ module Exchange
           result = client.fetch key(api, opts[:at]), :expires_in => Exchange::Configuration.update == :daily ? 86400 : 3600, &block
           client.delete(key(api, opts[:at])) unless result && !result.empty?
           
-          JSON.load result
+          JSON.load result if result
         end
         
       end
