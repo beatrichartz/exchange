@@ -1,6 +1,8 @@
 = exchange
 
-The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as 
+The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ruby 1.9.2 and 1.9.3. 
+
+Imagine a conversion as easy as 
   1.eur.to_usd
 or even better 
   1.eur.to_usd(:at => Time.now - 84600)
