@@ -56,6 +56,10 @@ Convert one currency to another and round, ceil or floor it, it still retains cu
 
 You can also just instantiate currencies and apply operations
   3.eur.round                                   #=> #<Exchange::Currency @value=3 @currency=:eur>
+  
+Compare Currencies
+  2.eur > 2.usd                                 #=> true (2.usd get converted to eur and compared)
+  2.nok < 2.sek                                 #=> false (2.sek get converted to nok and compared)
 
 Sort multiple currencies at once
   [5.eur, 4.usd, 4.chf(:at => '2010-01-01')].sort   #=> [#<Exchange::Currency @value=4 @currency=:usd>, #<Exchange::Currency @value=4 @currency=:chf>, #<Exchange::Currency @value=5 @currency=:eur>]
