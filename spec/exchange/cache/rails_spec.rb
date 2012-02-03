@@ -33,7 +33,7 @@ describe "Exchange::Cache::Rails" do
           client.should_receive(:fetch).with('KEY', :expires_in => 86400).and_return "{\"RESULT\":\"YAY\"}"
         end
         it "should return the JSON loaded result" do
-          subject.cached('API_CLASS') { 'something' }.should == {'RESULT' => 'YAY'}
+          subject.cached('API_CLASS') { 'something' }.should == "{\"RESULT\":\"YAY\"}"
         end
       end
       context "with an hourly cache" do
@@ -47,7 +47,7 @@ describe "Exchange::Cache::Rails" do
           Exchange::Configuration.update = :daily
         end
         it "should return the JSON loaded result" do
-          subject.cached('API_CLASS') { 'something' }.should == {'RESULT' => 'YAY'}
+          subject.cached('API_CLASS') { 'something' }.should == "{\"RESULT\":\"YAY\"}"
         end
       end
     end
