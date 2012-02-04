@@ -11,7 +11,7 @@ module Exchange
       # The base of the ECB API URL
       API_URL              = "http://www.ecb.europa.eu/stats/eurofxref"
       # The currencies the ECB API URL can handle
-      CURRENCIES           = %W(usd jpy bgn czk dkk gbp huf ltl lvl pln ron sek chf nok hrk rub try aud brl cad cny hkd idr ils inr krw mxn myr nzd php sgd thb zar)
+      CURRENCIES           = %W(eur usd jpy bgn czk dkk gbp huf ltl lvl pln ron sek chf nok hrk rub try aud brl cad cny hkd idr ils inr krw mxn myr nzd php sgd thb zar)
       
       attr_accessor :callresult
       
