@@ -9,11 +9,12 @@ module Exchange
     class File < Base
       class << self
         
-        # returns either cached data from the redis client or calls the block and caches it in redis.
+        # returns either cached data from a stored file or stores a file.
         # This method has to be the same in all the cache classes in order for the configuration binding to work
         # @param [Exchange::ExternalAPI::Subclass] api The API class the data has to be stored for
         # @param [Hash] opts the options to cache with
         # @option opts [Time] :at IS IGNORED FOR FILECACHE
+        # @option opts [Symbol] :cache_period The period to cache the file for
         # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
         # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
         
@@ -46,10 +47,10 @@ module Exchange
           # A Cache Key generator for the file Cache Class and the time
           # Generates a key which can handle expiration by itself
           # @param [Exchange::ExternalAPI::Subclass] api_class The API to store the data for
-          # @param [optional, Time] time The time for which the data is valid
+          # @param [optional, Symbol] cache_period The time for which the data is valid
           # @return [String] A string that can be used as cache key
           # @example
-          #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"
+          #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, :monthly) #=> "Exchange_ExternalAPI_CurrencyBot_monthly_2012_1"
           
           def key(api_class, cache_period=:daily)
             time      = Time.now

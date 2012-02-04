@@ -54,7 +54,7 @@ module Exchange
       # @example
       #   Exchange::Configuration.api = :currency_bot
       #   Exchange::Configuration.api_class #=> Exchange::ExternalAPI::CurrencyBot
-      # @params [Hash] options A hash of Options
+      # @param [Hash] options A hash of Options
       # @option options [Class] :api A api to return instead of the api class (use for fallback)
       # @return [Exchange::ExternalAPI::Subclass] A subclass of Exchange::ExternalAPI
       
@@ -66,7 +66,7 @@ module Exchange
       # @example
       #   Exchange::Configuration.cache = :redis
       #   Exchange::Configuration.cache_class #=> Exchange::ExternalAPI::Redis
-      # @params [Hash] options A hash of Options
+      # @param [Hash] options A hash of Options
       # @option options [Class] :api A api to return instead of the api class (use for fallback)
       # @return [Exchange::Cache::Subclass] A subclass of Exchange::Cache (or nil if caching has been set to false)
       

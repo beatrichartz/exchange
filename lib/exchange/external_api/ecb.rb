@@ -61,7 +61,7 @@ module Exchange
         # If the date is today, get the small daily file. If it is less than 90 days ago, get the 90 days file. 
         # If it is more than 90 days ago, get the big file
         # @param [Time] time The exchange rate date for which the URL should be built
-        # @return [String] An Xaviermedia API URL for the specified time
+        # @return [String] An ECB API URL to get the xml from
       
         def api_url(time)
           border = Time.now - 90 * 86400
