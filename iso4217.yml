@@ -1,0 +1,631 @@
+--- 
+NIO: 
+  minor_unit: 2
+  currency: Cordoba Oro
+LAK: 
+  minor_unit: 2
+  currency: Kip
+SAR: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Saudi Riyal
+NOK: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Norwegian Krone
+USD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: US Dollar
+RUB: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Russian Ruble
+XCD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: East Caribbean Dollar
+XPT: 
+  minor_unit: N.A.
+  currency: Platinum
+OMR: 
+  format: "#,###.###"
+  minor_unit: 3
+  currency: Rial Omani
+AMD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Armenian Dram
+CDF: 
+  minor_unit: 2
+  currency: Congolese Franc
+KPW: 
+  minor_unit: 2
+  currency: North Korean Won
+XSU: 
+  minor_unit: N.A.
+  currency: Sucre
+CNY: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Yuan Renminbi
+KES: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Kenyan Shilling
+KHR: 
+  minor_unit: 2
+  currency: Riel
+PLN: 
+  format: "# ###,##"
+  minor_unit: 2
+  currency: Zloty
+MVR: 
+  minor_unit: 2
+  currency: Rufiyaa
+GTQ: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Quetzal
+CLP: 
+  format: "#.###"
+  minor_unit: 0
+  currency: Chilean Peso
+INR: 
+  format: "#,##,###.##"
+  minor_unit: 2
+  currency: Indian Rupee
+BZD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Belize Dollar
+MYR: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Malaysian Ringgit
+HKD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Hong Kong Dollar
+COP: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Colombian Peso
+DKK: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Danish Krone
+SEK: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Swedish Krona
+BYR: 
+  minor_unit: 0
+  currency: Belarussian Ruble
+LYD: 
+  minor_unit: 3
+  currency: Libyan Dinar
+RON: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: New Romanian Leu
+DZD: 
+  minor_unit: 2
+  currency: Algerian Dinar
+BIF: 
+  minor_unit: 0
+  currency: Burundi Franc
+ARS: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Argentine Peso
+GIP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Gibraltar Pound
+UYI: 
+  minor_unit: 0
+  currency: Uruguay Peso en Unidades Indexadas (URUIURUI)
+XUA: 
+  minor_unit: N.A.
+  currency: ADB Unit of Account
+BOB: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Boliviano
+SSP: 
+  minor_unit: 2
+  currency: South Sudanese Pound
+NGN: 
+  minor_unit: 2
+  currency: Naira
+PGK: 
+  minor_unit: 2
+  currency: Kina
+STD: 
+  minor_unit: 2
+  currency: Dobra
+XOF: 
+  minor_unit: 0
+  currency: CFA Franc BCEAO
+AED: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: UAE Dirham
+ERN: 
+  minor_unit: 2
+  currency: Nakfa
+MWK: 
+  minor_unit: 2
+  currency: Kwacha
+CUP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Cuban Peso
+USN: 
+  minor_unit: 2
+  currency: US Dollar (Next day)
+GMD: 
+  minor_unit: 2
+  currency: Dalasi
+CVE: 
+  minor_unit: 2
+  currency: Cape Verde Escudo
+TZS: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Tanzanian Shilling
+COU: 
+  minor_unit: 2
+  currency: Unidad de Valor Real
+BTN: 
+  minor_unit: 2
+  currency: Ngultrum
+ZWL: 
+  minor_unit: 2
+  currency: Zimbabwe Dollar
+UGX: 
+  minor_unit: 2
+  currency: Uganda Shilling
+SYP: 
+  minor_unit: 2
+  currency: Syrian Pound
+MAD: 
+  minor_unit: 2
+  currency: Moroccan Dirham
+MNT: 
+  minor_unit: 2
+  currency: Tugrik
+LSL: 
+  minor_unit: 2
+  currency: Loti
+XAF: 
+  minor_unit: 0
+  currency: CFA Franc BEAC
+XTS: 
+  minor_unit: N.A.
+  currency: Codes specifically reserved for testing purposes
+SHP: 
+  minor_unit: 2
+  currency: Saint Helena Pound
+HTG: 
+  minor_unit: 2
+  currency: Gourde
+RSD: 
+  minor_unit: 2
+  currency: Serbian Dinar
+XAG: 
+  minor_unit: N.A.
+  currency: Silver
+MGA: 
+  minor_unit: 2
+  currency: Malagasy Ariary
+TOP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: !binary |
+    UGHigJlhbmdh
+
+MZN: 
+  minor_unit: 2
+  currency: Mozambique Metical
+LVL: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Latvian Lats
+FKP: 
+  minor_unit: 2
+  currency: Falkland Islands Pound
+USS: 
+  minor_unit: 2
+  currency: US Dollar (Same day)
+BWP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Pula
+HNL: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Lempira
+CHE: 
+  minor_unit: 2
+  currency: WIR Euro
+EUR: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Euro
+EGP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Egyptian Pound
+CHF: 
+  format: "#'###.##"
+  minor_unit: 2
+  currency: Swiss Franc
+ILS: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: New Israeli Sheqel
+PYG: 
+  minor_unit: 0
+  currency: Guarani
+LBP: 
+  format: "# ###"
+  minor_unit: 2
+  currency: Lebanese Pound
+ANG: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Netherlands Antillean Guilder
+KZT: 
+  minor_unit: 2
+  currency: Tenge
+GYD: 
+  minor_unit: 2
+  currency: Guyana Dollar
+WST: 
+  minor_unit: 2
+  currency: Tala
+XFU: 
+  minor_unit: N.A.
+  currency: UIC-Franc
+NPR: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Nepalese Rupee
+KMF: 
+  minor_unit: 0
+  currency: Comoro Franc
+THB: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Baht
+IRR: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Iranian Rial
+SRD: 
+  minor_unit: 2
+  currency: Surinam Dollar
+JPY: 
+  format: "#,###"
+  minor_unit: 0
+  currency: Yen
+XBA: 
+  minor_unit: N.A.
+  currency: Bond Markets Unit European Composite Unit (EURCO)
+BRL: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Brazilian Real
+XPD: 
+  minor_unit: N.A.
+  currency: Palladium
+UYU: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Peso Uruguayo
+MOP: 
+  minor_unit: 2
+  currency: Pataca
+BMD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Bermudian Dollar
+XBB: 
+  minor_unit: N.A.
+  currency: 0
+SZL: 
+  format: "#, ###.##"
+  minor_unit: 2
+  currency: Lilangeni
+ETB: 
+  minor_unit: 2
+  currency: Ethiopian Birr
+JOD: 
+  format: "#,###.###"
+  minor_unit: 3
+  currency: Jordanian Dinar
+XBC: 
+  minor_unit: N.A.
+  currency: 0
+IDR: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Rupiah
+MDL: 
+  minor_unit: 2
+  currency: Moldovan Leu
+XPF: 
+  minor_unit: 0
+  currency: CFP Franc
+MRO: 
+  minor_unit: 2
+  currency: Ouguiya
+YER: 
+  minor_unit: 2
+  currency: Yemeni Rial
+XBD: 
+  minor_unit: N.A.
+  currency: 0
+BAM: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Convertible Mark
+AWG: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Aruban Florin
+NZD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: New Zealand Dollar
+PEN: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Nuevo Sol
+AOA: 
+  minor_unit: 2
+  currency: Kwanza
+KYD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Cayman Islands Dollar
+SLL: 
+  minor_unit: 2
+  currency: Leone
+TRY: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Turkish Lira
+VEF: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Bolivar Fuerte
+ISK: 
+  format: "#.###"
+  minor_unit: 0
+  currency: Iceland Krona
+GNF: 
+  minor_unit: 0
+  currency: Guinea Franc
+BSD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Bahamian Dollar
+DJF: 
+  minor_unit: 0
+  currency: Djibouti Franc
+HUF: 
+  format: "#.###"
+  minor_unit: 2
+  currency: Forint
+LTL: 
+  format: "# ###,##"
+  minor_unit: 2
+  currency: Lithuanian Litas
+MXN: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Mexican Peso
+SCR: 
+  minor_unit: 2
+  currency: Seychelles Rupee
+SGD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Singapore Dollar
+LKR: 
+  minor_unit: 2
+  currency: Sri Lanka Rupee
+TJS: 
+  minor_unit: 2
+  currency: Somoni
+TND: 
+  minor_unit: 3
+  currency: Tunisian Dinar
+DOP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Dominican Peso
+FJD: 
+  minor_unit: 2
+  currency: Fiji Dollar
+GEL: 
+  minor_unit: 2
+  currency: Lari
+SDG: 
+  minor_unit: 2
+  currency: Sudanese Pound
+VUV: 
+  format: "#,###"
+  minor_unit: 0
+  currency: Vatu
+XDR: 
+  minor_unit: N.A.
+  currency: SDR (Special Drawing Right)
+BBD: 
+  minor_unit: 2
+  currency: Barbados Dollar
+LRD: 
+  minor_unit: 2
+  currency: Liberian Dollar
+KRW: 
+  format: "#,###"
+  minor_unit: 0
+  currency: Won
+MMK: 
+  minor_unit: 2
+  currency: Kyat
+MUR: 
+  format: "#,###"
+  minor_unit: 2
+  currency: Mauritius Rupee
+PHP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Philippine Peso
+ZAR: 
+  format: "# ###.##"
+  minor_unit: 2
+  currency: Rand
+KGS: 
+  minor_unit: 2
+  currency: Som
+GBP: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Pound Sterling
+BGN: 
+  minor_unit: 2
+  currency: Bulgarian Lev
+IQD: 
+  minor_unit: 3
+  currency: Iraqi Dinar
+TMT: 
+  minor_unit: 2
+  currency: Turkmenistan New Manat
+UAH: 
+  format: "# ###,##"
+  minor_unit: 2
+  currency: Hryvnia
+VND: 
+  format: "#.###"
+  minor_unit: 0
+  currency: Dong
+ZMK: 
+  minor_unit: 2
+  currency: Zambian Kwacha
+XAU: 
+  minor_unit: N.A.
+  currency: Gold
+BOV: 
+  minor_unit: 2
+  currency: Mvdol
+HRK: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Croatian Kuna
+TTD: 
+  minor_unit: 2
+  currency: Trinidad and Tobago Dollar
+BHD: 
+  format: "#,###.###"
+  minor_unit: 3
+  currency: Bahraini Dinar
+CLF: 
+  minor_unit: 0
+  currency: Unidades de fomento
+RWF: 
+  minor_unit: 0
+  currency: Rwanda Franc
+MKD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Denar
+AUD: 
+  format: "# ###.##"
+  minor_unit: 2
+  currency: Australian Dollar
+CRC: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Costa Rican Colon
+PKR: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Pakistan Rupee
+TWD: 
+  minor_unit: 2
+  currency: New Taiwan Dollar
+UZS: 
+  minor_unit: 2
+  currency: Uzbekistan Sum
+CZK: 
+  format: "#.###,##"
+  minor_unit: 2
+  currency: Czech Koruna
+AZN: 
+  minor_unit: 2
+  currency: Azerbaijanian Manat
+BDT: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Taka
+NAD: 
+  minor_unit: 2
+  currency: Namibia Dollar
+AFN: 
+  minor_unit: 2
+  currency: Afghani
+MXV: 
+  minor_unit: 2
+  currency: Mexican Unidad de Inversion (UDI)
+CUC: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Peso Convertible
+PAB: 
+  minor_unit: 2
+  currency: Balboa
+QAR: 
+  minor_unit: 2
+  currency: Qatari Rial
+SOS: 
+  minor_unit: 2
+  currency: Somali Shilling
+CHW: 
+  minor_unit: 2
+  currency: WIR Franc
+XXX: 
+  minor_unit: N.A.
+  currency: The codes assigned for transactions where no currency is involved
+CAD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Canadian Dollar
+JMD: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Jamaican Dollar
+BND: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: Brunei Dollar
+ALL: 
+  minor_unit: 2
+  currency: Lek
+SVC: 
+  format: "#,###.##"
+  minor_unit: 2
+  currency: El Salvador Colon
+SBD: 
+  minor_unit: 2
+  currency: Solomon Islands Dollar
+GHS: 
+  minor_unit: 2
+  currency: Ghana Cedi
+KWD: 
+  format: "#,###.###"
+  minor_unit: 3
+  currency: Kuwaiti Dinar

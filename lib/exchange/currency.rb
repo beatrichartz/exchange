@@ -43,7 +43,7 @@ module Exchange
     #     #=> #<Exchange::Currency @number=37.0 @currency=:usd @time=#<Time> @from=#<Exchange::Currency @number=40.0 @currency=:usd>>
     
     def initialize value, currency, opts={}
-      @value            = value.to_f
+      @value            = Exchange::ISO4217.instantiate(value, currency)
       @currency         = currency
       @time             = assure_time(opts[:at], :default => :now)
       @from             = opts[:from] if opts[:from]
@@ -86,8 +86,8 @@ module Exchange
         # @macro [attach] install_operations
          
         def install_operation op
-          define_method op do
-            @value = self.value.send(op)
+          define_method op do |*precision|
+            @value = ISO4217.send(op, self.value, self.currency, precision.first)
             self
           end
         end
@@ -108,29 +108,50 @@ module Exchange
       
     end
     
-    # Round the currency (Equivalent to normal round)
+    # Round the currency. Since this is a currency, it will round to the standard decimal value.
+    # If you want to round it to another precision, you have to specifically ask for it.
     # @return [Exchange::Currency] The currency you started with with a rounded value
-    # @example
-    #   Exchange::Currency.new(40.5, :usd).round
-    #     #=> #<Exchange::Currency @number=41 @currency=:usd>
+    # @param [Integer] precision The precision you want the rounding to have. Defaults to the ISO 4217 standard value for the currency
+    # @since 0.1
+    # @version 0.3
+    # @example Round your currency to the iso standard number of decimals
+    #   Exchange::Currency.new(40.545, :usd).round
+    #     #=> #<Exchange::Currency @value=40.55 @currency=:usd>
+    # @example Round your currency to another number of decimals
+    #   Exchange::Currency.new(40.545, :usd).round(0)
+    #     #=> #<Exchange::Currency @value=41 @currency=:usd>
     
     install_operation :round
     
     
-    # Ceil the currency (Equivalent to normal ceil)
+    # Ceil the currency. Since this is a currency, it will ceil to the standard decimal value.
+    # If you want to ceil it to another precision, you have to specifically ask for it.
     # @return [Exchange::Currency] The currency you started with with a ceiled value
-    # @example
-    #   Exchange::Currency.new(40.4, :usd).ceil
-    #     #=> #<Exchange::Currency @number=41 @currency=:usd>
+    # @param [Integer] precision The precision you want the ceiling to have. Defaults to the ISO 4217 standard value for the currency
+    # @since 0.1
+    # @version 0.3
+    # @example Ceil your currency to the iso standard number of decimals
+    #   Exchange::Currency.new(40.544, :usd).ceil
+    #     #=> #<Exchange::Currency @value=40.55 @currency=:usd>
+    # @example Ceil your currency to another number of decimals
+    #   Exchange::Currency.new(40.445, :usd).ceil(0)
+    #     #=> #<Exchange::Currency @value=41 @currency=:usd>
     
     install_operation :ceil
     
     
-    # Floor the currency (Equivalent to normal floor)
+    # Floor the currency. Since this is a currency, it will ceil to the standard decimal value.
+    # If you want to ceil it to another precision, you have to specifically ask for it.
     # @return [Exchange::Currency] The currency you started with with a floored value
-    # @example
-    #   Exchange::Currency.new(40.7, :usd).floor
-    #     #=> #<Exchange::Currency @number=40 @currency=:usd>
+    # @param [Integer] precision The precision you want the flooring to have. Defaults to the ISO 4217 standard value for the currency
+    # @since 0.1
+    # @version 0.3
+    # @example Floor your currency to the iso standard number of decimals
+    #   Exchange::Currency.new(40.545, :usd).floor
+    #     #=> #<Exchange::Currency @value=40.54 @currency=:usd>
+    # @example Floor your currency to another number of decimals
+    #   Exchange::Currency.new(40.545, :usd).floor(0)
+    #     #=> #<Exchange::Currency @value=40 @currency=:usd>
     
     install_operation :floor
     
@@ -191,6 +212,17 @@ module Exchange
     
     base_operation '/'
     
+    # Compare a currency with another currency or another value. If the other is not an instance of Exchange::Currency, the value 
+    # of the currency is compared
+    # @param [Whatever you want to throw at it] other The counterpart to compare
+    # @return [Boolean] true if the other is equal, false if not
+    # @example Compare two currencies
+    #   Exchange::Currency.new(40, :usd) == Exchange::Currency.new(34, :usd) #=> true
+    # @example Compare two different currencies, the other will get converted for comparison
+    #   Exchange::Currency.new(40, :usd) == Exchange::Currency.new(34, :eur) #=> true, will implicitly convert eur to usd at the actual rate
+    # @example Compare a currency with a number, the value of the currency will get compared
+    #   Exchange::Currency.new(35, :usd) == 35 #=> true
+    
     def == other
       if other.is_a?(Exchange::Currency) && other.currency == self.currency
         other.value == self.value
@@ -201,8 +233,21 @@ module Exchange
       end
     end
     
+    # Sortcompare a currency with another currency. If the other is not an instance of Exchange::Currency, the value 
+    # of the currency is compared. Different currencies will be converted to the comparing instances currency
+    # @param [Whatever you want to throw at it] other The counterpart to compare
+    # @return [Fixed] a number which can be used for sorting
+    # @since 0.3
+    # @version 0.3
+    # @example Compare two currencies in terms of value
+    #   Exchange::Currency.new(40, :usd) <=> Exchange::Currency.new(28, :usd) #=> -1
+    # @example Compare two different currencies, the other will get converted for comparison
+    #   Exchange::Currency.new(40, :usd) <=> Exchange::Currency.new(28, :eur) #=> -1
+    # @example Sort multiple currencies in an array
+    #   [1.usd, 1.eur, 1.chf].sort.map(&:currency) #=> [:usd, :chf, :eur]
+    
     def <=> other
-      # TODO which historic converion should be used when two are present?
+      # TODO which historic conversion should be used when two are present?
       if other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value < other.value) || (other.currency != self.currency && self.value < other.convert_to(self.currency, :at => other.time).value))
         -1
       elsif other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value > other.value) || (other.currency != self.currency && self.value > other.convert_to(self.currency, :at => other.time).value))
@@ -215,10 +260,25 @@ module Exchange
         
     end
     
-    # TODO Make this easy or hard?
-    # could have ISO Mapping, Symbol mapping, even translations
-    # def to_s
-    # end
+    # Converts the currency to a string in ISO 4217 standardized format, either with or without the currency. This leaves you
+    # with no worries how to display the currency.
+    # @since 0.3
+    # @version 0.3
+    # @param [Symbol] format :currency (default) if you want a string with currency, :amount if you want just the amount.
+    # @return [String] The formatted string
+    # @example Convert a currency to a string
+    #   Exchange::Currency.new(49.567, :usd).to_s #=> "USD 49.57"
+    # @example Convert a currency without minor to a string
+    #   Exchange::Currency.new(45, :jpy).to_s #=> "JPY 45"
+    # @example Convert a currency with a three decimal minor to a string
+    #   Exchange::Currency.new(34.34, :omr).to_s #=> "OMR 34.340"
+    # @example Convert a currency to a string without the currency
+    #   Exchange::ISO4217.stringif(34.34, :omr).to_s(:iso) #=> "34.340"
+    
+    def to_s format=:currency
+      [format == :currency && Exchange::ISO4217.stringify(self.value, self.currency),
+       format == :amount && Exchange::ISO4217.stringify(self.value, self.currency, :amount_only => true)].detect{|l| l.is_a?(String) }
+    end
     
     protected
     

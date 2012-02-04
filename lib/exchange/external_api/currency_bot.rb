@@ -24,7 +24,7 @@ module Exchange
         
         Call.new(api_url(time), :at => time) do |result|
           @base                 = result['base']
-          @rates                = result['rates']
+          @rates                = Hash[*result['rates'].keys.zip(result['rates'].values.map{|v| BigDecimal.new(v.to_s) }).flatten]
           @timestamp            = result['timestamp'].to_i
         end
       end

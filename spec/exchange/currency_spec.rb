@@ -167,27 +167,87 @@ describe "Exchange::Currency" do
     end
     describe "round" do
       subject { Exchange::Currency.new(40.123, :usd) }
-      it "should apply it to its number" do
-        subject.round.value.should == 40
-        subject.round.currency.should == :usd
-        subject.round.should be_kind_of Exchange::Currency
+      context "without arguments" do
+        it "should apply it to its number in the iso certified format" do
+          subject.round.value.should == 40.12
+          subject.round.currency.should == :usd
+          subject.round.should be_kind_of Exchange::Currency
+        end
+      end
+      context "with arguments" do
+        it "should apply it to its number" do
+          subject.round(0).value.should == 40
+          subject.round(0).currency.should == :usd
+          subject.round(0).should be_kind_of Exchange::Currency
+        end
+        it "should allow to round to whatever number of decimals" do
+          subject.round(2).value.should == 40.12
+          subject.round(2).currency.should == :usd
+          subject.round(2).should be_kind_of Exchange::Currency
+        end
       end
     end
     describe "ceil" do
-      subject { Exchange::Currency.new(40.123, :usd) }
-      it "should apply it to its number" do
-        subject.ceil.value.should == 41
-        subject.ceil.currency.should == :usd
-        subject.ceil.should be_kind_of Exchange::Currency
+      subject { Exchange::Currency.new(40.1236, :omr) }
+      context "without arguments" do
+        it "should apply it to its number in the iso certified format" do
+          subject.ceil.value.should == 40.124
+          subject.ceil.currency.should == :omr
+          subject.ceil.should be_kind_of Exchange::Currency
+        end
+      end
+      context "with arguments" do
+        it "should apply it to its number" do
+          subject.ceil(0).value.should == 41
+          subject.ceil(0).currency.should == :omr
+          subject.ceil(0).should be_kind_of Exchange::Currency
+        end
+        it "should allow to round to whatever number of decimals" do
+          subject.ceil(2).value.should == 40.13
+          subject.ceil(2).currency.should == :omr
+          subject.ceil(2).should be_kind_of Exchange::Currency
+        end
       end
     end
     describe "floor" do
-      subject { Exchange::Currency.new(40.723, :usd) }
-      it "should apply it to its number" do
-        subject.floor.value.should == 40
-        subject.floor.currency.should == :usd
-        subject.floor.should be_kind_of Exchange::Currency
+      subject { Exchange::Currency.new(40.723, :jpy) }
+      context "without arguments" do
+        it "should apply it to its number in the iso certified format" do
+          subject.floor.value.should == 40
+          subject.floor.currency.should == :jpy
+          subject.floor.should be_kind_of Exchange::Currency
+        end
       end
+      context "with arguments" do
+        it "should apply it to its number" do
+          subject.floor(1).value.should == 40.7
+          subject.floor(1).currency.should == :jpy
+          subject.floor(1).should be_kind_of Exchange::Currency
+        end
+        it "should allow to round to whatever number of decimals" do
+          subject.floor(2).value.should == 40.72
+          subject.floor(2).currency.should == :jpy
+          subject.floor(2).should be_kind_of Exchange::Currency
+        end
+      end
+    end
+  end
+  describe "to_s" do
+    it "should render the currency according to ISO 4217 Definitions" do
+      Exchange::Currency.new(23.232524, 'TND').to_s.should == "TND 23.233"
+      Exchange::Currency.new(23.23252423, 'SAR').to_s.should == "SAR 23.23"
+      Exchange::Currency.new(23.23252423, 'CLP').to_s.should == "CLP 23"
+      Exchange::Currency.new(23.2, 'TND').to_s.should == "TND 23.200"
+      Exchange::Currency.new(23.4, 'SAR').to_s.should == "SAR 23.40"
+      Exchange::Currency.new(23.0, 'CLP').to_s.should == "CLP 23"
+    end
+    it "should render only the currency amount if the argument amount is passed" do
+      Exchange::Currency.new(23.232524, 'TND').to_s(:amount).should == "23.233"
+      Exchange::Currency.new(23.23252423, 'SAR').to_s(:amount).should == "23.23"
+      Exchange::Currency.new(23.23252423, 'CLP').to_s(:amount).should == "23"
+      Exchange::Currency.new(23.2, 'TND').to_s(:amount).should == "23.200"
+      Exchange::Currency.new(23.4, 'SAR').to_s(:amount).should == "23.40"
+      Exchange::Currency.new(23.0, 'CLP').to_s(:amount).should == "23"
     end
   end
   describe "methods via method missing" do

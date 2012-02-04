@@ -12,6 +12,7 @@ module Exchange
       # @param [String] url The url of the API to call
       # @param [Hash] options The options of the API call
       # @option options [Time] :at The time of the historical exchange rate file to get
+      # @option options [Class] :keyclass The class to generate the key for
       # @option options [Integer] :retries The number of retries if the API Call should fail with a HTTP Error
       # @option options [Array] :retry_with an Array of urls to retry the call with (if the API does not have a file for the specified date). These values will be shifted until a call succeeds or the number of maximum retries is reached.
       # @option options [Symbol] :format The format to return / yield the API call result in, defaults to :json
@@ -30,12 +31,12 @@ module Exchange
       #   # Do something with that result
       
       def initialize url, options={}, &block
-        if Exchange::Configuration.cache
-          result = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api_class, :at => options[:at]) do
-            load_url(url, options[:retries] || 5, options[:retry_with])
+        if Exchange::Configuration.cache && options[:cache].nil?
+          result = Exchange::Configuration.cache_class.cached(options[:keyclass] || Exchange::Configuration.api_class, :at => options[:at]) do
+            load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
           end
         else
-          result = load_url(url, options[:retries] || 5, options[:retry_with])
+          result = load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
         end
         
         parsed = options[:format] == :xml ? Nokogiri.parse(result) : JSON.load(result)

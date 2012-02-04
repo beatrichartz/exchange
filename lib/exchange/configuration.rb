@@ -35,12 +35,11 @@ module Exchange
       # @example Set configuration values directly to the class
       #   Exchange::Configuration.cache = :redis
       #   Exchange::Configuration.api   = :xavier_media
+      
       def define &blk
         self.instance_eval(&blk)
       end
-      
-      #TODO Precision ?
-      
+            
       [:api, :retries, :cache, :cache_host, :cache_port, :update, :allow_mixed_operations].each do |m|
         define_method m do
           @@config[m]

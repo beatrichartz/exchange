@@ -15,6 +15,7 @@ module Exchange
       
       # Updates the rates by getting the information from Xaviermedia API for today or a defined historical date
       # The call gets cached for a maximum of 24 hours.
+      # @version 0.3
       # @param [Hash] opts Options to define for the API Call
       # @option opts [Time, String] :at a historical date to get the exchange rates for
       # @example Update the currency bot API to use the file of March 2, 2010
@@ -23,12 +24,11 @@ module Exchange
       def update(opts={})
         time       = assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
-        #TODO make this array dependent on the number of retries (go back 1 day for each retry)
-        retry_urls = [api_url(time - 86400), api_url(time - 172800), api_url(time - 259200)]
+        retry_urls = Exchange::Configuration.retries.times.map{ |i| api_url(time - 86400 * (i+1)) }
         
         Call.new(api_url, :format => :xml, :at => time, :retry_with => retry_urls) do |result|
           @base                 = result.css('basecurrency').children[0].to_s
-          @rates                = Hash[*result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| c.to_s.to_f }).flatten]
+          @rates                = Hash[*result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten]
           @timestamp            = Time.gm(*result.css('fx_date').children[0].to_s.split('-')).to_i
         end
       end

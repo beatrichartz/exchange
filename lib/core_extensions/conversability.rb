@@ -28,5 +28,6 @@ module Exchange
   end
 end
 
-Fixnum.send :include, Exchange::Conversability
-Float.send  :include, Exchange::Conversability
+Fixnum.send     :include, Exchange::Conversability
+Float.send      :include, Exchange::Conversability
+BigDecimal.send :include, Exchange::Conversability
