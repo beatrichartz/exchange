@@ -24,7 +24,7 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'))
     end
     it "should convert right" do
-      subject.convert(79, 'eur', 'usd').round(2).should == BigDecimal.new("104.44")
+      subject.convert(78, 'eur', 'usd').round(2).should == BigDecimal.new("103.12")
     end
     it "should convert negative numbers right" do
       subject.convert(-70, 'chf', 'usd').round(2).should == BigDecimal.new("-76.71")
