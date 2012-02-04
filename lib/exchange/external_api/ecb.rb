@@ -27,6 +27,7 @@ module Exchange
         time          = assure_time(opts[:at], :default => :now)
         api_url       = api_url(time)
         times         = Exchange::Configuration.retries.times.map{ |i| time - 86400 * (i+1) }
+        
         api_call      = Proc.new { |inst|
           Call.new(api_url, :format => :xml, :at => time, :cache => false) do |result|
             t = time
@@ -38,7 +39,7 @@ module Exchange
         }
         
         if Exchange::Configuration.cache        
-          Exchange::Configuration.cache_class.cached(self.class, :at => time) do
+          self.callresult = Exchange::Configuration.cache_class.cached(self.class, :at => time) do
             api_call.call(self)
             self.callresult
           end
