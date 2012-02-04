@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Exchange::ExternalAPI::Base" do
   subject { Exchange::ExternalAPI::Base.new }
   before(:each) do
-    subject.instance_variable_set("@rates", {'EUR' => 3.45, 'CHF' => 5.565})
+    subject.instance_variable_set("@rates", {'EUR' => BigDecimal.new("3.45"), 'CHF' => BigDecimal.new("5.565")})
     subject.instance_variable_set("@base", 'usd')
   end
   describe "rate" do
@@ -14,7 +14,7 @@ describe "Exchange::ExternalAPI::Base" do
     it "should put out an exchange rate for the two currencies and pass on opts" do
       time = Time.now
       subject.should_receive(:update).with(:at => time).once
-      ((subject.rate('eur', 'chf', :at => time) * 10000).round.to_f / 10000).should == 1.613
+      subject.rate('eur', 'chf', :at => time).round(3).should == 1.613
     end
   end
   describe "convert" do

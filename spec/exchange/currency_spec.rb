@@ -101,7 +101,7 @@ describe "Exchange::Currency" do
         (subject / 40).value.should == 1
       end
       it "should be able to multiply a float" do
-        (subject / 40.5).value.round(4).should == 0.9877
+        BigDecimal.new((subject / 40.5).value.to_s).round(4).should == 0.9877
       end
       it "should be able to multiply by another currency value" do
         mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
