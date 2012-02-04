@@ -47,12 +47,13 @@ module Exchange
           Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow."
           api_call.call(self)
         end
-        
-        parsed = Nokogiri.parse(callresult)
+
+        parsed = Nokogiri.parse(self.callresult)
         
         @base                 = 'EUR' # We just have to assume, since it's the ECB
-        @rates                = Hash[*(['EUR', BigDecimal.new("1")] + parsed.children.children.map {|c| c.attributes.values.map{|v| v.value.match(/\d/) ? BigDecimal.new(v.value) : v.value }.reverse unless c.attributes.values.empty? }.compact.flatten)]
+        @rates                = Hash[*(['EUR', BigDecimal.new("1")] + parsed.children.children.map {|c| c.attributes.values.map{|v| v.value.match(/\d/) ? BigDecimal.new(v.value) : v.value } unless c.attributes.values.empty? }.compact.flatten)]
         @timestamp            = time.to_i
+        puts @rates.inspect
       end
       
       private
