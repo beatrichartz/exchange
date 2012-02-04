@@ -27,7 +27,7 @@ module Exchange
           else
             result = block.call
             if result && !result.empty?
-              File.open(path, 'w') {|f| f.write(result) }
+              ::File.open(path, 'w') {|f| f.write(result) }
             end
           end
           
