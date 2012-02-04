@@ -24,7 +24,7 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'))
     end
     it "should convert right" do
-      subject.convert(80, 'eur', 'usd').round(2).should == 105.76
+      subject.convert(80, 'eur', 'usd').round(4).should == BigDecimal.new("105.764")
     end
     it "should convert negative numbers right" do
       subject.convert(-70, 'chf', 'usd').round(2).should == BigDecimal.new("-76.71")
@@ -37,7 +37,7 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
     subject { Exchange::ExternalAPI::CurrencyBot.new }
     it "should convert and be able to use history" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))
-      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("92.54")
+      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).round(4).should == BigDecimal.new("92.5435")
     end
     it "should convert negative numbers right" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-09-09.json", fixture('api_responses/example_json_api.json'))

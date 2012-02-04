@@ -105,7 +105,7 @@ describe "Exchange::Currency" do
       end
       it "should be able to multiply by another currency value" do
         mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 2)
-        (subject / Exchange::Currency.new(10, :chf)).value.round(4).should == 3.6502
+        (subject / Exchange::Currency.new(10, :chf)).value.round(2).should == BigDecimal.new("3.65")
         (subject / Exchange::Currency.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
