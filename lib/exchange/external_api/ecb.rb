@@ -40,7 +40,7 @@ module Exchange
         if Exchange::Configuration.cache        
           Exchange::Configuration.cache_class.cached(self.class, :at => time) do
             api_call.call(self)
-            inst.callresult
+            self.callresult
           end
         else
           Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow."
