@@ -94,7 +94,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.convert(23, :eur, :chf, :at => Time.gm(12,1,2011))
       #     #=> 30.12
       def convert(amount, from, to, opts={})
-        (amount.to_f * rate(from, to, opts) * 100).round.to_f / 100
+        amount * rate(from, to, opts)
       end
       
       protected

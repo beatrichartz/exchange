@@ -225,9 +225,9 @@ module Exchange
     
     def == other
       if other.is_a?(Exchange::Currency) && other.currency == self.currency
-        other.value == self.value
+        other.round.value == self.round.value
       elsif other.is_a?(Exchange::Currency)
-        other.convert_to(self.currency, :at => other.time).value == self.value
+        other.convert_to(self.currency, :at => other.time).round.value == self.round.value
       else
         self.value == other
       end
