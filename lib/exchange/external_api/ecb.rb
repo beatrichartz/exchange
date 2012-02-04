@@ -29,7 +29,7 @@ module Exchange
         times         = Exchange::Configuration.retries.times.map{ |i| time - 86400 * (i+1) }
         
         api_call      = Proc.new { |inst|
-          Call.new(api_url, :format => :xml, :at => time, :cache => :file) do |result|
+          Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
             t = time
             while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?
               t = times.shift

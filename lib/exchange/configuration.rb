@@ -7,7 +7,7 @@ module Exchange
   # @since 0.1
   class Configuration    
     class << self
-      @@config ||= {:api => :currency_bot, :retries => 5, :allow_mixed_operations => true, :cache => :memcached, :cache_host => 'localhost', :cache_port => 11211, :update => :daily} 
+      @@config ||= {:api => :currency_bot, :retries => 5, :filestore_path => File.expand_path('exchange_filestore'), :allow_mixed_operations => true, :cache => :memcached, :cache_host => 'localhost', :cache_port => 11211, :update => :daily} 
       
       # A configuration method that stores the configuration of the gem. It allows to set the api from which the data gets retrieved,
       # the cache in which the data gets cached, the regularity of updates for the currency rates, how many times the api calls should be 
@@ -32,6 +32,7 @@ module Exchange
       # @yieldparam [optional, Integer] retries The number of times the gem should retry to connect to the api host. Defaults to 5.
       # @yieldparam [optional, Boolean] If set to false, Operations with with different currencies raise errors. Defaults to true.
       # @yieldparam [optional, Symbol] The regularity of updates for the API. Possible values: :daily, :hourly. Defaults to :daily.
+      # @yieldparam [optional, String] The path where files can be stored for the gem (used for large files from ECB)
       # @example Set configuration values directly to the class
       #   Exchange::Configuration.cache = :redis
       #   Exchange::Configuration.api   = :xavier_media
@@ -40,7 +41,7 @@ module Exchange
         self.instance_eval(&blk)
       end
             
-      [:api, :retries, :cache, :cache_host, :cache_port, :update, :allow_mixed_operations].each do |m|
+      [:api, :retries, :cache, :cache_host, :cache_port, :filestore_path, :update, :allow_mixed_operations].each do |m|
         define_method m do
           @@config[m]
         end
@@ -53,20 +54,24 @@ module Exchange
       # @example
       #   Exchange::Configuration.api = :currency_bot
       #   Exchange::Configuration.api_class #=> Exchange::ExternalAPI::CurrencyBot
+      # @params [Hash] options A hash of Options
+      # @option options [Class] :api A api to return instead of the api class (use for fallback)
       # @return [Exchange::ExternalAPI::Subclass] A subclass of Exchange::ExternalAPI
       
-      def api_class
-        Exchange::ExternalAPI.const_get self.api.to_s.gsub(/(?:^|_)(.)/) { $1.upcase }
+      def api_class(options={})
+        Exchange::ExternalAPI.const_get((options[:api] || self.api).to_s.gsub(/(?:^|_)(.)/) { $1.upcase })
       end
       
       # The instantiated cache class according to the configuration
       # @example
       #   Exchange::Configuration.cache = :redis
       #   Exchange::Configuration.cache_class #=> Exchange::ExternalAPI::Redis
+      # @params [Hash] options A hash of Options
+      # @option options [Class] :api A api to return instead of the api class (use for fallback)
       # @return [Exchange::Cache::Subclass] A subclass of Exchange::Cache (or nil if caching has been set to false)
       
-      def cache_class
-        Exchange::Cache.const_get self.cache.to_s.gsub(/(?:^|_)(.)/) { $1.upcase } if self.cache
+      def cache_class(options={})
+        Exchange::Cache.const_get((options[:cache] || self.cache).to_s.gsub(/(?:^|_)(.)/) { $1.upcase }) if self.cache
       end
     end 
   end

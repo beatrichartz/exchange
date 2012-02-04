@@ -12,6 +12,9 @@ doc
 # bundler
 .bundle
 
+# filestore
+exchange_filestore
+
 # jeweler generated
 pkg
 

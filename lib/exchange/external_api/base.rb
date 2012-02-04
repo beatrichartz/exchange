@@ -77,7 +77,10 @@ module Exchange
       #     #=> 1.232231231
       def rate(from, to, opts={})
         update(opts)
-        self.rates[to.to_s.upcase] / self.rates[from.to_s.upcase]
+        rate_from   = self.rates[to.to_s.upcase]
+        rate_to     = self.rates[from.to_s.upcase]
+        raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + opts[:at].to_s if opts[:at]}") unless rate_from && rate_to
+        rate_from / rate_to
       end
       
       # Converts an amount of one currency into another
@@ -110,5 +113,7 @@ module Exchange
         end
         
     end
+    
+    NoRateError = Class.new(StandardError)
   end
 end
