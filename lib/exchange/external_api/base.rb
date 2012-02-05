@@ -77,7 +77,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       def rate(from, to, opts={})
-        rate = Configuration.cache_class.cached(Exchange::Configuration.api, opts.merge(:key_for => [from, to])) do
+        rate = Configuration.cache_class.cached(Exchange::Configuration.api, opts.merge(:key_for => [from, to], :plain => true)) do
           update(opts)
           rate_from   = self.rates[to.to_s.upcase]
           rate_to     = self.rates[from.to_s.upcase]

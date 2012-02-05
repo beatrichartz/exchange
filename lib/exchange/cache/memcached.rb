@@ -35,7 +35,7 @@ module Exchange
         def cached api, opts={}, &block
           raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
           begin
-            result = JSON.load client.get(key(api, opts))
+            result = opts[:plain] ? client.get(key(api, opts)) : JSON.load(client.get(key(api, opts)))
           rescue ::Memcached::NotFound
             result = block.call
             if result && !result.to_s.empty?
