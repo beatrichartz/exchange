@@ -39,7 +39,7 @@ module Exchange
           
           def key(api, opts={})
             time          = assure_time(opts[:at], :default => :now)
-            key_parts     = [ 'exchange'
+            key_parts     = [ 'exchange',
                               api, 
                               time.year, 
                               time.yday, 
