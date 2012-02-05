@@ -1,0 +1,11 @@
+= Changes to Exchange
+
+== 0.3.0
+- All Currencies & Rates get handled in BigDecimal now, preventing floating point errors
+- Major Performance inprovements on the DSL methods
+- New ECB API configuration possibility
+- Refactoring of the cache classes, new File cache class for large file storage
+- ISO 4217 String conversion is now available for all currencies, making it easier to display currencies in their right format
+
+== Up to 0.2.6
+- first version, bugfixes (see documentation)
