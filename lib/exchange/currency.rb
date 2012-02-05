@@ -12,7 +12,7 @@ module Exchange
     include Comparable
     
     # @attr_reader
-    # @return [Float] number The number the currency object has been instantiated from
+    # @return [BigDecimal] number The number the currency object has been instantiated from
     attr_reader :value
     
     # @attr_reader
