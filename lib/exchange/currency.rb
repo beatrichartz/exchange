@@ -58,8 +58,7 @@ module Exchange
     
     def method_missing method, *args, &block
       if method.to_s.match(/\Ato_(\w+)/) && Exchange::Configuration.api_class::CURRENCIES.include?($1)
-        args.first[:at] ||= time if args.first
-        return self.convert_to($1, args.first || {:at => self.time})
+        return self.convert_to($1, {:at => self.time}.merge(args.first || {}))
       end
 
       self.value.send method, *args, &block
@@ -287,12 +286,12 @@ module Exchange
       # @param [Hash] opts Options for assertion
       # @option opts [Symbol] :default If the argument is nil, you can define :default as :now to be delivered with Time.now instead of nil
       # @version 0.2
-      
+          
       def assure_time(arg=nil, opts={})
         if arg
           arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
-        elsif opts[:default] == :now
-          Time.now
+        elsif opts[:default]
+          Time.send(opts[:default])
         end
       end
   

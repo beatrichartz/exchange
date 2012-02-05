@@ -76,7 +76,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       def rate(from, to, opts={})
-        rate = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api_class, opts.merge(:key_for => [from, to])) do
+        rate = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api, opts.merge(:key_for => [from, to])) do
           update(opts)
           rate_from   = self.rates[to.to_s.upcase]
           rate_to     = self.rates[from.to_s.upcase]
@@ -106,12 +106,12 @@ module Exchange
         # @param [Time, String, NilClass] The value to be asserted
         # @param [Hash] opts Options for assertion
         # @option opts [Symbol] :default If the argument is nil, you can define :default as :now to be delivered with Time.now instead of nil
-        
+                  
         def assure_time(arg=nil, opts={})
           if arg
             arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
-          elsif opts[:default] == :now
-            Time.now
+          elsif opts[:default]
+            Time.send(opts[:default])
           end
         end
         

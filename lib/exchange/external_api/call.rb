@@ -31,7 +31,7 @@ module Exchange
       #   # Do something with that result
       
       def initialize url, options={}, &block
-        result = Exchange::Configuration.cache_class(options).cached(Exchange::Configuration.api_class(options), options) do
+        result = Exchange::Configuration.cache_class(options).cached(options[:api] || Exchange::Configuration.api, options) do
           load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
         end
         
