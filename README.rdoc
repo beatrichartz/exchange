@@ -26,12 +26,22 @@ a string with the currency code in front, or just the amount in the right format
 
 === Use three great APIs or your own great API
 
-Three open APIs are already included: Currency Bot (http://currencybot.github.com/), Xaviermedia (http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057) and the XML API of the European Central Bank (http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html)
+Three open APIs are already included: 
+
+- Currency Bot (http://currencybot.github.com/)
+- Xaviermedia (http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057)
+- European Central Bank (http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html)
+
 but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it with the Exchange gem. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI to see an example of a custom API Extension
 
 === Use great caches or your own great cache
 
-Also, the gem allows you to use one of three available caching solutions: Memcached via the Memcached gem, Redis via the redis gem or the Rails cache.
+Also, the gem allows you to use one of three available caching solutions: 
+
+- Memcached via the Memcached gem
+- Redis via the redis gem
+- Rails cache (This gem does however not depend on rails)
+
 But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it with Exchange. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache for an example of a cache extension
 
 == Installation
