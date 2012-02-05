@@ -43,13 +43,13 @@ describe "Exchange::ExternalAPI::ECB" do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml", fixture('api_responses/example_ecb_xml_history.xml'))
     end
     it "should convert and be able to use history" do
-      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).round(2).should == 96.72
+      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).round(2).should == 91.66
     end
     it "should convert negative numbers right" do
-      subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-79.51")
+      subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-76.08")
     end
     it "should convert when given symbols" do
-      subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2).should == 10.87
+      subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2).should == 10.35
     end
   end
 end

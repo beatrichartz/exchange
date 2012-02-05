@@ -7,6 +7,13 @@ describe "Exchange::Conversability" do
   after(:all) do
     Exchange::Configuration.cache = :memcached
   end
+  it "should define all currencies on Fixnum, Float and BigDecimal" do
+    Exchange::ISO4217.definitions.keys.each do |c|
+      1.should be_respond_to(c.downcase.to_sym)
+      1.1.should be_respond_to(c.downcase.to_sym)
+      BigDecimal.new("1").should be_respond_to(c.downcase.to_sym)
+    end
+  end
   context "with a fixnum" do
     it "should allow to convert to a currency" do
       3.eur.should be_kind_of Exchange::Currency

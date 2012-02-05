@@ -25,9 +25,6 @@ XCD:
   format: "#,###.##"
   minor_unit: 2
   currency: East Caribbean Dollar
-XPT: 
-  minor_unit: N.A.
-  currency: Platinum
 OMR: 
   format: "#,###.###"
   minor_unit: 3
@@ -42,9 +39,6 @@ CDF:
 KPW: 
   minor_unit: 2
   currency: North Korean Won
-XSU: 
-  minor_unit: N.A.
-  currency: Sucre
 CNY: 
   format: "#,###.##"
   minor_unit: 2
@@ -126,9 +120,6 @@ GIP:
 UYI: 
   minor_unit: 0
   currency: Uruguay Peso en Unidades Indexadas (URUIURUI)
-XUA: 
-  minor_unit: N.A.
-  currency: ADB Unit of Account
 BOB: 
   format: "#,###.##"
   minor_unit: 2
@@ -202,9 +193,6 @@ LSL:
 XAF: 
   minor_unit: 0
   currency: CFA Franc BEAC
-XTS: 
-  minor_unit: N.A.
-  currency: Codes specifically reserved for testing purposes
 SHP: 
   minor_unit: 2
   currency: Saint Helena Pound
@@ -214,9 +202,6 @@ HTG:
 RSD: 
   minor_unit: 2
   currency: Serbian Dinar
-XAG: 
-  minor_unit: N.A.
-  currency: Silver
 MGA: 
   minor_unit: 2
   currency: Malagasy Ariary
@@ -286,9 +271,6 @@ GYD:
 WST: 
   minor_unit: 2
   currency: Tala
-XFU: 
-  minor_unit: N.A.
-  currency: UIC-Franc
 NPR: 
   format: "#,###.##"
   minor_unit: 2
@@ -311,16 +293,10 @@ JPY:
   format: "#,###"
   minor_unit: 0
   currency: Yen
-XBA: 
-  minor_unit: N.A.
-  currency: Bond Markets Unit European Composite Unit (EURCO)
 BRL: 
   format: "#.###,##"
   minor_unit: 2
   currency: Brazilian Real
-XPD: 
-  minor_unit: N.A.
-  currency: Palladium
 UYU: 
   format: "#.###,##"
   minor_unit: 2
@@ -332,9 +308,6 @@ BMD:
   format: "#,###.##"
   minor_unit: 2
   currency: Bermudian Dollar
-XBB: 
-  minor_unit: N.A.
-  currency: 0
 SZL: 
   format: "#, ###.##"
   minor_unit: 2
@@ -346,9 +319,6 @@ JOD:
   format: "#,###.###"
   minor_unit: 3
   currency: Jordanian Dinar
-XBC: 
-  minor_unit: N.A.
-  currency: 0
 IDR: 
   format: "#.###,##"
   minor_unit: 2
@@ -365,9 +335,6 @@ MRO:
 YER: 
   minor_unit: 2
   currency: Yemeni Rial
-XBD: 
-  minor_unit: N.A.
-  currency: 0
 BAM: 
   format: "#,###.##"
   minor_unit: 2
@@ -461,9 +428,6 @@ VUV:
   format: "#,###"
   minor_unit: 0
   currency: Vatu
-XDR: 
-  minor_unit: N.A.
-  currency: SDR (Special Drawing Right)
 BBD: 
   minor_unit: 2
   currency: Barbados Dollar
@@ -516,9 +480,6 @@ VND:
 ZMK: 
   minor_unit: 2
   currency: Zambian Kwacha
-XAU: 
-  minor_unit: N.A.
-  currency: Gold
 BOV: 
   minor_unit: 2
   currency: Mvdol
@@ -597,9 +558,6 @@ SOS:
 CHW: 
   minor_unit: 2
   currency: WIR Franc
-XXX: 
-  minor_unit: N.A.
-  currency: The codes assigned for transactions where no currency is involved
 CAD: 
   format: "#,###.##"
   minor_unit: 2

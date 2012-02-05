@@ -43,9 +43,9 @@ module Exchange
               api.to_s, 
               time.year.to_s, 
               time.yday.to_s, 
-              Exchange::Configuration.update == :hourly ? time.hour.to_s : '',
+              Exchange::Configuration.update == :hourly ? time.hour.to_s : nil,
               *(opts[:key_for] || [])
-            ].join('_')
+            ].compact.join('_')
           end
           
           def assure_time(arg=nil, opts={})

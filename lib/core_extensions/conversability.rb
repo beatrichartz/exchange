@@ -6,7 +6,10 @@ module Exchange
   # @since 0.1
   
   module Conversability
-    # Method missing is used here to allow instantiation and immediate conversion of Currency objects from a common Fixnum or Float
+    # Dynamic method generation is used here to allow instantiation and immediate conversion of Currency objects from 
+    # a common Fixnum or Float or BigDecimal. Since ruby 1.9 handles certain type conversion of Fixnum, Float and others
+    # via method missing, this is not handled via method missing because it would seriously break down performance.
+    # 
     # @example Instantiate from any type of number
     #   40.usd => #<Exchange::Currency @value=40 @currency=:usd>
     #   -33.nok => #<Exchange::Currency @value=-33 @currency=:nok>
@@ -20,11 +23,12 @@ module Exchange
     #   1.nok.to_chf(:at => Time.now - 3600) => #<Exchange::Currency @value=6.57 @currency=:chf>
     #   -3.5.dkk.to_huf(:at => Time.now - 172800) => #<Exchange::Currency @value=-337.40 @currency=:huf>
     
-    def method_missing method, *args, &block
-      return Exchange::Currency.new(self, method, *args) if method.to_s.length == 3 && Exchange::Configuration.api_class::CURRENCIES.include?(method.to_s)
-    
-      super method, *args, &block
+    ISO4217.definitions.keys.each do |c|
+      define_method c.downcase.to_sym do |*args|
+        Currency.new(self, c, *args)
+      end
     end
+    
   end
 end
 

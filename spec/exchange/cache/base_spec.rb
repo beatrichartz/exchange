@@ -9,8 +9,8 @@ describe "Exchange::Cache::Base" do
     end
     context "with a daily cache" do
       it "should build a timestamped key with the class given, the yearday and the year" do
-        Exchange::Cache::Base.send(:key, Exchange::ExternalAPI::XavierMedia).should == 'Exchange_ExternalAPI_XavierMedia_2012_61'
-        Exchange::Cache::Base.send(:key, Exchange::ExternalAPI::CurrencyBot).should == 'Exchange_ExternalAPI_CurrencyBot_2012_61'
+        Exchange::Cache::Base.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61'
+        Exchange::Cache::Base.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61'
       end
     end
     context "with an hourly cache" do
@@ -21,8 +21,8 @@ describe "Exchange::Cache::Base" do
         Exchange::Configuration.update = :daily
       end
       it "should build a timestamped key with the class given, the yearday, the year and the hour" do
-        Exchange::Cache::Base.send(:key, Exchange::ExternalAPI::XavierMedia).should == 'Exchange_ExternalAPI_XavierMedia_2012_61_23'
-        Exchange::Cache::Base.send(:key, Exchange::ExternalAPI::CurrencyBot).should == 'Exchange_ExternalAPI_CurrencyBot_2012_61_23'
+        Exchange::Cache::Base.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61_23'
+        Exchange::Cache::Base.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61_23'
       end
     end
   end
