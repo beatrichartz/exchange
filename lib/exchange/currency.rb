@@ -46,7 +46,7 @@ module Exchange
       @value            = Exchange::ISO4217.instantiate(value, currency)
       @currency         = currency
       @time             = assure_time(opts[:at], :default => :now)
-      @from             = opts[:from] if opts[:from]
+      @from             = opts[:from]
     end
     
     # Method missing is used to handle conversions from one currency object to another. It only handles currencies which are available in
@@ -275,8 +275,10 @@ module Exchange
     #   Exchange::ISO4217.stringif(34.34, :omr).to_s(:iso) #=> "34.340"
     
     def to_s format=:currency
-      [format == :currency && Exchange::ISO4217.stringify(self.value, self.currency),
-       format == :amount && Exchange::ISO4217.stringify(self.value, self.currency, :amount_only => true)].detect{|l| l.is_a?(String) }
+      [
+        format == :currency && Exchange::ISO4217.stringify(self.value, self.currency),
+        format == :amount && Exchange::ISO4217.stringify(self.value, self.currency, :amount_only => true)
+      ].detect{|l| l.is_a?(String) }
     end
     
     protected

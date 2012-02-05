@@ -39,13 +39,13 @@ module Exchange
           
           def key(api, opts={})
             time          = assure_time(opts[:at], :default => :now)
-            key_parts     = [ 'exchange',
-                              api, 
-                              time.year, 
-                              time.yday, 
-                              Exchange::Configuration.update == :hourly ? time.hour : ''
-                            ] + (opts[:key_for]  || [])
-            key_parts.join('_')
+            [ 'exchange',
+              api.to_s, 
+              time.year.to_s, 
+              time.yday.to_s, 
+              Exchange::Configuration.update == :hourly ? time.hour.to_s : '',
+              *(opts[:key_for] || [])
+            ].join('_')
           end
           
           def assure_time(arg=nil, opts={})
