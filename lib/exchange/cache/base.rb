@@ -38,7 +38,7 @@ module Exchange
           #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"
           
           def key(api, opts={})
-            time          = assure_time(opts[:at], :default => :now)
+            time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
             [ 'exchange',
               api.to_s, 
               time.year.to_s, 
@@ -46,14 +46,6 @@ module Exchange
               Exchange::Configuration.update == :hourly ? time.hour.to_s : nil,
               *(opts[:key_for] || [])
             ].compact.join('_')
-          end
-          
-          def assure_time(arg=nil, opts={})
-            if arg
-              arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
-            elsif opts[:default]
-              Time.send(opts[:default])
-            end
           end
         
       end

@@ -22,7 +22,7 @@ module Exchange
       #   Exchange::ExternalAPI::XavierMedia.new.update(:at => Time.gm(3,2,2010))
       
       def update(opts={})
-        time       = assure_time(opts[:at], :default => :now)
+        time       = Exchange::Helper.assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
         retry_urls = Exchange::Configuration.retries.times.map{ |i| api_url(time - 86400 * (i+1)) }
         

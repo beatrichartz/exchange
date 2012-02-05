@@ -24,13 +24,13 @@ module Exchange
       #   Exchange::ExternalAPI::XavierMedia.new.update(:at => Time.gm(3,2,2010))
       
       def update(opts={})
-        time          = assure_time(opts[:at], :default => :now)
+        time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
         api_url       = api_url(time)
         times         = Exchange::Configuration.retries.times.map{ |i| time - 86400 * (i+1) }
         
-        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." unless Exchange::Configuration.cache
+        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." unless Configuration.cache
         
-        Exchange::Configuration.cache_class.cached(self.class, :at => time) do
+        Configuration.cache_class.cached(self.class, :at => time) do
           Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
             t = time
             while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?

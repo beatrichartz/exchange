@@ -21,7 +21,7 @@ module Exchange
         # @return [::Redis] an instance of the redis client gem class
         
         def client
-          @@client ||= ::Redis.new(:host => Exchange::Configuration.cache_host, :port => Exchange::Configuration.cache_port)
+          @@client ||= ::Redis.new(:host => Configuration.cache_host, :port => Configuration.cache_port)
         end
         
         # returns either cached data from the redis client or calls the block and caches it in redis.
@@ -41,7 +41,7 @@ module Exchange
             result = block.call
             if result && !result.to_s.empty?
               client.set key(api, opts), result.to_json
-              client.expire key(api, opts), Exchange::Configuration.update == :daily ? 86400 : 3600
+              client.expire key(api, opts), Configuration.update == :daily ? 86400 : 3600
             end
           end
           

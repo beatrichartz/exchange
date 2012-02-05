@@ -43,9 +43,9 @@ module Exchange
     #     #=> #<Exchange::Currency @number=37.0 @currency=:usd @time=#<Time> @from=#<Exchange::Currency @number=40.0 @currency=:usd>>
     
     def initialize value, currency, opts={}
-      @value            = Exchange::ISO4217.instantiate(value, currency)
+      @value            = ISO4217.instantiate(value, currency)
       @currency         = currency
-      @time             = assure_time(opts[:at], :default => :now)
+      @time             = Helper.assure_time(opts[:at], :default => :now)
       @from             = opts[:from]
     end
     
@@ -57,8 +57,11 @@ module Exchange
     #   Exchange::Currency.new(40,:nok).to_sek(:at => Time.gm(2012,2,2))
     
     def method_missing method, *args, &block
-      if method.to_s.match(/\Ato_(\w+)/) && Exchange::Configuration.api_class::CURRENCIES.include?($1)
+      match = method.to_s.match(/\Ato_(\w{3})/)
+      if match && Configuration.api_class::CURRENCIES.include?($1)
         return self.convert_to($1, {:at => self.time}.merge(args.first || {}))
+      elsif match && ISO4217.definitions.keys.include?($1.upcase)
+        raise NoRateError.new("Cannot convert to #{$1} because the defined api does not provide a rate")
       end
 
       self.value.send method, *args, &block
@@ -75,7 +78,7 @@ module Exchange
     #   Exchange::Currency.new(40,:nok).convert_to('sek', :at => Time.gm(2012,2,2))
     
     def convert_to other, opts={}
-      Exchange::Currency.new(Exchange::Configuration.api_class.new.convert(value, currency, other, opts), other, opts.merge(:from => self))
+      Currency.new(Configuration.api_class.new.convert(value, currency, other, opts), other, opts.merge(:from => self))
     end
     
     class << self
@@ -98,8 +101,8 @@ module Exchange
         def base_operation op
           self.class_eval <<-EOV
             def #{op}(other)
-              #{'raise Exchange::CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange::Configuration.allow_mixed_operations && other.kind_of?(Exchange::Currency) && other.currency != self.currency'}
-              @value #{op}= other.kind_of?(Exchange::Currency) ? other.convert_to(self.currency, :at => other.time) : other
+              #{'raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency'}
+              @value #{op}= other.kind_of?(Currency) ? other.convert_to(self.currency, :at => other.time) : other
               self
             end
           EOV
@@ -276,26 +279,10 @@ module Exchange
     
     def to_s format=:currency
       [
-        format == :currency && Exchange::ISO4217.stringify(self.value, self.currency),
-        format == :amount && Exchange::ISO4217.stringify(self.value, self.currency, :amount_only => true)
+        format == :currency && ISO4217.stringify(self.value, self.currency),
+        format == :amount && ISO4217.stringify(self.value, self.currency, :amount_only => true)
       ].detect{|l| l.is_a?(String) }
     end
-    
-    protected
-    
-      # A helper function to assure a value is an instance of time
-      # @param [Time, String, NilClass] The value to be asserted
-      # @param [Hash] opts Options for assertion
-      # @option opts [Symbol] :default If the argument is nil, you can define :default as :now to be delivered with Time.now instead of nil
-      # @version 0.2
-          
-      def assure_time(arg=nil, opts={})
-        if arg
-          arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
-        elsif opts[:default]
-          Time.send(opts[:default])
-        end
-      end
   
   end
   

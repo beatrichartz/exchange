@@ -1,4 +1,5 @@
 module Exchange
+  
   # The external API module. Every class Handling an API has to be placed here and inherit from base. It has to call an api and define
   # a rates hash, an exchange base and a unix timestamp. The call will get cached automatically with the right structure
   # Allows for easy extension with an own api, as shown below
@@ -15,7 +16,7 @@ module Exchange
   #         # Every instance of ExternalAPI Class has to have an update function which gets the rates from the API
   #         def update(opts={})
   #           # assure that you will get a Time object for the historical dates
-  #           time = assure_time(opts[:at]) 
+  #           time = Exchange::Helper.assure_time(opts[:at]) 
   #
   #           # call your API (shown here with a helper function that builds your API URL). Like this, your calls will get cached.
   #           Call.new(api_url(time), :at => time) do |result|
@@ -76,7 +77,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       def rate(from, to, opts={})
-        rate = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api, opts.merge(:key_for => [from, to])) do
+        rate = Configuration.cache_class.cached(Exchange::Configuration.api, opts.merge(:key_for => [from, to])) do
           update(opts)
           rate_from   = self.rates[to.to_s.upcase]
           rate_to     = self.rates[from.to_s.upcase]
@@ -99,24 +100,7 @@ module Exchange
       def convert(amount, from, to, opts={})
         amount * rate(from, to, opts)
       end
-      
-      protected
-      
-        # A helper function to assure a value is an instance of time
-        # @param [Time, String, NilClass] The value to be asserted
-        # @param [Hash] opts Options for assertion
-        # @option opts [Symbol] :default If the argument is nil, you can define :default as :now to be delivered with Time.now instead of nil
-                  
-        def assure_time(arg=nil, opts={})
-          if arg
-            arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
-          elsif opts[:default]
-            Time.send(opts[:default])
-          end
-        end
         
     end
-    
-    NoRateError = Class.new(StandardError)
   end
 end

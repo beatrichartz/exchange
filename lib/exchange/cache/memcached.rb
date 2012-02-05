@@ -21,7 +21,7 @@ module Exchange
         # @return [::Memcached] an instance of the memcached client gem class
         
         def client
-          @@client ||= ::Memcached.new("#{Exchange::Configuration.cache_host}:#{Exchange::Configuration.cache_port}")
+          @@client ||= ::Memcached.new("#{Configuration.cache_host}:#{Configuration.cache_port}")
         end
         
         # returns either cached data from the memcached client or calls the block and caches it in memcached.
@@ -39,7 +39,7 @@ module Exchange
           rescue ::Memcached::NotFound
             result = block.call
             if result && !result.to_s.empty?
-              client.set key(api, opts), result.to_json, Exchange::Configuration.update == :daily ? 86400 : 3600
+              client.set key(api, opts), result.to_json, Configuration.update == :daily ? 86400 : 3600
             end
           end
           

@@ -33,7 +33,7 @@ module Exchange
         def cached api, opts={}, &block
           raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
           
-          result = client.fetch key(api, opts), :expires_in => Exchange::Configuration.update == :daily ? 86400 : 3600, &block
+          result = client.fetch key(api, opts), :expires_in => Configuration.update == :daily ? 86400 : 3600, &block
           client.delete(key(api, opts)) unless result && !result.to_s.empty?
           
           result

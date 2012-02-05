@@ -62,7 +62,7 @@ module Exchange
         @api_class ||= {}
         return @api_class[options[:api] || self.api] if @api_class[options[:api] || self.api]
 
-        @api_class[options[:api] || self.api] = Exchange::ExternalAPI.const_get((options[:api] || self.api).to_s.gsub(/(?:^|_)(.)/) { $1.upcase })
+        @api_class[options[:api] || self.api] = ExternalAPI.const_get((options[:api] || self.api).to_s.gsub(/(?:^|_)(.)/) { $1.upcase })
       end
       
       # The instantiated cache class according to the configuration
@@ -78,9 +78,9 @@ module Exchange
         return @cache_class[options[:cache] || self.cache] if @cache_class[options[:cache] || self.cache]
         
         @cache_class[options[:cache] || self.cache] = if self.cache
-          Exchange::Cache.const_get((options[:cache] || self.cache).to_s.gsub(/(?:^|_)(.)/) { $1.upcase })
+          Cache.const_get((options[:cache] || self.cache).to_s.gsub(/(?:^|_)(.)/) { $1.upcase })
         else
-          Exchange::Cache::NoCache
+          Cache::NoCache
         end
       end
     end 

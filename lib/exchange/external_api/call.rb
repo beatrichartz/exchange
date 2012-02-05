@@ -31,7 +31,7 @@ module Exchange
       #   # Do something with that result
       
       def initialize url, options={}, &block
-        result = Exchange::Configuration.cache_class(options).cached(options[:api] || Exchange::Configuration.api, options) do
+        result = Configuration.cache_class(options).cached(options[:api] || Configuration.api, options) do
           load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
         end
         
@@ -48,20 +48,22 @@ module Exchange
         # @param [Integer] retries The number of retries to do if the API Call should fail with a HTTP Error
         # @param [Array] retry_with An array of urls to retry the API call with if the call to the original URL should fail. These values will be shifted until a call succeeds or the number of maximum retries is reached
       
-        def load_url(url, retries, retry_with)
-          begin
+        def load_url(url, retries, retry_with)          
+          begin            
             result = URI.parse(url).open.read
           rescue SocketError
+            puts 'SocketError'
             raise APIError.new("Calling API #{url} produced a socket error")
-          rescue OpenURI::HTTPError
+          rescue OpenURI::HTTPError => e
+            retries -= 1
             if retries > 0
-              retries -= 1
               url = retry_with.shift if retry_with && !retry_with.empty?
               retry
             else
               raise APIError.new("API #{url} was not reachable")
             end
           end
+          result          
         end
       
     end

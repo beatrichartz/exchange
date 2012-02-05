@@ -25,6 +25,9 @@ describe "Exchange::Cache::Memcached" do
     end
   end
   describe "cached" do
+    it "should raise an error if no block was given" do
+      lambda { subject.cached('API_CLASS') }.should raise_error(Exchange::Cache::CachingWithoutBlockError)
+    end
     context "when a cached result exists" do
       let(:client) { mock('memcached') }
       before(:each) do

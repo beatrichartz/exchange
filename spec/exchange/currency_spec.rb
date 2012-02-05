@@ -271,6 +271,9 @@ describe "Exchange::Currency" do
       mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/historical/2011-01-01.json", fixture('api_responses/example_json_api.json'), 2)
       5.eur(:at => Time.gm(2011,1,1)).to_usd.value.should == 5.eur.to_usd(:at => Time.gm(2011,1,1)).value
     end
+    it "should raise errors for currency conversions it does not have rates for" do
+      lambda { subject.to_ssp }.should raise_error(NoRateError)
+    end
     it "should pass on methods it does not understand to its number" do
       subject.to_f.should == 40
       lambda { subject.to_hell }.should raise_error(NoMethodError)
