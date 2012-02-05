@@ -28,24 +28,16 @@ module Exchange
         api_url       = api_url(time)
         times         = Exchange::Configuration.retries.times.map{ |i| time - 86400 * (i+1) }
         
-        api_call      = Proc.new { |inst|
+        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." unless Exchange::Configuration.cache
+        
+        Exchange::Configuration.cache_class.cached(self.class, :at => time) do
           Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
             t = time
             while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?
               t = times.shift
             end
-            inst.callresult = r.to_s
+            @callresult = r.to_s
           end
-        }
-        
-        if Exchange::Configuration.cache        
-          self.callresult = Exchange::Configuration.cache_class.cached(self.class, :at => time) do
-            api_call.call(self)
-            self.callresult
-          end
-        else
-          Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow."
-          api_call.call(self)
         end
 
         parsed = Nokogiri.parse(self.callresult)

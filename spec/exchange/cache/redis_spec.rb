@@ -30,7 +30,7 @@ describe "Exchange::Cache::Redis" do
     context "when a cached result exists" do
       let(:client) { mock('redis') }
       before(:each) do
-        subject.should_receive(:key).with('API_CLASS', nil).and_return('KEY')
+        subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
         ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
         client.should_receive(:get).with('KEY').and_return "{\"RESULT\":\"YAY\"}"
       end
@@ -44,7 +44,7 @@ describe "Exchange::Cache::Redis" do
     context "when no cached result exists" do
       let(:client) { mock('redis') }
       before(:each) do
-        subject.should_receive(:key).with('API_CLASS', nil).at_most(3).times.and_return('KEY')
+        subject.should_receive(:key).with('API_CLASS', {}).at_most(3).times.and_return('KEY')
         ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
         client.should_receive(:get).with('KEY').and_return nil
       end

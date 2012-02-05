@@ -28,7 +28,7 @@ describe "Exchange::Cache::Rails" do
       let(:client) { mock('rails_cache') }
       context "with a daily cache" do
         before(:each) do
-          subject.should_receive(:key).with('API_CLASS', nil).and_return('KEY')
+          subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
           ::Rails.should_receive(:cache).and_return(client)
           client.should_receive(:fetch).with('KEY', :expires_in => 86400).and_return "{\"RESULT\":\"YAY\"}"
         end
@@ -39,7 +39,7 @@ describe "Exchange::Cache::Rails" do
       context "with an hourly cache" do
         before(:each) do
           Exchange::Configuration.update = :hourly
-          subject.should_receive(:key).with('API_CLASS', nil).and_return('KEY')
+          subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
           ::Rails.should_receive(:cache).and_return(client)
           client.should_receive(:fetch).with('KEY', :expires_in => 3600).and_return "{\"RESULT\":\"YAY\"}"
         end
@@ -54,7 +54,7 @@ describe "Exchange::Cache::Rails" do
     context "when no result is returned" do
       let(:client) { mock('rails_cache') }
       before(:each) do
-        subject.should_receive(:key).with('API_CLASS', nil).at_most(3).times.and_return('KEY')
+        subject.should_receive(:key).with('API_CLASS', {}).at_most(3).times.and_return('KEY')
         ::Rails.should_receive(:cache).twice.and_return(client)
         client.should_receive(:fetch).with('KEY', an_instance_of(Hash)).and_return nil
         client.should_receive(:delete).with('KEY').once

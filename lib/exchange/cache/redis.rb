@@ -35,13 +35,13 @@ module Exchange
         def cached api, opts={}, &block
           raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
           
-          if result = client.get(key(api, opts[:at]))
+          if result = client.get(key(api, opts))
             result = JSON.load result
           else
             result = block.call
-            if result && !result.empty?
-              client.set key(api, opts[:at]), result.to_json
-              client.expire key(api, opts[:at]), Exchange::Configuration.update == :daily ? 86400 : 3600
+            if result && !result.to_s.empty?
+              client.set key(api, opts), result.to_json
+              client.expire key(api, opts), Exchange::Configuration.update == :daily ? 86400 : 3600
             end
           end
           

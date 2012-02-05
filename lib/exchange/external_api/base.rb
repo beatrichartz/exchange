@@ -76,11 +76,14 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       def rate(from, to, opts={})
-        update(opts)
-        rate_from   = self.rates[to.to_s.upcase]
-        rate_to     = self.rates[from.to_s.upcase]
-        raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + opts[:at].to_s if opts[:at]}") unless rate_from && rate_to
-        rate_from / rate_to
+        rate = Exchange::Configuration.cache_class.cached(Exchange::Configuration.api_class, opts.merge(:key_for => [from, to])) do
+          update(opts)
+          rate_from   = self.rates[to.to_s.upcase]
+          rate_to     = self.rates[from.to_s.upcase]
+          raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + opts[:at].to_s if opts[:at]}") unless rate_from && rate_to
+          rate_from / rate_to
+        end
+        BigDecimal.new(rate)
       end
       
       # Converts an amount of one currency into another

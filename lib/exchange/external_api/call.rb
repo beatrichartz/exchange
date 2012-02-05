@@ -31,19 +31,14 @@ module Exchange
       #   # Do something with that result
       
       def initialize url, options={}, &block
-        if Exchange::Configuration.cache
-          result = Exchange::Configuration.cache_class(options).cached(Exchange::Configuration.api_class(options), options) do
-            load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
-          end
-        else
-          result = load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
+        result = Exchange::Configuration.cache_class(options).cached(Exchange::Configuration.api_class(options), options) do
+          load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
         end
         
         parsed = options[:format] == :xml ? Nokogiri.parse(result) : JSON.load(result)
         
         return parsed unless block_given?
-
-        yield parsed
+        yield  parsed
       end
       
       private

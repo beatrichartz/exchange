@@ -1,11 +1,13 @@
 module Exchange
   module Cache
+    
     # @author Beat Richartz
     # A class that allows to store api call results in files. THIS NOT A RECOMMENDED CACHING OPTION!
     # It just may be necessary to cache large files somewhere, this class allows you to do that
     # 
     # @version 0.3
     # @since 0.3
+    
     class File < Base
       class << self
         
@@ -29,8 +31,8 @@ module Exchange
             result = ::File.read(path)
           else
             result = block.call
-            if result && !result.empty?
-              FileUtils.mkdir_p(dir) unless Dir.respond_to?(:exists) && Dir.exists?(dir)
+            if result && !result.to_s.empty?
+              FileUtils.mkdir_p(dir) unless Dir.respond_to?(:exists?) && Dir.exists?(dir)
               keep_files = [key(api, :daily), key(api, :monthly)]
               Dir.entries(dir).each do |e|
                 ::File.delete(::File.join(dir, e)) unless keep_files.include?(e) || e.match(/\A\./)

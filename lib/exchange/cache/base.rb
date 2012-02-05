@@ -37,10 +37,12 @@ module Exchange
           # @example
           #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"
           
-          def key(api_class, time=nil)
-            time      ||= Time.now
+          def key(api_class, opts={})
+            time          = opts[:at]       || Time.now
+            custom_parts  = opts[:key_for]  || []
             key_parts = [api_class.to_s.gsub(/::/, '_'), time.year, time.yday]
             key_parts << time.hour if Exchange::Configuration.update == :hourly
+            key_parts += custom_parts
             key_parts.join('_')
           end
         

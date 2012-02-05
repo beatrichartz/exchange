@@ -28,7 +28,7 @@ describe "Exchange::Cache::Memcached" do
     context "when a cached result exists" do
       let(:client) { mock('memcached') }
       before(:each) do
-        subject.should_receive(:key).with('API_CLASS', nil).and_return('KEY')
+        subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
         ::Memcached.should_receive(:new).with("HOST:PORT").and_return(client)
         client.should_receive(:get).with('KEY').and_return "{\"RESULT\":\"YAY\"}"
       end
@@ -42,7 +42,7 @@ describe "Exchange::Cache::Memcached" do
     context "when no cached result exists" do
       let(:client) { mock('memcached') }
       before(:each) do
-        subject.should_receive(:key).with('API_CLASS', nil).twice.and_return('KEY')
+        subject.should_receive(:key).with('API_CLASS', {}).twice.and_return('KEY')
         ::Memcached.should_receive(:new).with("HOST:PORT").and_return(client)
         client.should_receive(:get).with('KEY').and_raise(::Memcached::NotFound)
       end

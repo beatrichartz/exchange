@@ -32,7 +32,7 @@ module Exchange
       # @yieldparam [optional, Integer] retries The number of times the gem should retry to connect to the api host. Defaults to 5.
       # @yieldparam [optional, Boolean] If set to false, Operations with with different currencies raise errors. Defaults to true.
       # @yieldparam [optional, Symbol] The regularity of updates for the API. Possible values: :daily, :hourly. Defaults to :daily.
-      # @yieldparam [optional, String] The path where files can be stored for the gem (used for large files from ECB)
+      # @yieldparam [optional, String] The path where files can be stored for the gem (used for large files from ECB). Make sure ruby has write access.
       # @example Set configuration values directly to the class
       #   Exchange::Configuration.cache = :redis
       #   Exchange::Configuration.api   = :xavier_media
@@ -71,7 +71,11 @@ module Exchange
       # @return [Exchange::Cache::Subclass] A subclass of Exchange::Cache (or nil if caching has been set to false)
       
       def cache_class(options={})
-        Exchange::Cache.const_get((options[:cache] || self.cache).to_s.gsub(/(?:^|_)(.)/) { $1.upcase }) if self.cache
+        if self.cache
+          Exchange::Cache.const_get((options[:cache] || self.cache).to_s.gsub(/(?:^|_)(.)/) { $1.upcase })
+        else
+          Exchange::Cache::NoCache
+        end
       end
     end 
   end
