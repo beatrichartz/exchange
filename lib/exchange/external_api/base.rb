@@ -84,7 +84,7 @@ module Exchange
           raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + opts[:at].to_s if opts[:at]}") unless rate_from && rate_to
           rate_from / rate_to
         end
-        BigDecimal.new(rate)
+        BigDecimal.new(rate.to_s)
       end
       
       # Converts an amount of one currency into another
