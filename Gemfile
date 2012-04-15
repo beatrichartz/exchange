@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 # Add dependencies required to use your gem here.
 # Example:
-gem "nokogiri",   ">= 1.4.0"
+gem "nokogiri",   "<= 1.5.0"
 gem "json",       ">= 1.6.5"
 gem "memcached",  ">= 1.3.0"
 gem "redis",      ">= 2.2.0"

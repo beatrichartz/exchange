@@ -33,6 +33,7 @@ module Exchange
         Configuration.cache_class.cached(self.class, :at => time) do
           Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
             t = time
+            debugger
             while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?
               t = times.shift
             end
