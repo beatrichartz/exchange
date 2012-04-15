@@ -1,3 +1,5 @@
+EXCHANGE_GEM_ROOT_PATH = File.dirname(__FILE__).sub(/\/lib/, '') if __FILE__.is_a?(String) 
+
 require 'bigdecimal'
 require 'open-uri'
 require 'bundler'

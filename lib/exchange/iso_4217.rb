@@ -14,7 +14,7 @@ module Exchange
       # @return [Hash] The iso427 Definitions with the currency code as keys
       
       def definitions
-        @@definitions ||= YAML.load_file('iso4217.yml')
+        @@definitions ||= YAML.load_file(File.join(EXCHANGE_GEM_ROOT_PATH, 'iso4217.yml'))
       end
       
       # Use this to instantiate a currency amount. For one, it is important that we use BigDecimal here so nothing gets lost because
