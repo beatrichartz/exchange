@@ -28,9 +28,9 @@ module Exchange
         api_url       = api_url(time)
         times         = Exchange::Configuration.retries.times.map{ |i| time - 86400 * (i+1) }
         
-        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." unless Configuration.cache
+        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." unless Exchange::Configuration.cache
         
-        Configuration.cache_class.cached(self.class, :at => time) do
+        Exchange::Configuration.cache_class.cached(self.class, :at => time) do
           Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
             t = time
 
