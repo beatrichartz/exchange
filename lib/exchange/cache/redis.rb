@@ -36,7 +36,7 @@ module Exchange
           raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
           
           if result = client.get(key(api, opts))
-            result = opts[:plain] ? result : JSON.load(result)
+            result = opts[:plain] ? result.gsub(/["\s+]/, '') : JSON.load(result)
           else
             result = block.call
             if result && !result.to_s.empty?

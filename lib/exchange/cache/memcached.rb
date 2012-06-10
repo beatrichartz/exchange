@@ -32,10 +32,10 @@ module Exchange
         # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
         # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
          
-        def cached api, opts={}, &block
+        def cached api, opts={}, &block          
           raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
           begin
-            result = opts[:plain] ? client.get(key(api, opts)) : JSON.load(client.get(key(api, opts)))
+            result = opts[:plain] ? client.get(key(api, opts)).gsub(/["\s+]/, '') : JSON.load(client.get(key(api, opts)))
           rescue ::Memcached::NotFound
             result = block.call
             if result && !result.to_s.empty?

@@ -33,15 +33,32 @@ describe "Exchange::Cache::Redis" do
     context "when a cached result exists" do
       let(:client) { mock('redis') }
       before(:each) do
-        subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
         ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
-        client.should_receive(:get).with('KEY').and_return "{\"RESULT\":\"YAY\"}"
       end
       after(:each) do
         subject.send(:remove_class_variable, "@@client")
       end
-      it "should return the JSON loaded result" do
-        subject.cached('API_CLASS') { 'something' }.should == {'RESULT' => 'YAY'}
+      context "when loading json" do
+        before(:each) do
+          subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
+          client.should_receive(:get).with('KEY').and_return "{\"RESULT\":\"YAY\"}"
+        end
+        it "should return the JSON loaded result" do
+          subject.cached('API_CLASS') { 'something' }.should == {'RESULT' => 'YAY'}
+        end
+      end
+      context "when loading plain" do
+        before(:each) do
+          subject.should_receive(:key).with('API_CLASS', {:plain => true}).and_return('KEY')
+        end
+        it "should return a String result in the right format" do
+          client.should_receive(:get).with('KEY').and_return "122.0"
+          subject.cached('API_CLASS', :plain => true) { 'something' }.should == "122.0"
+        end
+        it "should also return a String result in the right format when redis adds quotes and spaces" do
+          client.should_receive(:get).with('KEY').and_return "\"122.0\" "
+          subject.cached('API_CLASS', :plain => true) { 'something' }.should == "122.0"
+        end
       end
     end
     context "when no cached result exists" do
