@@ -7,7 +7,7 @@ module Exchange
   # @since 0.1
   class Configuration    
     class << self
-      @@config ||= {:api => :currency_bot, :retries => 5, :filestore_path => File.expand_path('exchange_filestore'), :allow_mixed_operations => true, :cache => :memcached, :cache_host => 'localhost', :cache_port => 11211, :update => :daily} 
+      @@config ||= {:api => :xavier_media, :retries => 5, :filestore_path => File.expand_path('exchange_filestore'), :allow_mixed_operations => true, :cache => :memcached, :cache_host => 'localhost', :cache_port => 11211, :update => :daily} 
       
       # A configuration method that stores the configuration of the gem. It allows to set the api from which the data gets retrieved,
       # the cache in which the data gets cached, the regularity of updates for the currency rates, how many times the api calls should be 
@@ -41,7 +41,7 @@ module Exchange
         self.instance_eval(&blk)
       end
             
-      [:api, :retries, :cache, :cache_host, :cache_port, :filestore_path, :update, :allow_mixed_operations].each do |m|
+      [:api, :api_app_id, :retries, :cache, :cache_host, :cache_port, :filestore_path, :update, :allow_mixed_operations].each do |m|
         define_method m do
           @@config[m]
         end

@@ -4,6 +4,10 @@ describe "Exchange::Conversability" do
   before(:all) do
     Exchange::Configuration.cache = false
   end
+  before(:each) do
+    @time = Time.gm(2012,8,27)
+    Time.stub! :now => @time
+  end
   after(:all) do
     Exchange::Configuration.cache = :memcached
   end
@@ -24,15 +28,15 @@ describe "Exchange::Conversability" do
       -3.eur.value.should == -3
     end
     it "should allow to do full conversions" do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
+      mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
       3.eur.to_chf.should be_kind_of Exchange::Currency
-      3.eur.to_chf.value.round(2).should == 3.62
+      3.eur.to_chf.value.round(2).should == 3.68
       3.eur.to_chf.currency.should == 'chf'
     end
     it "should allow to do full conversions with negative numbers" do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
+      mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
       -3.eur.to_chf.should be_kind_of Exchange::Currency
-      -3.eur.to_chf.value.round(2).should == -3.62
+      -3.eur.to_chf.value.round(2).should == -3.68
       -3.eur.to_chf.currency.should == 'chf'
     end
     it "should allow to define a historic time in which the currency should be interpreted" do
@@ -51,15 +55,15 @@ describe "Exchange::Conversability" do
       -3.25.eur.value.round(2).should == -3.25
     end
     it "should allow to do full conversions" do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
+      mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
       3.25.eur.to_chf.should be_kind_of Exchange::Currency
-      3.25.eur.to_chf.value.round(2).should == 3.92
+      3.25.eur.to_chf.value.round(2).should == 3.99
       3.25.eur.to_chf.currency.should == 'chf'
     end
     it "should allow to do full conversions with negative numbers" do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
+      mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
       -3.25.eur.to_chf.should be_kind_of Exchange::Currency
-      -3.25.eur.to_chf.value.round(2).should == -3.92
+      -3.25.eur.to_chf.value.round(2).should == -3.99
       -3.25.eur.to_chf.currency.should == 'chf'
     end
     it "should allow to define a historic time in which the currency should be interpreted" do
@@ -78,15 +82,15 @@ describe "Exchange::Conversability" do
       BigDecimal.new("-3.25").eur.value.round(2).should == -3.25
     end
     it "should allow to do full conversions" do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
+      mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
       BigDecimal.new("3.25").eur.to_chf.should be_kind_of Exchange::Currency
-      BigDecimal.new("3.25").eur.to_chf.value.round(2).should == 3.92
+      BigDecimal.new("3.25").eur.to_chf.value.round(2).should == 3.99
       BigDecimal.new("3.25").eur.to_chf.currency.should == 'chf'
     end
     it "should allow to do full conversions with negative numbers" do
-      mock_api("https://raw.github.com/currencybot/open-exchange-rates/master/latest.json", fixture('api_responses/example_json_api.json'), 3)
+      mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
       BigDecimal.new("-3.25").eur.to_chf.should be_kind_of Exchange::Currency
-      BigDecimal.new("-3.25").eur.to_chf.value.round(2).should == -3.92
+      BigDecimal.new("-3.25").eur.to_chf.value.round(2).should == -3.99
       BigDecimal.new("-3.25").eur.to_chf.currency.should == 'chf'
     end
     it "should allow to define a historic time in which the currency should be interpreted" do

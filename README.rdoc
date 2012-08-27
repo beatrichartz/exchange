@@ -2,6 +2,18 @@
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra, Padrino or whatever Framework you like.
 
+=== Important Note
+
+Since The Currency Bot API, now renamed to Open Exchange Rates API at openexchangerates.org, requires an APP ID now, you should configure it using the Exchange::Configuration
+
+  Exchange::Configuration.define do |c|
+    c.api_app_id = 'YOUR_APP_ID0
+  end
+
+Also, since it is not my intention to support paid APIs with this gem, the default API has been moved to use the Xavier Media API at xaviermedia.org. However, since Open Exchange Rates (Currency Bot) still supports a free plan, I updated the gem to be able to use it.
+
+As a sidenote: Please be reasonable when using the APIs provided, and be sure to enable caching and mock out any http calls in your specs.
+
 === Easy Conversion
 
 Imagine a conversion as easy as 

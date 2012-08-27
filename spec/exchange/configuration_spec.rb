@@ -3,8 +3,8 @@ require 'spec_helper'
 describe "Exchange::Configuration" do
   let(:subject) { Exchange::Configuration }
   it "should have a standard configuration" do
-    subject.api.should == :currency_bot
-    subject.api_class.should == Exchange::ExternalAPI::CurrencyBot
+    subject.api.should == :xavier_media
+    subject.api_class.should == Exchange::ExternalAPI::XavierMedia
     subject.cache.should == :memcached
     subject.cache_class.should == Exchange::Cache::Memcached
     subject.cache_host.should == 'localhost'
