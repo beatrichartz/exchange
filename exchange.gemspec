@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "exchange"
-  s.version = "0.4.3"
+  s.version = "0.4.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Beat Richartz"]
-  s.date = "2012-06-10"
+  s.date = "2012-08-27"
   s.description = "The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as \n    1.eur.to_usd\n  or even better \n    1.eur.to_usd(:at => Time.now - 84600)\n  which gets you an exchange at the rates of yesterday."
   s.email = "exchange_gem@gmail.com"
   s.extra_rdoc_files = [
@@ -75,14 +75,14 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/beatrichartz/exchange"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.22"
+  s.rubygems_version = "1.8.24"
   s.summary = "Simple Exchange Rate operations for your ruby app"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<nokogiri>, ["<= 1.5.0"])
+      s.add_runtime_dependency(%q<nokogiri>, [">= 1.5.0"])
       s.add_runtime_dependency(%q<json>, [">= 1.6.5"])
       s.add_runtime_dependency(%q<memcached>, [">= 1.3.0"])
       s.add_runtime_dependency(%q<redis>, [">= 2.2.0"])
@@ -92,7 +92,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
     else
-      s.add_dependency(%q<nokogiri>, ["<= 1.5.0"])
+      s.add_dependency(%q<nokogiri>, [">= 1.5.0"])
       s.add_dependency(%q<json>, [">= 1.6.5"])
       s.add_dependency(%q<memcached>, [">= 1.3.0"])
       s.add_dependency(%q<redis>, [">= 2.2.0"])
@@ -103,7 +103,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rspec>, [">= 0"])
     end
   else
-    s.add_dependency(%q<nokogiri>, ["<= 1.5.0"])
+    s.add_dependency(%q<nokogiri>, [">= 1.5.0"])
     s.add_dependency(%q<json>, [">= 1.6.5"])
     s.add_dependency(%q<memcached>, [">= 1.3.0"])
     s.add_dependency(%q<redis>, [">= 2.2.0"])
