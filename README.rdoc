@@ -4,10 +4,10 @@ The Exchange Gem gives you easy access to currency functions directly on your Nu
 
 === Important Note
 
-Since The Currency Bot API, now renamed to Open Exchange Rates API at openexchangerates.org, requires an APP ID now, you should configure it using the Exchange::Configuration
+Since The Currency Bot API, now renamed to Open Exchange Rates API at openexchangerates.org (http://openexchangerates.org), requires an APP ID now, you should configure it using the Exchange::Configuration
 
   Exchange::Configuration.define do |c|
-    c.api_app_id = 'YOUR_APP_ID0
+    c.api_app_id = 'YOUR_APP_ID'
   end
 
 Also, since it is not my intention to support paid APIs with this gem, the default API has been moved to use the Xavier Media API at xaviermedia.org. However, since Open Exchange Rates (Currency Bot) still supports a free plan, I updated the gem to be able to use it.
