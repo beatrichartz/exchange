@@ -25,18 +25,16 @@ module Exchange
       
       def update(opts={})
         time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
-        api_url       = api_url(time)
         times         = Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
-        
-        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." if Exchange.configuration.cache.subclass == Exchange::Cache::NoCache
-        
+                
         Exchange.configuration.cache.subclass.cached(self.class, :at => time) do
-          Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
+          Call.new(api_url(time), call_opts(time)) do |result|
             t = time
 
             while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?
               t = times.shift
             end
+            
             @callresult = r.to_s
           end
         end
@@ -62,6 +60,10 @@ module Exchange
             API_URL, 
             border <= time ? 'eurofxref-hist-90d.xml' : 'eurofxref-hist.xml'
           ].join('/')
+        end
+        
+        def call_opts time
+          {:format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly}
         end
         
     end
