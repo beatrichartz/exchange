@@ -1,15 +1,19 @@
 require 'spec_helper'
 
-describe "Exchange::ExternalAPI::ECB" do
+describe "Exchange::ExternalAPI::Ecb" do
   before(:all) do
-    Exchange::Configuration.cache = false
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache = {
+        :subclass => :no_cache
+      }
+    }
   end
   before(:each) do
     time = Time.gm(2012,2,3)
     Time.stub! :now => time
   end
   describe "updating rates" do
-    subject { Exchange::ExternalAPI::ECB.new }
+    subject { Exchange::ExternalAPI::Ecb.new }
     before(:each) do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", fixture('api_responses/example_ecb_xml_90d.xml'))
     end
@@ -23,7 +27,7 @@ describe "Exchange::ExternalAPI::ECB" do
     end
   end
   describe "conversion" do
-    subject { Exchange::ExternalAPI::ECB.new }
+    subject { Exchange::ExternalAPI::Ecb.new }
     before(:each) do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", fixture('api_responses/example_ecb_xml_90d.xml'))
     end
@@ -38,7 +42,7 @@ describe "Exchange::ExternalAPI::ECB" do
     end
   end
   describe "historic conversion" do
-    subject { Exchange::ExternalAPI::ECB.new }
+    subject { Exchange::ExternalAPI::Ecb.new }
     before(:each) do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml", fixture('api_responses/example_ecb_xml_history.xml'))
     end

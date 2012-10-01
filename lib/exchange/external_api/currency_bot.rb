@@ -39,7 +39,7 @@ module Exchange
       
         def api_url(time=nil)
           today = Time.now
-          [API_URL, time && (time.year != today.year || time.yday != today.yday) ? "historical/#{time.strftime("%Y-%m-%d")}.json?app_id=#{Exchange::Configuration.api_app_id}" : "latest.json?app_id=#{Exchange::Configuration.api_app_id}"].join('/')
+          [API_URL, time && (time.year != today.year || time.yday != today.yday) ? "historical/#{time.strftime("%Y-%m-%d")}.json?app_id=#{Exchange.configuration.api.app_id}" : "latest.json?app_id=#{Exchange.configuration.api.app_id}"].join('/')
         end
         
     end

@@ -1,16 +1,21 @@
 require 'spec_helper'
 
 describe "Exchange::Cache::File" do
-  subject { Exchange::Cache::File }
+  subject { Exchange::Cache::File.instance }
   before(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :file
-    end
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache      = {
+        :subclass => :file,
+        :path     => 'STORE/PATH'
+      }
+    }
   end
   after(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :memcached
-    end
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache      = {
+        :subclass => :memcached
+      }
+    }
   end
   describe "cached" do
     it "should raise an error if no block was given" do
@@ -20,9 +25,8 @@ describe "Exchange::Cache::File" do
       context "with a daily cache" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', nil).and_return('KEY')
-          Exchange::Configuration.should_receive(:filestore_path).and_return('STORE')
-          ::File.should_receive(:exists?).with('STORE/KEY').and_return(true)
-          ::File.should_receive(:read).with('STORE/KEY').and_return 'CONTENT'
+          ::File.should_receive(:exists?).with('STORE/PATH/KEY').and_return(true)
+          ::File.should_receive(:read).with('STORE/PATH/KEY').and_return 'CONTENT'
         end
         it "should return the file contents" do
           subject.cached('API_CLASS') { 'something' }.should == 'CONTENT'
@@ -31,9 +35,8 @@ describe "Exchange::Cache::File" do
       context "with an monthly cache" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', an_instance_of(Symbol)).and_return('KEY')
-          Exchange::Configuration.should_receive(:filestore_path).and_return('STORE')
-          ::File.should_receive(:exists?).with('STORE/KEY').and_return(true)
-          ::File.should_receive(:read).with('STORE/KEY').and_return 'CONTENT'
+          ::File.should_receive(:exists?).with('STORE/PATH/KEY').and_return(true)
+          ::File.should_receive(:read).with('STORE/PATH/KEY').and_return 'CONTENT'
         end
         it "should return the file contents" do
           subject.cached('API_CLASS', :cache_period => :monthly) { 'something' }.should == 'CONTENT'
@@ -43,9 +46,8 @@ describe "Exchange::Cache::File" do
     context "when no file is cached yet" do
       before(:each) do
         subject.should_receive(:key).with('API_CLASS', an_instance_of(Symbol)).at_most(3).times.and_return('KEY')
-        Exchange::Configuration.should_receive(:filestore_path).and_return('STORE')
-        ::File.should_receive(:exists?).with('STORE/KEY').and_return(false)
-        Dir.should_receive(:entries).with('STORE').once.and_return(%W(entry entry2))
+        ::File.should_receive(:exists?).with('STORE/PATH/KEY').and_return(false)
+        Dir.should_receive(:entries).with('STORE/PATH').once.and_return(%W(entry entry2))
         ::File.should_receive(:delete).with(an_instance_of(String)).twice
         FileUtils.should_receive(:mkdir_p).once
         ::File.should_receive(:open).once
@@ -57,8 +59,7 @@ describe "Exchange::Cache::File" do
     context "when no result is returned" do
       before(:each) do
         subject.should_receive(:key).with('API_CLASS', an_instance_of(Symbol)).at_most(3).times.and_return('KEY')
-        Exchange::Configuration.should_receive(:filestore_path).and_return('STORE')
-        ::File.should_receive(:exists?).with('STORE/KEY').and_return(false)
+        ::File.should_receive(:exists?).with('STORE/PATH/KEY').and_return(false)
         FileUtils.should_receive(:mkdir_p).never
         ::File.should_receive(:open).never
       end

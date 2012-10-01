@@ -7,7 +7,7 @@ module Exchange
     # @version 0.1
     # @since 0.1
     
-    class XavierMedia < Base
+    class XavierMedia < XML
       # The base of the Xaviermedia API URL
       API_URL              = "http://api.finance.xaviermedia.com/api"
       # The currencies the Xaviermedia API URL can handle
@@ -24,7 +24,7 @@ module Exchange
       def update(opts={})
         time       = Exchange::Helper.assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
-        retry_urls = Exchange::Configuration.retries.times.map{ |i| api_url(time - 86400 * (i+1)) }
+        retry_urls = Exchange.configuration.api.retries.times.map{ |i| api_url(time - 86400 * (i+1)) }
         
         Call.new(api_url, :format => :xml, :at => time, :retry_with => retry_urls) do |result|
           @base                 = result.css('basecurrency').children[0].to_s

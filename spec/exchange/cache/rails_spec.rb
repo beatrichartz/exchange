@@ -5,16 +5,20 @@ describe "Exchange::Cache::Rails" do
     class ::Rails
     end
   end
-  subject { Exchange::Cache::Rails }
+  subject { Exchange::Cache::Rails.instance }
   before(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :rails
-    end
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache = {
+        :class => :rails
+      }
+    }
   end
   after(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :memcached
-    end
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache = {
+        :class => :memcached
+      }
+    }
   end
   describe "client" do
     let(:client) { mock('rails_cache') }
@@ -41,13 +45,13 @@ describe "Exchange::Cache::Rails" do
       end
       context "with an hourly cache" do
         before(:each) do
-          Exchange::Configuration.update = :hourly
+          Exchange.configuration.cache.expire = :hourly
           subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
           ::Rails.should_receive(:cache).and_return(client)
           client.should_receive(:fetch).with('KEY', :expires_in => 3600).and_return "{\"RESULT\":\"YAY\"}"
         end
         after(:each) do
-          Exchange::Configuration.update = :daily
+          Exchange.configuration.cache.expire = :daily
         end
         it "should return the JSON loaded result" do
           subject.cached('API_CLASS') { 'something' }.should == "{\"RESULT\":\"YAY\"}"

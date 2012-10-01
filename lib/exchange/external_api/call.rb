@@ -31,11 +31,13 @@ module Exchange
       #   # Do something with that result
       
       def initialize url, options={}, &block
-        result = Exchange::Configuration.cache_class(options).cached(options[:api] || Exchange::Configuration.api, options) do
-          load_url(url, options[:retries] || Exchange::Configuration.retries, options[:retry_with])
+        Exchange::GemLoader.new('nokogiri').try_load if options[:format] == :xml
+        
+        result = Exchange.configuration.cache.subclass.cached(options[:api] || Exchange.configuration.api.subclass, options) do
+          load_url(url, options[:retries] || Exchange.configuration.api.retries, options[:retry_with])
         end
         
-        parsed = options[:format] == :xml ? Nokogiri.parse(result) : JSON.load(result)
+        parsed = options[:format] == :xml ? Nokogiri.parse(result) : ::JSON.load(result)
         
         return parsed unless block_given?
         yield  parsed

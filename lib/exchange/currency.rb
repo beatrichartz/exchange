@@ -58,7 +58,7 @@ module Exchange
     
     def method_missing method, *args, &block
       match = method.to_s.match(/\Ato_(\w{3})/)
-      if match && Configuration.api_class::CURRENCIES.include?($1)
+      if match && Exchange.configuration.api.subclass::CURRENCIES.include?($1)
         return self.convert_to($1, {:at => self.time}.merge(args.first || {}))
       elsif match && ISO4217.definitions.keys.include?($1.upcase)
         raise NoRateError.new("Cannot convert to #{$1} because the defined api does not provide a rate")
@@ -78,7 +78,7 @@ module Exchange
     #   Exchange::Currency.new(40,:nok).convert_to('sek', :at => Time.gm(2012,2,2))
     
     def convert_to other, opts={}
-      Currency.new(Configuration.api_class.new.convert(value, currency, other, opts), other, opts.merge(:from => self))
+      Currency.new(Exchange.configuration.api.subclass.new.convert(value, currency, other, opts), other, opts.merge(:from => self))
     end
     
     class << self
@@ -101,7 +101,7 @@ module Exchange
         def base_operation op
           self.class_eval <<-EOV
             def #{op}(other)
-              #{'raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency'}
+              #{'raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency'}
               @value #{op}= other.kind_of?(Currency) ? other.convert_to(self.currency, :at => other.time) : other
               self
             end
@@ -163,7 +163,7 @@ module Exchange
     # @return [Exchange::Currency] The currency with the added value
     # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange::Configuration.allow_mixed_operations = false
+    #   Exchange.configuration.allow_mixed_operations = false
     #   Exchange::Currency.new(20,:nok) + Exchange::Currency.new(20,:sek)
     #     #=> #<CurrencyMixError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
@@ -177,7 +177,7 @@ module Exchange
     # @return [Exchange::Currency] The currency with the added value
     # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange::Configuration.allow_mixed_operations = false
+    #   Exchange.configuration.allow_mixed_operations = false
     #   Exchange::Currency.new(20,:nok) - Exchange::Currency.new(20,:sek)
     #     #=> #<CurrencyMixError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
@@ -191,7 +191,7 @@ module Exchange
     # @return [Exchange::Currency] The currency with the multiplied value
     # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange::Configuration.allow_mixed_operations = false
+    #   Exchange.configuration.allow_mixed_operations = false
     #   Exchange::Currency.new(20,:nok) * Exchange::Currency.new(20,:sek)
     #     #=> #<CurrencyMixError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
@@ -205,7 +205,7 @@ module Exchange
     # @return [Exchange::Currency] The currency with the divided value
     # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange::Configuration.allow_mixed_operations = false
+    #   Exchange.configuration.allow_mixed_operations = false
     #   Exchange::Currency.new(20,:nok) / Exchange::Currency.new(20,:sek)
     #     #=> #<CurrencyMixError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
@@ -226,9 +226,9 @@ module Exchange
     #   Exchange::Currency.new(35, :usd) == 35 #=> true
     
     def == other
-      if other.is_a?(Exchange::Currency) && other.currency == self.currency
+      if is_currency?(other) && other.currency == self.currency
         other.round.value == self.round.value
-      elsif other.is_a?(Exchange::Currency)
+      elsif is_currency?(other)
         other.convert_to(self.currency, :at => other.time).round.value == self.round.value
       else
         self.value == other
@@ -241,6 +241,7 @@ module Exchange
     # @return [Fixed] a number which can be used for sorting
     # @since 0.3
     # @version 0.3
+    # @todo which historic conversion should be used when two are present?
     # @example Compare two currencies in terms of value
     #   Exchange::Currency.new(40, :usd) <=> Exchange::Currency.new(28, :usd) #=> -1
     # @example Compare two different currencies, the other will get converted for comparison
@@ -249,17 +250,13 @@ module Exchange
     #   [1.usd, 1.eur, 1.chf].sort.map(&:currency) #=> [:usd, :chf, :eur]
     
     def <=> other
-      # TODO which historic conversion should be used when two are present?
-      if other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value < other.value) || (other.currency != self.currency && self.value < other.convert_to(self.currency, :at => other.time).value))
-        -1
-      elsif other.is_a?(Exchange::Currency) && ((other.currency == self.currency && self.value > other.value) || (other.currency != self.currency && self.value > other.convert_to(self.currency, :at => other.time).value))
-        1
-      elsif other.is_a?(Exchange::Currency)
-        0
+      if is_currency?(other) && other.currency == self.currency
+        self.value <=> other.value
+      elsif is_currency?(other) && other.currency != self.currency
+        self.value <=> other.convert_to(self.currency, :at => other.time).value
       else
         self.value <=> other
       end
-        
     end
     
     # Converts the currency to a string in ISO 4217 standardized format, either with or without the currency. This leaves you
@@ -283,6 +280,12 @@ module Exchange
         format == :amount && ISO4217.stringify(self.value, self.currency, :amount_only => true)
       ].detect{|l| l.is_a?(String) }
     end
+    
+    private
+    
+      def is_currency? other
+        other.is_a?(Exchange::Currency)
+      end
   
   end
   

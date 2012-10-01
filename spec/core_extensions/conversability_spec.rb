@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe "Exchange::Conversability" do
   before(:all) do
-    Exchange::Configuration.cache = false
+    Exchange.configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :no_cache } }
   end
   before(:each) do
     @time = Time.gm(2012,8,27)
     Time.stub! :now => @time
   end
   after(:all) do
-    Exchange::Configuration.cache = :memcached
+    Exchange::configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :memcached } }
   end
   it "should define all currencies on Fixnum, Float and BigDecimal" do
     Exchange::ISO4217.definitions.keys.each do |c|

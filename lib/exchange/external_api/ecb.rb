@@ -7,7 +7,7 @@ module Exchange
     # @version 0.3
     # @since 0.3
     
-    class ECB < Base
+    class Ecb < XML
       # The base of the ECB API URL
       API_URL              = "http://www.ecb.europa.eu/stats/eurofxref"
       # The currencies the ECB API URL can handle
@@ -26,11 +26,11 @@ module Exchange
       def update(opts={})
         time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
         api_url       = api_url(time)
-        times         = Exchange::Configuration.retries.times.map{ |i| time - 86400 * (i+1) }
+        times         = Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
         
-        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." unless Exchange::Configuration.cache
+        Kernel.warn "WARNING: Using the ECB API without caching can be very, very slow." if Exchange.configuration.cache.subclass == Exchange::Cache::NoCache
         
-        Exchange::Configuration.cache_class.cached(self.class, :at => time) do
+        Exchange.configuration.cache.subclass.cached(self.class, :at => time) do
           Call.new(api_url, :format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly) do |result|
             t = time
 

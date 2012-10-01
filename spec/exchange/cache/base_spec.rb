@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Exchange::Cache::Base" do
-  subject { Exchange::Cache::Base }
+  subject { Exchange::Cache::Base.instance }
   describe "key generation" do
     before(:each) do
       time = Time.gm 2012, 03, 01, 23, 23, 23
@@ -9,20 +9,20 @@ describe "Exchange::Cache::Base" do
     end
     context "with a daily cache" do
       it "should build a timestamped key with the class given, the yearday and the year" do
-        Exchange::Cache::Base.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61'
-        Exchange::Cache::Base.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61'
+        subject.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61'
+        subject.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61'
       end
     end
     context "with an hourly cache" do
       before(:each) do
-        Exchange::Configuration.update = :hourly
+        Exchange.configuration.cache.expire = :hourly
       end
       after(:each) do
-        Exchange::Configuration.update = :daily
+        Exchange.configuration.cache.expire = :daily
       end
       it "should build a timestamped key with the class given, the yearday, the year and the hour" do
-        Exchange::Cache::Base.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61_23'
-        Exchange::Cache::Base.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61_23'
+        subject.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61_23'
+        subject.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61_23'
       end
     end
   end

@@ -2,7 +2,11 @@ require 'spec_helper'
 
 describe "Exchange::ExternalAPI::XavierMedia" do
   before(:all) do
-    Exchange::Configuration.cache = false
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache = {
+        :subclass => :no_cache
+      }
+    }
   end
   describe "updating rates" do
     subject { Exchange::ExternalAPI::XavierMedia.new }
@@ -48,7 +52,7 @@ describe "Exchange::ExternalAPI::XavierMedia" do
       subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2).should == 10.35
     end
     it "should convert right when the year is the same, but the yearday is not" do
-      mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.year}/0#{Time.now.month > 10 ? Time.now.month - 1 : Time.now.month + 1}/01.xml", fixture('api_responses/example_xml_api.xml'))
+      mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.year}/0#{Time.now.month > 9 ? Time.now.month - 1 : Time.now.month + 1}/01.xml", fixture('api_responses/example_xml_api.xml'))
       subject.convert(70, :sek, :usd, :at => Time.gm(Time.now.year,Time.now.month > 9 ? Time.now.month - 1 : Time.now.month + 1,1)).round(2).should == 10.35
     end
     it "should convert right when the yearday is the same, but the year is not" do

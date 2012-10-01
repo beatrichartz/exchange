@@ -2,7 +2,11 @@ require 'spec_helper'
 
 describe "Exchange::ExternalAPI::Call" do
   before(:all) do
-    Exchange::Configuration.cache = false
+    Exchange.configuration = Exchange::Configuration.new{|c|
+      c.cache = {
+        :subclass => :no_cache
+      }
+    }
   end
   describe "initialization" do
     context "with a json api" do
