@@ -38,7 +38,7 @@ describe "Exchange::Configuration" do
     subject.retries.should == 1
   end
   after(:all) do
-    subject.api = :currency_bot
+    subject.api = :xavier_media
     subject.cache = :memcached
     subject.cache_host = 'localhost'
     subject.cache_port = 11211
