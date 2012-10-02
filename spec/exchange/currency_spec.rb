@@ -9,7 +9,10 @@ describe "Exchange::Currency" do
     end
   end
   after(:all) do
-    Exchange::Configuration.cache = :memcached
+    Exchange::Configuration.define do |c|
+      c.api = :xavier_media
+      c.cache = :memcached
+    end
   end
   it "should initialize with a number and a currency" do
     subject.value.should == 40
