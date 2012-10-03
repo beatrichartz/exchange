@@ -5,7 +5,7 @@ module Exchange
     # @author Beat Richartz
     # @version 0.1
     # @since 0.1
-    
+    #
     class Call
       
       # Initialization of the Call class is the call itself. This means that every instance of the class will only exist during the call
@@ -29,7 +29,7 @@ module Exchange
       # @example Call the API and do something with the result
       #   result = Exchange::ExternalAPI::Call.new('http://yourapiurl.com', :format => :xml)
       #   # Do something with that result
-      
+      #
       def initialize url, options={}, &block
         Exchange::GemLoader.new('nokogiri').try_load if options[:format] == :xml
         
@@ -49,12 +49,11 @@ module Exchange
         # @param [String] url The url to be loaded
         # @param [Integer] retries The number of retries to do if the API Call should fail with a HTTP Error
         # @param [Array] retry_with An array of urls to retry the API call with if the call to the original URL should fail. These values will be shifted until a call succeeds or the number of maximum retries is reached
-      
+        #
         def load_url(url, retries, retry_with)          
           begin            
             result = URI.parse(url).open.read
           rescue SocketError
-            puts 'SocketError'
             raise APIError.new("Calling API #{url} produced a socket error")
           rescue OpenURI::HTTPError => e
             retries -= 1
@@ -71,6 +70,8 @@ module Exchange
     end
     
     # The Api Error to throw when an API Call fails
+    #
     APIError = Class.new(StandardError)
+    
   end
 end

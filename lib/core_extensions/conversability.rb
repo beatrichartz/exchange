@@ -4,11 +4,12 @@ module Exchange
   # @author Beat Richartz
   # @version 0.2
   # @since 0.1
-  
+  #
   module Conversability
+    
     # Dynamic method generation is used here to allow instantiation and immediate conversion of Currency objects from 
-    # a common Fixnum or Float or BigDecimal. Since ruby 1.9 handles certain type conversion of Fixnum, Float and others
-    # via method missing, this is not handled via method missing because it would seriously break down performance.
+    # a common Fixnum or Float or BigDecimal. Since some builds of ruby 1.9 handle certain type conversion of Fixnum, Float 
+    # and others via method missing, this is not handled via method missing because it would seriously break down performance.
     # 
     # @example Instantiate from any type of number
     #   40.usd => #<Exchange::Currency @value=40 @currency=:usd>
@@ -22,7 +23,7 @@ module Exchange
     #   1.usd.to_eur(:at => Time.now - 86400) => #<Exchange::Currency @value=0.80 @currency=:eur>
     #   1.nok.to_chf(:at => Time.now - 3600) => #<Exchange::Currency @value=6.57 @currency=:chf>
     #   -3.5.dkk.to_huf(:at => Time.now - 172800) => #<Exchange::Currency @value=-337.40 @currency=:huf>
-    
+    #
     ISO4217.definitions.keys.each do |c|
       define_method c.downcase.to_sym do |*args|
         Currency.new(self, c, *args)

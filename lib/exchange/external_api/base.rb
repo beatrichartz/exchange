@@ -42,27 +42,31 @@ module Exchange
   #     end
   #   end
   #   # Now, you can configure your API in the configuration. The Symbol will get camelcased and constantized
-  #   Exchange::Configuration.api = :my_custom
+  #   Exchange::Configuration.api.subclass = :my_custom
   #   # Have fun, and don't forget to write tests.
-  
+  #
   module ExternalAPI
     
     # The Base class of all External APIs, handling basic exchange rates and conversion
     # @author Beat Richartz
     # @version 0.1
     # @since 0.1
-    
+    #
     class Base
+      
       # @attr_reader
       # @return [String] The currency which was the base for the rates
+      #
       attr_reader :base
       
       # @attr_reader
       # @return [Integer] A unix timestamp for the rates, delivered by the API
+      #
       attr_reader :timestamp
       
       # @attr_reader
       # @return [Hash] A Hash which delivers the exchange rate of every available currency to the base currency
+      #
       attr_reader :rates
       
       
@@ -76,6 +80,7 @@ module Exchange
       # @example Get the exchange rate for a conversion from USD to EUR at March 23 2009
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
+      #
       def rate(from, to, opts={})
         rate = Exchange.configuration.cache.subclass.cached(Exchange.configuration.api.subclass, opts.merge(:key_for => [from, to], :plain => true)) do
           update(opts)
@@ -97,9 +102,11 @@ module Exchange
       # @example Convert 23 EUR to CHF at the rate of December 1 2011
       #   Exchange::ExternalAPI::Base.new.convert(23, :eur, :chf, :at => Time.gm(12,1,2011))
       #     #=> 30.12
+      #
       def convert(amount, from, to, opts={})
         amount * rate(from, to, opts)
       end
+      
     end
   end
 end

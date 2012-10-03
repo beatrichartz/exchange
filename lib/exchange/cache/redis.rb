@@ -18,7 +18,7 @@ module Exchange
       # @example
       #   Exchange::Cache::Redis.client.set('FOO', 'BAR')
       # @return [::Redis] an instance of the redis client gem class
-      
+      #
       def client
         Exchange::GemLoader.new('redis').try_load unless defined?(::Redis)
         @client ||= ::Redis.new(:host => Exchange.configuration.cache.host, :port => Exchange.configuration.cache.port)
@@ -31,7 +31,7 @@ module Exchange
       # @option opts [Time] :at the historic time of the exchange rates to be cached
       # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
-      
+      #
       def cached api, opts={}, &block          
         if result = client.get(key(api, opts))
           result = opts[:plain] ? result.gsub(/["\s+]/, '') : JSON.load(result)

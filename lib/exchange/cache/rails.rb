@@ -9,6 +9,7 @@ module Exchange
     #   Exchange::Configuration.define do |c| 
     #     c.cache = :rails
     #   end
+    #
     class Rails < Base
         
       # returns a Rails cache client. This has not to be stored since rails already memoizes it.
@@ -16,7 +17,7 @@ module Exchange
       # @example
       #   Exchange::Cache::Rails.client.set('FOO', 'BAR')
       # @return [ActiveSupport::Cache::Subclass] an instance of the rails cache class (presumably a subclass of ActiveSupport::Cache)
-      
+      #
       def client
         Exchange::GemLoader.new('rails').try_load unless defined?(::Rails)
         ::Rails.cache
@@ -29,7 +30,7 @@ module Exchange
       # @option opts [Time] :at the historic time of the exchange rates to be cached
       # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
-      
+      #
       def cached api, opts={}, &block
         raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
         

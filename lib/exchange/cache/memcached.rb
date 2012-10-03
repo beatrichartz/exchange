@@ -11,14 +11,15 @@ module Exchange
     #     c.cache_host = 'Your memcached host' 
     #     c.cache_port = 'Your memcached port'
     #   end
+    #
     class Memcached < Base
         
       # instantiates a memcached client and memoizes it in a class variable.
       # Use this client to access memcached data. For further explanation of use visit the memcached gem documentation
       # @example
       #   Exchange::Cache::Memcached.client.set('FOO', 'BAR')
-      # @return [::Memcached] an instance of the memcached client gem class
-      
+      # @return [Dalli::Client] an instance of the dalli gem client class
+      #
       def client
         Exchange::GemLoader.new('dalli').try_load unless defined?(::Dalli)
         @client ||= Dalli::Client.new("#{Exchange.configuration.cache.host}:#{Exchange.configuration.cache.port}")

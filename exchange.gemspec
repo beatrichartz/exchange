@@ -1,5 +1,5 @@
 $LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
-require 'exchange/version'
+require 'exchange/base'
 
 Gem::Specification.new do |s|
   s.name        = "exchange"

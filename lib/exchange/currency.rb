@@ -8,23 +8,28 @@ module Exchange
   # Currency Objects instantiated from the currency class can be used for basic mathematical operations and currency conversions
   # @version 0.1
   # @since 0.1
+  #
   class Currency
     include Comparable
     
     # @attr_reader
     # @return [BigDecimal] number The number the currency object has been instantiated from
+    #
     attr_reader :value
     
     # @attr_reader
     # @return [Symbol, String] currency the currency of the currency object
+    #
     attr_reader :currency
     
     # @attr_reader
     # @return [Time] The time at which the conversion has taken place or should take place if the object is involved in operations
+    #
     attr_reader :time
     
     # @attr_reader
     # @return [Exchange::Currency] The original currency object this currency object was converted from
+    #
     attr_reader :from
     
     # Intialize the currency with a number and a currency
@@ -41,7 +46,7 @@ module Exchange
     # @example Instantiate a currency object of 40 US Dollars and convert it to Euro. It shows the conversion date and the original currency
     #   Exchange::Currency.new(40, :usd).to_eur(:at => Time.gm(2012,9,1)) 
     #     #=> #<Exchange::Currency @number=37.0 @currency=:usd @time=#<Time> @from=#<Exchange::Currency @number=40.0 @currency=:usd>>
-    
+    #
     def initialize value, currency, opts={}
       @value            = ISO4217.instantiate(value, currency)
       @currency         = currency
@@ -55,7 +60,7 @@ module Exchange
     #   Exchange::Currency.new(40,:usd).to_chf
     # @example Calls convert_to with 'sek' and :at => Time.gm(2012,2,2)
     #   Exchange::Currency.new(40,:nok).to_sek(:at => Time.gm(2012,2,2))
-    
+    #
     def method_missing method, *args, &block
       match = method.to_s.match(/\Ato_(\w{3})/)
       if match && Exchange.configuration.api.subclass::CURRENCIES.include?($1)
@@ -76,7 +81,7 @@ module Exchange
     #   Exchange::Currency.new(40,:usd).convert_to('chf')
     # @example convert to 'sek' at a specific rate
     #   Exchange::Currency.new(40,:nok).convert_to('sek', :at => Time.gm(2012,2,2))
-    
+    #
     def convert_to other, opts={}
       Currency.new(Exchange.configuration.api.subclass.new.convert(value, currency, other, opts), other, opts.merge(:from => self))
     end
@@ -84,9 +89,10 @@ module Exchange
     class << self
       
       private
+      
         # @private
         # @macro [attach] install_operations
-         
+        #
         def install_operation op
           define_method op do |*precision|
             @value = ISO4217.send(op, self.value, self.currency, precision.first)
@@ -97,7 +103,7 @@ module Exchange
         # @private
         # @macro [attach] base_operations
         #   @method $1(other)
-      
+        #
         def base_operation op
           self.class_eval <<-EOV
             def #{op}(other)
@@ -122,7 +128,7 @@ module Exchange
     # @example Round your currency to another number of decimals
     #   Exchange::Currency.new(40.545, :usd).round(0)
     #     #=> #<Exchange::Currency @value=41 @currency=:usd>
-    
+    #
     install_operation :round
     
     
@@ -138,7 +144,7 @@ module Exchange
     # @example Ceil your currency to another number of decimals
     #   Exchange::Currency.new(40.445, :usd).ceil(0)
     #     #=> #<Exchange::Currency @value=41 @currency=:usd>
-    
+    #
     install_operation :ceil
     
     
@@ -154,7 +160,7 @@ module Exchange
     # @example Floor your currency to another number of decimals
     #   Exchange::Currency.new(40.545, :usd).floor(0)
     #     #=> #<Exchange::Currency @value=40 @currency=:usd>
-    
+    #
     install_operation :floor
     
     
@@ -169,7 +175,7 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) + Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=37.56 @currency=:nok>
-    
+    #
     base_operation '+'
     
     # Subtract a value from the currency
@@ -183,7 +189,7 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) - Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=7.56 @currency=:nok>
-    
+    #
     base_operation '-'
     
     # Multiply a value with the currency
@@ -197,7 +203,7 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) * Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=70.56 @currency=:nok>
-    
+    #
     base_operation '*'
     
     # Divide the currency by a value
@@ -211,7 +217,7 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) / Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=1.56 @currency=:nok>
-    
+    #
     base_operation '/'
     
     # Compare a currency with another currency or another value. If the other is not an instance of Exchange::Currency, the value 
@@ -224,9 +230,9 @@ module Exchange
     #   Exchange::Currency.new(40, :usd) == Exchange::Currency.new(34, :eur) #=> true, will implicitly convert eur to usd at the actual rate
     # @example Compare a currency with a number, the value of the currency will get compared
     #   Exchange::Currency.new(35, :usd) == 35 #=> true
-    
+    #
     def == other
-      if is_currency?(other) && other.currency == self.currency
+      if is_same_currency?(other)
         other.round.value == self.round.value
       elsif is_currency?(other)
         other.convert_to(self.currency, :at => other.time).round.value == self.round.value
@@ -250,9 +256,9 @@ module Exchange
     #   [1.usd, 1.eur, 1.chf].sort.map(&:currency) #=> [:usd, :chf, :eur]
     
     def <=> other
-      if is_currency?(other) && other.currency == self.currency
+      if is_same_currency?(other)
         self.value <=> other.value
-      elsif is_currency?(other) && other.currency != self.currency
+      elsif is_other_currency?(other)
         self.value <=> other.convert_to(self.currency, :at => other.time).value
       else
         self.value <=> other
@@ -283,12 +289,34 @@ module Exchange
     
     private
     
+      # determine if another given object is an instance of Exchange::Currency
+      # @param [Object] other The object to be tested against
+      # @return [Boolean] true if the other is an instance of Exchange::Currency, false if not
+      #
       def is_currency? other
         other.is_a?(Exchange::Currency)
+      end
+      
+      # determine if another given object is an instance of Exchange::Currency and the same currency
+      # @param [Object] other The object to be tested against
+      # @return [Boolean] true if the other is an instance of Exchange::Currency and has the same currency as self, false if not
+      #
+      def is_same_currency? other
+        is_currency?(other) && other.currency == self.currency
+      end
+      
+      # determine if another given object is an instance of Exchange::Currency and has another currency
+      # @param [Object] other The object to be tested against
+      # @return [Boolean] true if the other is an instance of Exchange::Currency and has another currency as self, false if not
+      #
+      def is_other_currency? other
+        is_currency?(other) && other.currency != self.currency
       end
   
   end
   
   # The error that will get thrown when currencies get mixed up in base operations
+  #
   CurrencyMixError = Class.new(ArgumentError)
+  
 end

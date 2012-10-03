@@ -6,13 +6,18 @@ module Exchange
     # @author Beat Richartz
     # @version 0.3
     # @since 0.3
-    
+    #
     class Ecb < XML
+      
       # The base of the ECB API URL
+      #
       API_URL              = "http://www.ecb.europa.eu/stats/eurofxref"
+      
       # The currencies the ECB API URL can handle
+      #
       CURRENCIES           = %W(eur usd jpy bgn czk dkk gbp huf ltl lvl pln ron sek chf nok hrk rub try aud brl cad cny hkd idr ils inr krw mxn myr nzd php sgd thb zar)
       
+      # The result of the api call to the Central bank
       attr_accessor :callresult
       
       # Updates the rates by getting the information from ECB API for today or a defined historical date
@@ -21,16 +26,21 @@ module Exchange
       # @param [Hash] opts Options to define for the API Call
       # @option opts [Time, String] :at a historical date to get the exchange rates for
       # @example Update the currency bot API to use the file of March 2, 2010
-      #   Exchange::ExternalAPI::XavierMedia.new.update(:at => Time.gm(3,2,2010))
-      
+      #   Exchange::ExternalAPI::Ecb.new.update(:at => Time.gm(3,2,2010))
+      #
       def update(opts={})
         time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
         times         = Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
-                
+        
+        # Since the Ecb File retrieved can be very large (> 5MB for the history file) and parsing takes a fair amount of time,
+        # caching is doubled on this API
+        # 
         Exchange.configuration.cache.subclass.cached(self.class, :at => time) do
           Call.new(api_url(time), call_opts(time)) do |result|
             t = time
-
+            
+            # Weekends do not have rates present
+            #
             while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?
               t = times.shift
             end
@@ -53,7 +63,7 @@ module Exchange
         # If it is more than 90 days ago, get the big file
         # @param [Time] time The exchange rate date for which the URL should be built
         # @return [String] An ECB API URL to get the xml from
-      
+        #
         def api_url(time)
           border = Time.now - 90 * 86400
           [
@@ -62,6 +72,10 @@ module Exchange
           ].join('/')
         end
         
+        # a wrapper for the call options, since the cache period is quite complex
+        # @param [Time] time The date of the exchange rate
+        # @return [Hash] a hash with the call options
+        #
         def call_opts time
           {:format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly}
         end

@@ -18,7 +18,7 @@ module Exchange
       # @option opts [Symbol] :cache_period The period to cache the file for
       # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
-      
+      #
       def cached api, opts={}, &block
         today = Time.now
         dir   = Exchange.configuration.cache.path
@@ -50,7 +50,7 @@ module Exchange
       # @return [String] A string that can be used as cache key
       # @example
       #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, :monthly) #=> "Exchange_ExternalAPI_CurrencyBot_monthly_2012_1"
-      
+      #
       def key(api_class, cache_period=:daily)
         time      = Time.now
         [api_class.to_s.gsub(/::/, '_'), cache_period, time.year, time.send(cache_period == :monthly ? :month : :yday)].join('_')
