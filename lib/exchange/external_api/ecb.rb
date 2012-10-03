@@ -25,7 +25,7 @@ module Exchange
       # any smaller portion history than an epic 4MB XML history file and a 90 day recent history file. We get each of that once and cache it in smaller portions.
       # @param [Hash] opts Options to define for the API Call
       # @option opts [Time, String] :at a historical date to get the exchange rates for
-      # @example Update the currency bot API to use the file of March 2, 2010
+      # @example Update the ecb API to use the file of March 2, 2010
       #   Exchange::ExternalAPI::Ecb.new.update(:at => Time.gm(3,2,2010))
       #
       def update(opts={})
