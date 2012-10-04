@@ -5,8 +5,7 @@ The Exchange Gem gives you easy access to currency functions directly on your Nu
 == Changelog
 
 === 0.6
-- Memcached, Redis, JSON and Nokogiri have been removed as explicit dependencies of the gem. The gem will now try to load the gems
-you want to use with it during runtime, and it will throw an exception if a gem required according to your configuration is not present.
+- Memcached, Redis, JSON and Nokogiri have been removed as explicit dependencies of the gem. The gem will now try to load the gems you want to use with it during runtime, and it will throw an exception if a gem required according to your configuration is not present.
 - The cache class is now a singleton and no class singleton anymore. This makes it easier to write a seamlessly integrating custom cache class for it.
 === 0.5
 - Changed the currency bot api to openexchangerates.org and changed the default api to xaviermedia. Since the openexchangerates.org api still supports a free plan with reasonable conditions, it will still be supported by the exchange gem, although it may be moved to a separate gem in the future
