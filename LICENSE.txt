@@ -1,4 +1,4 @@
-Copyright (c) 2012 beatrichartz
+Copyright (c) 2012 Beat Richartz
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

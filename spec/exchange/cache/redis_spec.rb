@@ -1,25 +1,30 @@
 require 'spec_helper'
+require 'redis'
 
 describe "Exchange::Cache::Redis" do
-  subject { Exchange::Cache::Redis }
+  subject { Exchange::Cache::Redis.instance }
   before(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :redis
-      c.cache_host = 'HOST'
-      c.cache_port = 'PORT'
+    Exchange.configuration = Exchange::Configuration.new do |c|
+      c.cache = {
+        :class => :redis,
+        :host => 'HOST',
+        :port => 'PORT'
+      }
     end
   end
   after(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :memcached
-      c.cache_host = 'localhost'
-      c.cache_port = 11211
+    Exchange.configuration = Exchange::Configuration.new do |c|
+      c.cache = {
+        :class => :memcached,
+        :host => 'localhost',
+        :port => 11211
+      }
     end
   end
   describe "client" do
     let(:client) { mock('redis') }
     after(:each) do
-      subject.send(:remove_class_variable, "@@client")
+      subject.instance_variable_set "@client", nil
     end
     it "should set up a client on the specified host and port for the cache" do
       ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
@@ -27,17 +32,17 @@ describe "Exchange::Cache::Redis" do
     end
   end
   describe "cached" do
+    let(:client) { mock('redis', :get => nil) }
+    before(:each) do
+      ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
+    end
+    after(:each) do
+      subject.instance_variable_set "@client", nil
+    end
     it "should raise an error if no block was given" do
       lambda { subject.cached('API_CLASS') }.should raise_error(Exchange::Cache::CachingWithoutBlockError)
     end
     context "when a cached result exists" do
-      let(:client) { mock('redis') }
-      before(:each) do
-        ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
-      end
-      after(:each) do
-        subject.send(:remove_class_variable, "@@client")
-      end
       context "when loading json" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
@@ -62,14 +67,9 @@ describe "Exchange::Cache::Redis" do
       end
     end
     context "when no cached result exists" do
-      let(:client) { mock('redis') }
       before(:each) do
         subject.should_receive(:key).with('API_CLASS', {}).at_most(3).times.and_return('KEY')
-        ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
         client.should_receive(:get).with('KEY').and_return nil
-      end
-      after(:each) do
-        subject.send(:remove_class_variable, "@@client")
       end
       context "with daily cache" do
         it "should call the block and set and return the result" do
@@ -80,10 +80,10 @@ describe "Exchange::Cache::Redis" do
       end
       context "with hourly cache" do
         before(:each) do
-          Exchange::Configuration.update = :hourly
+          Exchange.configuration.cache.expire = :hourly
         end
         after(:each) do
-          Exchange::Configuration.update = :daily
+          Exchange.configuration.cache.expire = :daily
         end
         it "should call the block and set and return the result" do
           client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}").once

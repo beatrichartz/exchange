@@ -7,14 +7,20 @@ describe "Exchange::Cache::Rails" do
   end
   subject { Exchange::Cache::NoCache }
   before(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = false
-    end
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache = {
+        :class => :no_cache
+      }
+    }
   end
   after(:each) do
-    Exchange::Configuration.define do |c|
-      c.cache      = :memcached
-    end
+    Exchange.configuration = Exchange::Configuration.new { |c|
+      c.cache = {
+        :class => :memcached,
+        :host => 'localhost',
+        :port => 11211
+      }
+    }
   end
   describe "cached" do
     it "should directly call the block" do

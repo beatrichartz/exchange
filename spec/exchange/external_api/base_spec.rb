@@ -3,7 +3,9 @@ require 'spec_helper'
 describe "Exchange::ExternalAPI::Base" do
   subject { Exchange::ExternalAPI::Base.new }
   before(:each) do
-    Exchange::Configuration.cache = false
+    Exchange.configuration = Exchange::Configuration.new{|c|
+      c.cache = {:subclass => :no_cache}
+    }
   end
   before(:each) do
     subject.instance_variable_set("@rates", {'EUR' => BigDecimal.new("3.45"), 'CHF' => BigDecimal.new("5.565")})

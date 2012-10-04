@@ -1,18 +1,21 @@
 = exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange]
 
-The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra, Padrino or whatever Framework you like.
+The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
-=== Important Note
+=== Changelog
 
-Since The Currency Bot API, now renamed to Open Exchange Rates API at openexchangerates.org (http://openexchangerates.org), requires an APP ID now, you should configure it using the Exchange::Configuration
+== 0.6
+- Memcached, Redis, JSON and Nokogiri have been removed as explicit dependencies of the gem. The gem will now try to load the gems
+you want to use with it during runtime, and it will throw an exception if a gem required according to your configuration is not present.
+- The cache class is now a singleton and no class singleton anymore. This makes it easier to write a seamlessly integrating custom cache class for it.
+== 0.5
+- Changed the currency bot api to openexchangerates.org and changed the default api to xaviermedia. Since the openexchangerates.org api still supports a free plan with reasonable conditions, it will still be supported by the exchange gem, although it may be moved to a separate gem in the future
+== 0.4
+- Some potential 0 values on conversions when caching with memcached have been fixed.
+== 0.3
+- The ECB API has been added to the standard apis
 
-  Exchange::Configuration.define do |c|
-    c.api_app_id = 'YOUR_APP_ID'
-  end
-
-Also, since it is not my intention to support paid APIs with this gem, the default API has been moved to use the Xavier Media API at xaviermedia.org. However, since Open Exchange Rates (Currency Bot) still supports a free plan, I updated the gem to be able to use it.
-
-As a sidenote: Please be reasonable when using the APIs provided, and be sure to enable caching and mock out any http calls in your specs.
+==== Features
 
 === Easy Conversion
 
@@ -24,7 +27,7 @@ which gets you an exchange at the rates of yesterday.
 
 === Only one request per day to keep you up to date
 
-Imagine the exchange rates getting cached, and you hitting the internet only daily to get new rates (hourly if you're eager to have the absolutely newest ones)
+You're hitting the internet only daily to get new rates with this gem (hourly updates are available if you're eager to have the absolutely newest ones)
 
 === ISO 4217 Currency formatting
 On of the issues with currencies is: You never know the format they should be in. With Exchange, you can just use the currencies
@@ -40,9 +43,9 @@ a string with the currency code in front, or just the amount in the right format
 
 Three open APIs are already included: 
 
-- Currency Bot (http://currencybot.github.com/)
 - Xaviermedia (http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057)
 - European Central Bank (http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html)
+- Currency Bot (http://currencybot.github.com/)
 
 but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it with the Exchange gem. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI to see an example of a custom API Extension
 
