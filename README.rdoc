@@ -157,7 +157,7 @@ Access the original currency and its value after conversion, even over multiple 
 
 You can configure the exchange gem to a variety of options, allowing you to control restrictions on operations, caching and which API the gem uses. Just set the configuration with
 
-  Exchange::Configuration.define do |c|
+  Exchange.configuration = Exchange::Configuration.new do |c|
     # your configuration goes here
   end
   
@@ -166,49 +166,64 @@ You can configure the exchange gem to a variety of options, allowing you to cont
 
 The options available are
   
-  :cache (default :memcached)               The cache type to use. Possible Values: :redis, :memcached or :rails or false to disable caching
-  :cache_host (default '127.0.0.1')         A string with the hostname or IP to set the cache host to. Does not have to be set for Rails cache
-  :cache_port (default 11211)               An integer for the cache port. Does not have to be set for Rails cache
-  :api (default :currency_bot)              The API to use. Possible Values: :currency_bot (Open Source currency bot API) or :xavier_media (Xavier Media API)
-  :retries (default 5)                      The number of times the gem should retry to connect to the api host
+  :cache                                    Takes the cache options as a hash, the options are:
+    :subclass (default :memcached)          The cache subclass to use for caching. Available: Rails cache, Redis, Memcached, Filecache
+    :host (default '127.0.0.1')             A string with the hostname or IP to set the cache host to. Does not have to be set for Rails cache
+    :port (default 11211)                   An integer for the cache port. Does not have to be set for Rails cache
+    :expire (default :daily)                Which period is used to expire the cache, :daily or :hourly are available
+    
+  :api                                      Takes the conversion api as a hash, the options are:
+    :subclass (default :xavier_media)         The api to use. Available: Xavier Media, ECB, Currency Bot
+    :retries (default 5)                      The number of times the gem should retry to connect to the api host
+    :app_id (default nil)                     The app id to use with your api request
+    
   :allow_mixed_opterations (default true)   If set to false, Operations with with different currencies raise errors.
-  :update (default :daily)                  The regularity of updates for the API. Possible values: :daily, :hourly.
 
 If your afraid of mixed currency operations, just don't allow them
-  Exchange::Configuration.allow_mixed_operations = false
+  Exchange.configuration.allow_mixed_operations = false
   1.usd + 1.eur                                 #=> MixedCurrencyError
 
 === Caching Options  
 
 Use Memcached to cache the result (default). Exchange will cache the API files with a key starting with 'exchange_'
-  Exchange::Configuration.define do |c|
-    c.cache = :memcached
-    c.cache_host = 'yourhost'
-    c.cache_port = 2423 #your port
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.cache = {
+      :subclass => :memcached,
+      :host     => 'yourhost',
+      :port     => 2434, #yourport
+    }
   end
 
 Use Redis to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
-  Exchange::Configuration.define do |c|
-    c.cache = :redis
-    c.cache_host = 'yourhost'
-    c.cache_port = 2423 #your port
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.cache = {
+      :subclass => :redis,
+      :host     => 'yourhost',
+      :port     => 2434, #yourport
+    }
   end
 
 Use Rails to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
-  Exchange::Configuration.define do |c|
-    c.cache = :rails
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.cache = {
+      :subclass => :rails
+    }
   end
   
 === API Options
 
-Use the currencybot Open Source API as a source of your conversion rates (default)
-  Exchange::Configuration.define do |c|
-    c.api = :currency_bot
+Use the Xaviermedia API as the source of your conversion rates
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.api = {
+      :subclass => :xavier_media
+    }
   end
 
-Use the Xaviermedia API as the source of your conversion rates
-  Exchange::Configuration.define do |c|
-    c.api = :xavier_media
+Use the currencybot Open Source API as a source of your conversion rates
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.api = {
+      :subclass => :currency_bot
+    }
   end
   
 == Connect your own API and Cache
@@ -253,7 +268,7 @@ Easily connect to your custom API by writing an ExternalAPI Class, or use your o
 
 Now, you can configure your API in the configuration. The Symbol will get camelcased and constantized
 
-  Exchange::Configuration.api = :my_custom
+  Exchange::Configuration.api.subclass = :my_custom
 
 Have fun, and don't forget to write tests.
 
@@ -262,19 +277,17 @@ Have fun, and don't forget to write tests.
 Write your own caching module to use the gem with your own custom caching solution.
   module Cache
     class MyCustomCache < Base
-      class << self
-        # a cache class has to have the class method "cached"
-        def cached api, opts={}, &block
-          # generate the key with key(api, opts[:at]) and you will get a unique key to store in your cache
-          # Your code goes here
-        end
+      # a cache class has to have the class method "cached"
+      def cached api, opts={}, &block
+        # generate the key with key(api, opts[:at]) and you will get a unique key to store in your cache
+        # Your code goes here
       end
     end
   end
 
 Now, you can configure your Caching solution in the configuration. The Symbol will get camelcased and constantized
 
-  Exchange::Configuration.cache = :my_custom_cache
+  Exchange::Configuration.cache.subclass = :my_custom_cache
 
 Have fun, and don't forget to write tests.
 
