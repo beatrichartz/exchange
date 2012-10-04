@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = "attr_accessor@gmail.com"
   s.homepage    = "http://github.com/beatrichartz/exchange"
   s.summary     = "Making currency conversion easy"
-  s.description = "Making currency conversion easy"
+  s.description = "The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like."
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Beat Richartz"]
