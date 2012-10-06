@@ -120,7 +120,7 @@ module Exchange
     # @return [Exchange::Currency] The currency you started with with a rounded value
     # @param [Integer] precision The precision you want the rounding to have. Defaults to the ISO 4217 standard value for the currency
     # @since 0.1
-    # @version 0.3
+    # @version 0.7.1
     # @example Round your currency to the iso standard number of decimals
     #   Exchange::Currency.new(40.545, :usd).round
     #     #=> #<Exchange::Currency @value=40.55 @currency=:usd>
@@ -136,7 +136,7 @@ module Exchange
     # @return [Exchange::Currency] The currency you started with with a ceiled value
     # @param [Integer] precision The precision you want the ceiling to have. Defaults to the ISO 4217 standard value for the currency
     # @since 0.1
-    # @version 0.3
+    # @version 0.7.1
     # @example Ceil your currency to the iso standard number of decimals
     #   Exchange::Currency.new(40.544, :usd).ceil
     #     #=> #<Exchange::Currency @value=40.55 @currency=:usd>
@@ -152,7 +152,7 @@ module Exchange
     # @return [Exchange::Currency] The currency you started with with a floored value
     # @param [Integer] precision The precision you want the flooring to have. Defaults to the ISO 4217 standard value for the currency
     # @since 0.1
-    # @version 0.3
+    # @version 0.7.1
     # @example Floor your currency to the iso standard number of decimals
     #   Exchange::Currency.new(40.545, :usd).floor
     #     #=> #<Exchange::Currency @value=40.54 @currency=:usd>
