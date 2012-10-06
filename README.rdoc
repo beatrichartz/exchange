@@ -4,9 +4,9 @@ The Exchange Gem gives you easy access to currency functions directly on your Nu
 
 == Changelog
 
-=== 0.7
+=== 0.7.1
 - The DSL is now included into Numeric, which makes currency operations available for all subclasses (including your own) of Numeric
-- Some structurally unsound behaviour with ruby base operators (+, -, *, /) has been corrected. It is recommended to update to this latest version of exchange if you are using a version less than 0.7. 
+- Some structurally unsound behaviour with ruby base operators (+, -, *, /, round, floor, ceil) has been corrected. It is recommended to update to this latest version of exchange if you are using a version less than 0.7.1. 
 - the api classes have been refactored to less complex, more readable code, 
 - general performance has improved quite a bit.
 
