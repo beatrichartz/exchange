@@ -131,17 +131,17 @@ describe "Exchange::Currency" do
           # subject does not eval correctly when used with modifiers
           @instantiated = subject
         end
-        it "should be able to add an integer" do
+        it "should be able to subtract an integer" do
           (@instantiated -= 40).value.should == 0
         end
-        it "should be able to add a float" do
+        it "should be able to subtract a float" do
           (@instantiated -= 40.5).value.should == -0.5
         end
         it "should modify the base value" do
           (@instantiated -= 40.5).value.should == -0.5
           @instantiated.value.should == -0.5
         end
-        it "should be able to add another currency value" do
+        it "should be able to subtract another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
           added = (@instantiated -= Exchange::Currency.new(10, :chf))
@@ -196,7 +196,7 @@ describe "Exchange::Currency" do
           # subject does not eval correctly when used with modifiers
           @instantiated = subject
         end
-        it "should be able to add an integer" do
+        it "should be able to multiply by an integer" do
           (@instantiated *= 40).value.should == 1600
         end
         it "should be able to multiply a float" do
@@ -206,13 +206,13 @@ describe "Exchange::Currency" do
           (@instantiated *= 40.5).value.should == 1620
           @instantiated.value.should == 1620
         end
-        it "should be able to add another currency value" do
+        it "should be able to multiply by another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
-          added = (@instantiated *= Exchange::Currency.new(10, :chf))
-          added.value.round(2).should == 438.33
+          added = (@instantiated *= Exchange::Currency.new(9, :chf))
+          added.value.round(2).should == 394.50
           added.currency.should == :usd
-          @instantiated.value.round(2).should == 438.33
+          @instantiated.value.round(2).should == 394.50
           @instantiated.currency.should == :usd
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
@@ -229,10 +229,10 @@ describe "Exchange::Currency" do
       end
     end
     describe "/ other" do
-      it "should be able to multiply by an integer" do
+      it "should be able to divide by an integer" do
         (subject / 40).value.should == 1
       end
-      it "should be able to multiply a float" do
+      it "should be able to divide by a float" do
         BigDecimal.new((subject / 40.5).value.to_s).round(4).should == 0.9877
       end
       it "should not modify the base value" do
@@ -244,7 +244,7 @@ describe "Exchange::Currency" do
         (instantiated /= 40).value.should == 1
         instantiated.value.should == 1
       end
-      it "should be able to multiply by another currency value" do
+      it "should be able to divide by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         Exchange.configuration.allow_mixed_operations = true
         (subject / Exchange::Currency.new(10, :chf)).value.round(2).should == BigDecimal.new("3.65")
@@ -276,7 +276,7 @@ describe "Exchange::Currency" do
           (@instantiated /= 13.3).value.round(2).should == 3.01
           @instantiated.value.round(2).should == 3.01
         end
-        it "should be able to add another currency value" do
+        it "should be able to divide by another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
           added = (@instantiated /= Exchange::Currency.new(10, :chf))
