@@ -103,13 +103,13 @@ module Exchange
         # @private
         # @macro [attach] base_operations
         #   @method $1(other)
-        #
+        #   
         def base_operation op
           self.class_eval <<-EOV
             def #{op}(other)
-              #{'raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency'}
-              @value #{op}= other.kind_of?(Currency) ? other.convert_to(self.currency, :at => other.time) : other
-              self
+              test_for_currency_mix_error(other)
+              new_value = value #{op} (other.kind_of?(Currency) ? other.convert_to(self.currency, :at => other.time) : other)
+              Exchange::Currency.new(new_value, currency, :at => time, :from => self)
             end
           EOV
         end
@@ -311,6 +311,14 @@ module Exchange
       #
       def is_other_currency? other
         is_currency?(other) && other.currency != self.currency
+      end
+      
+      # Test if another currency is used in an operation, and if so, if the operation is allowed
+      # @param [Numeric, Exchange::Currency] other The counterpart in the operation
+      # @raise [CurrencyMixError] an error if mixing currencies is not allowed and currencies where mixed
+      #
+      def test_for_currency_mix_error other
+        raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency
       end
   
   end
