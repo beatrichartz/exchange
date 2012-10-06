@@ -52,7 +52,7 @@ module Exchange
         parsed = Nokogiri.parse(self.callresult)
         
         @base                 = 'EUR' # We just have to assume, since it's the ECB
-        @rates                = Hash[*(['EUR', BigDecimal.new("1")] + parsed.children.children.map {|c| c.attributes.values.map{|v| v.value.match(/\d/) ? BigDecimal.new(v.value) : v.value }.sort_by(&:to_s).reverse unless c.attributes.values.empty? }.compact.flatten)]
+        @rates                = extract_rates(parsed)
         @timestamp            = time.to_i
       end
       
@@ -70,6 +70,13 @@ module Exchange
             API_URL, 
             border <= time ? 'eurofxref-hist-90d.xml' : 'eurofxref-hist.xml'
           ].join('/')
+        end
+        
+        # A helper method to extract rates from the callresult
+        # @param [Nokogiri::XML] parsed the parsed api data
+        #
+        def extract_rates parsed
+          Hash[*(['EUR', BigDecimal.new("1")] + parsed.children.children.map {|c| c.attributes.values.map{|v| v.value.match(/\d/) ? BigDecimal.new(v.value) : v.value }.sort_by(&:to_s).reverse unless c.attributes.values.empty? }.compact.flatten)]
         end
         
         # a wrapper for the call options, since the cache period is quite complex

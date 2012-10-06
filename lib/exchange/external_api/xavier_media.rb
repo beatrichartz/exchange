@@ -25,12 +25,11 @@ module Exchange
       def update(opts={})
         time       = Exchange::Helper.assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
-        retry_urls = Exchange.configuration.api.retries.times.map{ |i| api_url(time - 86400 * (i+1)) }
         
-        Call.new(api_url, :format => :xml, :at => time, :retry_with => retry_urls) do |result|
-          @base                 = result.css('basecurrency').children[0].to_s
-          @rates                = Hash[*result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten]
-          @timestamp            = Time.gm(*result.css('fx_date').children[0].to_s.split('-')).to_i
+        Call.new(api_url, api_opts(opts.merge(:at => time))) do |result|
+          @base                 = extract_base_currency result
+          @rates                = extract_rates result
+          @timestamp            = extract_timestamp result
         end
       end
       
@@ -42,6 +41,41 @@ module Exchange
         #
         def api_url(time)
           [API_URL, "#{time.strftime("%Y/%m/%d")}.xml"].join('/')
+        end
+        
+        # Options for the API call to make
+        # @param [Hash] opts The options to generate the call options with
+        # @option opts [Time, String] :at a historical date to get the exchange rates for
+        # @return [Hash] The options hash for the API call
+        #
+        def api_opts(opts={})
+          retry_urls = Exchange.configuration.api.retries.times.map{ |i| api_url(opts[:at] - 86400 * (i+1)) }
+          
+          { :format => :xml, :at => opts[:at], :retry_with => retry_urls }
+        end
+        
+        # Extract a timestamp of the callresult
+        # @param [Nokogiri::XML] result the callresult
+        # @return [Integer] A unix timestamp
+        #
+        def extract_timestamp(result)
+          Time.gm(*result.css('fx_date').children[0].to_s.split('-')).to_i
+        end
+        
+        # Extract rates from the callresult
+        # @param [Nokogiri::XML] result the callresult
+        # @return [Hash] A hash with currency / rate pairs
+        #
+        def extract_rates(result)
+          Hash[*result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten]
+        end
+        
+        # Extract the base currency from the callresult
+        # @param [Nokogiri::XML] result the callresult
+        # @return [String] The base currency for the rates
+        #
+        def extract_base_currency(result)
+          result.css('basecurrency').children[0].to_s
         end
         
     end
