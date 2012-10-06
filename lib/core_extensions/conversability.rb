@@ -33,6 +33,5 @@ module Exchange
   end
 end
 
-Fixnum.send     :include, Exchange::Conversability
-Float.send      :include, Exchange::Conversability
-BigDecimal.send :include, Exchange::Conversability
+# include the Conversability methods in all number operations. Stack traces will indicate the module if something goes wrong.
+Numeric.send :include, Exchange::Conversability
