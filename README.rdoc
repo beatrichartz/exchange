@@ -1,8 +1,14 @@
 = exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/beatrichartz/exchange]
 
-The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
+The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3 and rubinius in 1.9 and 1.8 mode (see travis link for details). You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
 == Changelog
+
+=== 0.7
+- The DSL is now included into Numeric, which makes currency operations available for all subclasses (including your own) of Numeric
+- Some structurally unsound behaviour with ruby base operators (+, -, *, /) has been corrected. It is recommended to update to this latest version of exchange if you are using a version less than 0.7. 
+- the api classes have been refactored to less complex, more readable code, 
+- general performance has improved quite a bit.
 
 === 0.6
 - Memcached, Redis, JSON and Nokogiri have been removed as explicit dependencies of the gem. The gem will now try to load the gems you want to use with it during runtime, and it will throw an exception if a gem required according to your configuration is not present.
