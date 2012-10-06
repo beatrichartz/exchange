@@ -1,6 +1,6 @@
 # Top Level Module of the the gem.
 # @author Beat Richartz
-# @version 0.1
+# @version 0.7
 # @since 0.1
 
 module Exchange
