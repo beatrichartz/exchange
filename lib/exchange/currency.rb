@@ -32,6 +32,10 @@ module Exchange
     #
     attr_reader :from
     
+    # @attr_reader
+    # @return [Exchange::ExternalAPI] The current api subclass
+    attr_reader :api
+    
     # Intialize the currency with a number and a currency
     # @param [Integer, Float] number The number the currency is instantiated from
     # @param [String, Symbol] currency The currency the currency object is in
@@ -52,6 +56,7 @@ module Exchange
       @currency         = currency
       @time             = Helper.assure_time(opts[:at], :default => :now)
       @from             = opts[:from]
+      @api              = Exchange.configuration.api.subclass
     end
     
     # Method missing is used to handle conversions from one currency object to another. It only handles currencies which are available in
@@ -62,14 +67,16 @@ module Exchange
     #   Exchange::Currency.new(40,:nok).to_sek(:at => Time.gm(2012,2,2))
     #
     def method_missing method, *args, &block
-      match = method.to_s.match(/\Ato_(\w{3})/)
-      if match && Exchange.configuration.api.subclass::CURRENCIES.include?($1)
-        return self.convert_to($1, {:at => self.time}.merge(args.first || {}))
-      elsif match && ISO4217.definitions.keys.include?($1.upcase)
-        raise NoRateError.new("Cannot convert to #{$1} because the defined api does not provide a rate")
+      match    = method.to_s.match /\Ato_(\w{3})$/
+      currency = $1
+      
+      if match && api_supports_currency?(currency)
+        return convert_to currency, { :at => time }.merge(args.first || {})
+      elsif match
+        test_for_no_rate_error(currency)
       end
 
-      self.value.send method, *args, &block
+      value.send method, *args, &block
     end
     
     # Converts this instance of currency into another currency
@@ -328,6 +335,14 @@ module Exchange
         is_currency?(other) && other.currency != self.currency
       end
       
+      # determine wether the chosen api supports converting the given currency
+      # @param [String] currency The currency to test the api for
+      # @return [Boolean] True if the api supports the given currency, false if not
+      #
+      def api_supports_currency? currency
+        api::CURRENCIES.include?(currency)
+      end
+      
       # Test if another currency is used in an operation, and if so, if the operation is allowed
       # @param [Numeric, Exchange::Currency] other The counterpart in the operation
       # @raise [CurrencyMixError] an error if mixing currencies is not allowed and currencies where mixed
@@ -336,6 +351,16 @@ module Exchange
       #
       def test_for_currency_mix_error other
         raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency
+      end
+      
+      # Helper method to raise a no rate error for a given currency if no rate is given
+      # @param [String] currency a possible currency
+      # @raise [NoRateError] an error indicating that the given string is a currency, but no rate is present
+      # @since 0.7.2
+      # @version 0.7.2
+      #
+      def test_for_no_rate_error currency
+        raise NoRateError.new("Cannot convert to #{currency} because the defined api does not provide a rate") if ISO4217.definitions.keys.include?(currency.upcase)
       end
   
   end
