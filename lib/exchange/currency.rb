@@ -95,8 +95,7 @@ module Exchange
         #
         def install_operation op
           define_method op do |*precision|
-            @value = ISO4217.send(op, self.value, self.currency, precision.first)
-            self
+            Exchange::Currency.new(ISO4217.send(op, self.value, self.currency, precision.first), currency, :at => time, :from => self)
           end
         end
       

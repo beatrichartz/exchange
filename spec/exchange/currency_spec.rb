@@ -351,6 +351,10 @@ describe "Exchange::Currency" do
           subject.round.currency.should == :usd
           subject.round.should be_kind_of Exchange::Currency
         end
+        it "should not modify the base value" do
+          subject.round.value.should == 40.12
+          subject.value.should == 40.123
+        end
       end
       context "with arguments" do
         it "should apply it to its number" do
@@ -373,6 +377,10 @@ describe "Exchange::Currency" do
           subject.ceil.currency.should == :omr
           subject.ceil.should be_kind_of Exchange::Currency
         end
+        it "should not modify the base value" do
+          subject.ceil.value.should == 40.124
+          subject.value.should == 40.1236
+        end
       end
       context "with arguments" do
         it "should apply it to its number" do
@@ -394,6 +402,10 @@ describe "Exchange::Currency" do
           subject.floor.value.should == 40
           subject.floor.currency.should == :jpy
           subject.floor.should be_kind_of Exchange::Currency
+        end
+        it "should not modify the base value" do
+          subject.floor.value.should == 40
+          subject.value.should == 40.723
         end
       end
       context "with arguments" do
