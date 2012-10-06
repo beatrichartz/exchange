@@ -89,19 +89,9 @@ module Exchange
     #   Exchange::Configuration.new do |c|
     #     c.allow_mixed_operations = false
     #     c.cache = {
-    #       :subclass => Cache::Redis,
+    #       :subclass => Exhange::Cache::Redis,
     #       :expire => :hourly
     #     }
-    #
-    # @yield [Exchange::Configuration] yields an instance of the configuration class
-    # @yieldparam [optional, Symbol] cache The cache type to use. Possible Values: :redis, :memcached or :rails or false to disable caching. Defaults to :memcached
-    # @yieldparam [optional, String] cache_host A string with the hostname or IP to set the cache host to. Does not have to be set for Rails cache
-    # @yieldparam [optional, Integer] cache_port An integer for the cache port. Does not have to be set for Rails cache
-    # @yieldparam [optional, Symbol] api The API to use. Possible Values: :currency_bot (Open Source currency bot API) or :xavier_media (Xavier Media API). Defaults to :currency_bot
-    # @yieldparam [optional, Integer] retries The number of times the gem should retry to connect to the api host. Defaults to 5.
-    # @yieldparam [optional, Boolean] If set to false, Operations with with different currencies raise errors. Defaults to true.
-    # @yieldparam [optional, Symbol] The regularity of updates for the API. Possible values: :daily, :hourly. Defaults to :daily.
-    # @yieldparam [optional, String] The path where files can be stored for the gem (used for large files from ECB). Make sure ruby has write access.
     #
     def initialize configuration={}, &block
       @config = DEFAULTS.merge(configuration)
