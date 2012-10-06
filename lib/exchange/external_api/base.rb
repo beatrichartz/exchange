@@ -69,6 +69,28 @@ module Exchange
       #
       attr_reader :rates
       
+      # @attr_reader
+      # @return [Exchange::Cache] The cache subclass
+      attr_reader :cache
+      
+      # @attr_reader
+      # @return [Exchange::API] The api subclass
+      attr_reader :api
+      
+      # @attr_reader
+      # @return [Exchange::Helper] The Exchange Helper
+      attr_reader :helper
+      
+      # Initialize with a convenience accessor for the Cache and the api subclass
+      # @param [Any] args The args to initialize with
+      #
+      def initialize *args
+        @cache  = Exchange.configuration.cache.subclass
+        @api    = Exchange.configuration.api.subclass
+        @helper = Exchange::Helper.instance
+        
+        super *args
+      end
       
       # Delivers an exchange rate from one currency to another with the option of getting a historical exchange rate. This rate
       # has to be multiplied with the amount of the currency which you define in from
@@ -82,7 +104,7 @@ module Exchange
       #     #=> 1.232231231
       #
       def rate(from, to, opts={})
-        rate = Exchange.configuration.cache.subclass.cached(Exchange.configuration.api.subclass, opts.merge(:key_for => [from, to], :plain => true)) do
+        rate = cache.cached(api, opts.merge(:key_for => [from, to], :plain => true)) do
           update(opts)
           
           rate_from   = self.rates[to.to_s.upcase]

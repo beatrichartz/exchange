@@ -29,13 +29,13 @@ module Exchange
       #   Exchange::ExternalAPI::Ecb.new.update(:at => Time.gm(3,2,2010))
       #
       def update(opts={})
-        time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
-        times         = Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
+        time          = helper.assure_time(opts[:at], :default => :now)
+        times         = map_retry_times time
         
         # Since the Ecb File retrieved can be very large (> 5MB for the history file) and parsing takes a fair amount of time,
         # caching is doubled on this API
         # 
-        Exchange.configuration.cache.subclass.cached(self.class, :at => time) do
+        cache.cached(self.class, :at => time) do
           Call.new(api_url(time), call_opts(time)) do |result|
             t = time
             

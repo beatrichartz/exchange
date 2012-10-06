@@ -23,7 +23,7 @@ module Exchange
       #   Exchange::ExternalAPI::XavierMedia.new.update(:at => Time.gm(3,2,2010))
       #
       def update(opts={})
-        time       = Exchange::Helper.assure_time(opts[:at], :default => :now)
+        time       = helper.assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
         
         Call.new(api_url, api_opts(opts.merge(:at => time))) do |result|

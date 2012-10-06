@@ -24,7 +24,7 @@ module Exchange
       #   Exchange::ExternalAPI::CurrencyBot.new.update(:at => Time.gm(3,2,2010))
       #
       def update(opts={})
-        time = Exchange::Helper.assure_time(opts[:at])
+        time = helper.assure_time(opts[:at])
         
         Call.new(api_url(time), :at => time) do |result|
           @base                 = result['base']

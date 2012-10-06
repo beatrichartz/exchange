@@ -30,11 +30,13 @@ module Exchange
       #   result = Exchange::ExternalAPI::Call.new('http://yourapiurl.com', :format => :xml)
       #   # Do something with that result
       #
-      def initialize url, options={}, &block
+      def initialize url, options={}, &block        
         Exchange::GemLoader.new('nokogiri').try_load if options[:format] == :xml
         
-        result = Exchange.configuration.cache.subclass.cached(options[:api] || Exchange.configuration.api.subclass, options) do
-          load_url(url, options[:retries] || Exchange.configuration.api.retries, options[:retry_with])
+        api_config = Exchange.configuration.api
+        
+        result = Exchange.configuration.cache.subclass.cached(options[:api] || api_config.subclass, options) do
+          load_url(url, options[:retries] || api_config.retries, options[:retry_with])
         end
         
         parsed = options[:format] == :xml ? Nokogiri.parse(result) : ::JSON.load(result)
