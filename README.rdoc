@@ -67,7 +67,7 @@ But, same here, if you don't like any of these or want to use your own caching s
 == Installation
 === Bundler / Rails
 Add it to your Gemfile  
-  gem "exchange", ">=0.6.0"
+  gem "exchange", ">=0.7.0"
 === Manually
 Just install it as a gem
   gem install exchange
