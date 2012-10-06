@@ -13,7 +13,7 @@ module Exchange
     extend SingleForwardable
     
     # A helper function to assure a value is an instance of time
-    # @param [Time, String, NilClass] The value to be asserted
+    # @param [Time, String, NilClass] arg The value to be asserted
     # @param [Hash] opts Options for assertion
     # @option opts [Symbol] :default a method that can be sent to Time if the argument is nil (:now for example)
     #

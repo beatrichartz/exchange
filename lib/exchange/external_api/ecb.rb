@@ -4,7 +4,7 @@ module Exchange
     # The ECB class, handling communication with the European Central Bank XML File API
     # You can find further information on the European Central Bank XML API API here: http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html
     # @author Beat Richartz
-    # @version 0.3
+    # @version 0.7
     # @since 0.3
     #
     class Ecb < XML
@@ -27,6 +27,9 @@ module Exchange
       # @option opts [Time, String] :at a historical date to get the exchange rates for
       # @example Update the ecb API to use the file of March 2, 2010
       #   Exchange::ExternalAPI::Ecb.new.update(:at => Time.gm(3,2,2010))
+      #
+      # @since 0.1
+      # @version 0.7
       #
       def update(opts={})
         time          = helper.assure_time(opts[:at], :default => :now)
@@ -75,6 +78,9 @@ module Exchange
         # @param [Nokogiri::XML] parsed The parsed callresult
         # @param [Time] time The time to parse for
         # @return [Nokogiri::XML, NilClass] the rate, hopefully
+        # @since 0.7
+        # @version 0.7
+        #
         def find_rate! parsed, time
           parsed.css("Cube[time=\"#{time.strftime("%Y-%m-%d")}\"]")
         end
@@ -82,6 +88,8 @@ module Exchange
         # A helper method to extract rates from the callresult
         # @param [Nokogiri::XML] parsed the parsed api data
         # @return [Hash] a hash with rates
+        # @since 0.7
+        # @version 0.7
         #
         def extract_rates parsed
           rate_array = parsed.map { |c| 
@@ -94,6 +102,8 @@ module Exchange
         # a helper method to map a key value pair to either currency or rate
         # @param [Nokogiri::XML] xml a parsed xml part of the document
         # @return [Array] An array with the following structure [currency, value, currency, value]
+        # @since 0.7
+        # @version 0.7
         #
         def map_to_currency_or_rate xml
           unless (values = xml.attributes.values).empty?
@@ -107,6 +117,8 @@ module Exchange
         # Helper method to map retry times
         # @param [Time] time The time to start with
         # @return [Array] An array of times to retry api operation with
+        # @since 0.7
+        # @version 0.7
         #
         def map_retry_times time
           Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
@@ -115,6 +127,8 @@ module Exchange
         # a wrapper for the call options, since the cache period is quite complex
         # @param [Time] time The date of the exchange rate
         # @return [Hash] a hash with the call options
+        # @since 0.6
+        # @version 0.6
         #
         def call_opts time
           {:format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly}

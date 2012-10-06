@@ -24,6 +24,9 @@ module Exchange
     #   1.nok.to_chf(:at => Time.now - 3600) => #<Exchange::Currency @value=6.57 @currency=:chf>
     #   -3.5.dkk.to_huf(:at => Time.now - 172800) => #<Exchange::Currency @value=-337.40 @currency=:huf>
     #
+    # @since 0.1
+    # @version 0.2
+    #
     ISO4217.definitions.keys.each do |c|
       define_method c.downcase.to_sym do |*args|
         Currency.new(self, c, *args)

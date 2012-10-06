@@ -38,6 +38,8 @@ module Exchange
         # Helper method to extract rates from the api call result
         # @param [JSON] parsed The parsed result
         # @return [Hash] A hash with rates
+        # @since 0.7
+        # @version 0.7
         #
         def extract_rates parsed
           to_hash! parsed['rates'].keys.zip(parsed['rates'].values.map{|v| BigDecimal.new(v.to_s) }).flatten

@@ -175,6 +175,8 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) + Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=37.56 @currency=:nok>
+    # @since 0.1
+    # @version 0.7
     #
     base_operation '+'
     
@@ -189,6 +191,8 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) - Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=7.56 @currency=:nok>
+    # @since 0.1
+    # @version 0.7
     #
     base_operation '-'
     
@@ -203,6 +207,8 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) * Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=70.56 @currency=:nok>
+    # @since 0.1
+    # @version 0.7
     #
     base_operation '*'
     
@@ -217,6 +223,8 @@ module Exchange
     # @example Configuration allows mixed operations (default)
     #   Exchange::Currency.new(20,:nok) / Exchange::Currency.new(20,:sek)
     #     #=> #<Exchange::Currency @value=1.56 @currency=:nok>
+    # @since 0.1
+    # @version 0.7
     #
     base_operation '/'
     
@@ -230,6 +238,8 @@ module Exchange
     #   Exchange::Currency.new(40, :usd) == Exchange::Currency.new(34, :eur) #=> true, will implicitly convert eur to usd at the actual rate
     # @example Compare a currency with a number, the value of the currency will get compared
     #   Exchange::Currency.new(35, :usd) == 35 #=> true
+    # @since 0.1
+    # @version 0.6
     #
     def == other
       if is_same_currency?(other)
@@ -246,7 +256,7 @@ module Exchange
     # @param [Whatever you want to throw at it] other The counterpart to compare
     # @return [Fixed] a number which can be used for sorting
     # @since 0.3
-    # @version 0.3
+    # @version 0.6
     # @todo which historic conversion should be used when two are present?
     # @example Compare two currencies in terms of value
     #   Exchange::Currency.new(40, :usd) <=> Exchange::Currency.new(28, :usd) #=> -1
@@ -254,7 +264,7 @@ module Exchange
     #   Exchange::Currency.new(40, :usd) <=> Exchange::Currency.new(28, :eur) #=> -1
     # @example Sort multiple currencies in an array
     #   [1.usd, 1.eur, 1.chf].sort.map(&:currency) #=> [:usd, :chf, :eur]
-    
+    #
     def <=> other
       if is_same_currency?(other)
         self.value <=> other.value
@@ -279,7 +289,7 @@ module Exchange
     #   Exchange::Currency.new(34.34, :omr).to_s #=> "OMR 34.340"
     # @example Convert a currency to a string without the currency
     #   Exchange::ISO4217.stringif(34.34, :omr).to_s(:iso) #=> "34.340"
-    
+    #
     def to_s format=:currency
       [
         format == :currency && ISO4217.stringify(self.value, self.currency),
@@ -292,6 +302,8 @@ module Exchange
       # determine if another given object is an instance of Exchange::Currency
       # @param [Object] other The object to be tested against
       # @return [Boolean] true if the other is an instance of Exchange::Currency, false if not
+      # @since 0.6
+      # @version 0.6
       #
       def is_currency? other
         other.is_a?(Exchange::Currency)
@@ -300,6 +312,8 @@ module Exchange
       # determine if another given object is an instance of Exchange::Currency and the same currency
       # @param [Object] other The object to be tested against
       # @return [Boolean] true if the other is an instance of Exchange::Currency and has the same currency as self, false if not
+      # @since 0.6
+      # @version 0.6
       #
       def is_same_currency? other
         is_currency?(other) && other.currency == self.currency
@@ -308,6 +322,8 @@ module Exchange
       # determine if another given object is an instance of Exchange::Currency and has another currency
       # @param [Object] other The object to be tested against
       # @return [Boolean] true if the other is an instance of Exchange::Currency and has another currency as self, false if not
+      # @since 0.6
+      # @version 0.6
       #
       def is_other_currency? other
         is_currency?(other) && other.currency != self.currency
@@ -316,6 +332,8 @@ module Exchange
       # Test if another currency is used in an operation, and if so, if the operation is allowed
       # @param [Numeric, Exchange::Currency] other The counterpart in the operation
       # @raise [CurrencyMixError] an error if mixing currencies is not allowed and currencies where mixed
+      # @since 0.6
+      # @version 0.6
       #
       def test_for_currency_mix_error other
         raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency
