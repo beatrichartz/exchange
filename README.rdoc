@@ -1,4 +1,4 @@
-= exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange]
+= exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/beatrichartz/exchange]
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3. You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
@@ -178,7 +178,7 @@ The options available are
     
   :allow_mixed_opterations (default true)   If set to false, Operations with with different currencies raise errors.
 
-If your afraid of mixed currency operations, just don't allow them
+If you're afraid of mixed currency operations, just don't allow them
   Exchange.configuration.allow_mixed_operations = false
   1.usd + 1.eur                                 #=> MixedCurrencyError
 
