@@ -107,6 +107,13 @@ module Exchange
         amount * rate(from, to, opts)
       end
       
+      # Converts an array to a hash
+      # @param [Array] array The array to convert
+      # @return [Hash] The hash out of the array
+      def to_hash! array
+        Hash[*array]
+      end
+      
     end
   end
 end

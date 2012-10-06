@@ -41,9 +41,7 @@ module Exchange
             
             # Weekends do not have rates present
             #
-            while (r = result.css("Cube[time=\"#{t.strftime("%Y-%m-%d")}\"]")).empty? && !times.empty?
-              t = times.shift
-            end
+            t = times.shift while (r = find_rate!(result, t)).empty? && !times.empty?
             
             @callresult = r.to_s
           end
@@ -52,7 +50,7 @@ module Exchange
         parsed = Nokogiri.parse(self.callresult)
         
         @base                 = 'EUR' # We just have to assume, since it's the ECB
-        @rates                = extract_rates(parsed)
+        @rates                = extract_rates(parsed.children.children)
         @timestamp            = time.to_i
       end
       
@@ -72,12 +70,27 @@ module Exchange
           ].join('/')
         end
         
+        # A helper method to find rates from the callresult given a certain time
+        # ECB packs the rates in «Cubes», so we try to find the cube appropriate to the time
+        # @param [Nokogiri::XML] parsed The parsed callresult
+        # @param [Time] time The time to parse for
+        # @return [Nokogiri::XML, NilClass] the rate, hopefully
+        def find_rate! parsed, time
+          parsed.css("Cube[time=\"#{time.strftime("%Y-%m-%d")}\"]")
+        end
+        
         # A helper method to extract rates from the callresult
         # @param [Nokogiri::XML] parsed the parsed api data
         # @return [Hash] a hash with rates
         #
         def extract_rates parsed
-          Hash[*(['EUR', BigDecimal.new("1")] + parsed.children.children.map {|c| c.attributes.values.map{|v| v.value.match(/\d/) ? BigDecimal.new(v.value) : v.value }.sort_by(&:to_s).reverse unless c.attributes.values.empty? }.compact.flatten)]
+          rate_array = parsed.map { |c| 
+            c.attributes.values.map{ |v| 
+              v.value.match(/\d+/) ? BigDecimal.new(v.value) : v.value 
+            }.sort_by(&:to_s).reverse unless c.attributes.values.empty? 
+          }.compact.flatten
+          
+          to_hash!(['EUR', BigDecimal.new("1")] + rate_array)
         end
         
         # a wrapper for the call options, since the cache period is quite complex

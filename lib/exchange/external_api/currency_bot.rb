@@ -28,12 +28,20 @@ module Exchange
         
         Call.new(api_url(time), :at => time) do |result|
           @base                 = result['base']
-          @rates                = Hash[*result['rates'].keys.zip(result['rates'].values.map{|v| BigDecimal.new(v.to_s) }).flatten]
+          @rates                = extract_rates(result)
           @timestamp            = result['timestamp'].to_i
         end
       end
             
       private
+      
+        # Helper method to extract rates from the api call result
+        # @param [JSON] parsed The parsed result
+        # @return [Hash] A hash with rates
+        #
+        def extract_rates parsed
+          to_hash! parsed['rates'].keys.zip(parsed['rates'].values.map{|v| BigDecimal.new(v.to_s) }).flatten
+        end
       
         # A helper function to build an api url for either a specific time or the latest available rates
         # @param [Time] time The time to build the api url for

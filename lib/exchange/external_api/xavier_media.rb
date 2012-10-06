@@ -49,7 +49,7 @@ module Exchange
         # @return [Hash] The options hash for the API call
         #
         def api_opts(opts={})
-          retry_urls = Exchange.configuration.api.retries.times.map{ |i| api_url(opts[:at] - 86400 * (i+1)) }
+          retry_urls = Exchange.configuration.api.retries.times.map { |i| api_url(opts[:at] - 86400 * (i+1)) }
           
           { :format => :xml, :at => opts[:at], :retry_with => retry_urls }
         end
@@ -67,7 +67,8 @@ module Exchange
         # @return [Hash] A hash with currency / rate pairs
         #
         def extract_rates(result)
-          Hash[*result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten]
+          rates_array = result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten
+          to_hash!(rates_array)
         end
         
         # Extract the base currency from the callresult
