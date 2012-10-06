@@ -74,6 +74,7 @@ module Exchange
         
         # A helper method to extract rates from the callresult
         # @param [Nokogiri::XML] parsed the parsed api data
+        # @return [Hash] a hash with rates
         #
         def extract_rates parsed
           Hash[*(['EUR', BigDecimal.new("1")] + parsed.children.children.map {|c| c.attributes.values.map{|v| v.value.match(/\d/) ? BigDecimal.new(v.value) : v.value }.sort_by(&:to_s).reverse unless c.attributes.values.empty? }.compact.flatten)]
