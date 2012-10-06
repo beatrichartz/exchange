@@ -210,9 +210,9 @@ describe "Exchange::Currency" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
           added = (@instantiated *= Exchange::Currency.new(9, :chf))
-          added.value.round(2).should == 394.50
+          added.value.round(1).should == 394.50
           added.currency.should == :usd
-          @instantiated.value.round(2).should == 394.50
+          @instantiated.value.round(1).should == 394.50
           @instantiated.currency.should == :usd
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
