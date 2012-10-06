@@ -13,23 +13,37 @@ module Exchange
   #         # Define here which currencies your API can handle
   #         CURRENCIES = %W(usd chf)
   #         
-  #         # Every instance of ExternalAPI Class has to have an update function which gets the rates from the API
+  #         # Every instance of ExternalAPI Class has to have an update function which 
+  #         # gets the rates from the API
+  #         #
   #         def update(opts={})
   #           # assure that you will get a Time object for the historical dates
-  #           time = Exchange::Helper.assure_time(opts[:at]) 
+  #           #
+  #           time = helper.assure_time(opts[:at]) 
   #
-  #           # call your API (shown here with a helper function that builds your API URL). Like this, your calls will get cached.
+  #           # Call your API (shown here with a helper function that builds your API URL). 
+  #           # Like this, your calls will get cached.
+  #           #
   #           Call.new(api_url(time), :at => time) do |result|
-  #
-  #             # assign the currency conversion base, attention, this is readonly, so don't do self.base = 
-  #             @base                 = result['base']
-  #
-  #             # assign the rates, this has to be a hash with the following format: {'USD' => 1.23242, 'CHF' => 1.34323}. Attention, this is readonly.
-  #             @rates                = result['rates']
-  #
-  #             # timestamp the api call result. This may come in handy to assure you have the right result. Attention, this is readonly.
-  #             @timestamp            = result['timestamp'].to_i
-  #           end
+  # 
+  #           # Assign the currency conversion base.
+  #           # Attention, this is readonly, self.base= won't work
+  #           #
+  #           @base                 = result['base']
+  # 
+  #           # assign the rates, this has to be a hash with the following format: 
+  #           # {'USD' => 1.23242, 'CHF' => 1.34323}. 
+  #           #
+  #           # Attention, this is readonly, self.rates= won't work
+  #           #
+  #           @rates                = result['rates']
+  # 
+  #           # Timestamp the api call result. This may come in handy to assure you have 
+  #           # the right result. 
+  #           #
+  #           # Attention, this is readonly, self.timestamp= won't work
+  #           #
+  #           @timestamp            = result['timestamp'].to_i
   #         end
   #         
   #         private
@@ -41,8 +55,11 @@ module Exchange
   #       end
   #     end
   #   end
+  #
   #   # Now, you can configure your API in the configuration. The Symbol will get camelcased and constantized
+  #   #
   #   Exchange::Configuration.api.subclass = :my_custom
+  #
   #   # Have fun, and don't forget to write tests.
   #
   module ExternalAPI

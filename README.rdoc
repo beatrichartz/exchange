@@ -242,21 +242,36 @@ Easily connect to your custom API by writing an ExternalAPI Class, or use your o
         # Define here which currencies your API can handle
         CURRENCIES = %W(usd chf)
         
-        # Every instance of ExternalAPI Class has to have an update function which gets the rates from the API
+        # Every instance of ExternalAPI Class has to have an update function which gets 
+        # the rates from the API
+        #
         def update(opts={})
           # assure that you will get a Time object for the historical dates
+          #
           time = assure_time(opts[:at]) 
 
-          # call your API (shown here with a helper function that builds your API URL). Like this, your calls will get cached.
+          # Call your API (shown here with a helper function that builds your API URL). 
+          # Like this, your calls will get cached.
+          #
           Call.new(api_url(time), :at => time) do |result|
 
-            # assign the currency conversion base, attention, this is readonly, so don't do self.base = 
+            # Assign the currency conversion base.
+            # Attention, this is readonly, self.base= won't work
+            #
             @base                 = result['base']
 
-            # assign the rates, this has to be a hash with the following format: {'USD' => 1.23242, 'CHF' => 1.34323}. Attention, this is readonly.
+            # assign the rates, this has to be a hash with the following format: 
+            # {'USD' => 1.23242, 'CHF' => 1.34323}. 
+            #
+            # Attention, this is readonly, self.rates= won't work
+            #
             @rates                = result['rates']
 
-            # timestamp the api call result. This may come in handy to assure you have the right result. Attention, this is readonly.
+            # Timestamp the api call result. This may come in handy to assure you have 
+            # the right result. 
+            #
+            # Attention, this is readonly, self.timestamp= won't work
+            #
             @timestamp            = result['timestamp'].to_i
           end
         end
@@ -282,9 +297,14 @@ Have fun, and don't forget to write tests.
 Write your own caching module to use the gem with your own custom caching solution.
   module Cache
     class MyCustomCache < Base
-      # a cache class has to have the class method "cached"
+      # A cache class has to have the method "cached".
+      # The cache Base is a singleton and forwards the method "cached"
+      # to the instance
+      #
       def cached api, opts={}, &block
-        # generate the key with key(api, opts[:at]) and you will get a unique key to store in your cache
+        # generate the storage with key(api, opts[:at]) and you will get a 
+        # unique key to store in your cache
+        #
         # Your code goes here
       end
     end
@@ -292,7 +312,7 @@ Write your own caching module to use the gem with your own custom caching soluti
 
 Now, you can configure your Caching solution in the configuration. The Symbol will get camelcased and constantized
 
-  Exchange::Configuration.cache.subclass = :my_custom_cache
+  Exchange.configuration.cache.subclass = :my_custom_cache
 
 Have fun, and don't forget to write tests.
 

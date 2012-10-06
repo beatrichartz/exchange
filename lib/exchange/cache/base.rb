@@ -7,15 +7,23 @@ module Exchange
   # @example Write your own caching module
   #   module Cache
   #     class MyCustomCache < Base
-  #       # a cache class has to have the class method "cached"
+  #       # A cache class has to have the method "cached".
+  #       # The cache Base is a singleton and forwards the method "cached"
+  #       # to the instance
+  #       #
   #       def cached api, opts={}, &block
-  #         # generate the key with key(api, opts[:at]) and you will get a unique key to store in your cache
+  #         # generate the storage with key(api, opts[:at]) and you will get a 
+  #         # unique key to store in your cache
+  #         #
   #         # Your code goes here
   #       end
   #     end
   #   end
+  #
   #   # Now, you can configure your Caching solution in the configuration. The Symbol will get camelcased and constantized
-  #   configuration.cache.subclass = :my_custom_cache
+  #   #
+  #   Exchange.configuration.cache.subclass = :my_custom_cache
+  #
   #   # Have fun, and don't forget to write tests.
   
   module Cache
