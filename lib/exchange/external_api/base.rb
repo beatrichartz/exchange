@@ -84,11 +84,15 @@ module Exchange
       def rate(from, to, opts={})
         rate = Exchange.configuration.cache.subclass.cached(Exchange.configuration.api.subclass, opts.merge(:key_for => [from, to], :plain => true)) do
           update(opts)
+          
           rate_from   = self.rates[to.to_s.upcase]
           rate_to     = self.rates[from.to_s.upcase]
-          raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + opts[:at].to_s if opts[:at]}") unless rate_from && rate_to
+          
+          test_for_rates_and_raise_if_nil rate_from, rate_to, opts[:at]
+          
           rate_from / rate_to
         end
+        
         BigDecimal.new(rate.to_s)
       end
       
@@ -110,10 +114,20 @@ module Exchange
       # Converts an array to a hash
       # @param [Array] array The array to convert
       # @return [Hash] The hash out of the array
+      #
       def to_hash! array
         Hash[*array]
       end
       
+      # Test for a error to be thrown when no rates are present
+      # @param [String] rate_from The rate from which should be converted
+      # @param [String] rate_to The rate to which should be converted
+      # @param [Time] time The time at which should be converted
+      # @raise [NoRateError] An error indicating that there is no rate present when there is no rate present
+      #
+      def test_for_rates_and_raise_if_nil rate_from, rate_to, time=nil
+        raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + time.to_s if time}") unless rate_from && rate_to
+      end
     end
   end
 end

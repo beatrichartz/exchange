@@ -85,12 +85,31 @@ module Exchange
         #
         def extract_rates parsed
           rate_array = parsed.map { |c| 
-            c.attributes.values.map{ |v| 
-              v.value.match(/\d+/) ? BigDecimal.new(v.value) : v.value 
-            }.sort_by(&:to_s).reverse unless c.attributes.values.empty? 
+            map_to_currency_or_rate c
           }.compact.flatten
           
           to_hash!(['EUR', BigDecimal.new("1")] + rate_array)
+        end
+        
+        # a helper method to map a key value pair to either currency or rate
+        # @param [Nokogiri::XML] xml a parsed xml part of the document
+        # @return [Array] An array with the following structure [currency, value, currency, value]
+        #
+        def map_to_currency_or_rate xml
+          unless (values = xml.attributes.values).empty?
+            values.map { |v|
+              val = v.value
+              val.match(/\d+/) ? BigDecimal.new(val) : val 
+            }.sort_by(&:to_s).reverse 
+          end
+        end
+        
+        # Helper method to map retry times
+        # @param [Time] time The time to start with
+        # @return [Array] An array of times to retry api operation with
+        #
+        def map_retry_times time
+          Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
         end
         
         # a wrapper for the call options, since the cache period is quite complex
