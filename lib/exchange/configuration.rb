@@ -52,9 +52,10 @@ module Exchange
         #
         def install_getter key, parent_module
           define_method key do
-            @config[key] = OpenStruct.new(@config[key]) unless @config[key].is_a?(OpenStruct)
-            @config[key].subclass = parent_module.const_get camelize(@config[key].subclass) unless @config[key].subclass.is_a?(Class)
-            @config[key]
+            config_part = @config[key]
+            config_part = OpenStruct.new(config_part) unless config_part.is_a?(OpenStruct)
+            config_part.subclass = parent_module.const_get camelize(config_part.subclass) unless config_part.subclass.is_a?(Class)
+            @config[key] = config_part
           end
         end
         
