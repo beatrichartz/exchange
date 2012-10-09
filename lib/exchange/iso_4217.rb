@@ -1,5 +1,6 @@
 require 'singleton'
 require 'forwardable'
+require 'yaml'
 
 module Exchange
   
