@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
+$LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
 require 'exchange/base'
 
 Gem::Specification.new do |s|
   s.name = "exchange"
-  s.version = "0.7.5"
+  s.version = Exchange::VERSION
   s.authors = ["Beat Richartz"]
   s.date = "2012-10-09"
   s.description = "The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as \n    1.eur.to_usd\n  or even better \n    1.eur.to_usd(:at => Time.now - 84600)\n  which gets you an exchange at the rates of yesterday."
