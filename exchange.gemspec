@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Beat Richartz"]
   s.date = "2012-10-06"
-  s.description = "The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as \n    1.eur.to_usd\n  or even better \n    1.eur.to_usd(:at => Time.now - 84600)\n  which gets you an exchange at the rates of yesterday."
+  s.description = "The Exchange Gem gives you access to currency functions directly on your Numbers. Conversion as easy as \n    1.eur.to_usd\n  or even better \n    1.eur.to_usd(:at => Time.now - 84600)\n  which gets you an exchange at the rates of yesterday."
   s.email = "exchange_gem@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",

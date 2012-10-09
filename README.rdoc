@@ -2,24 +2,6 @@
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3 and rubinius in 1.9 and 1.8 mode (see travis link for details). You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
-== Changelog
-
-=== 0.7.1
-- The DSL is now included into Numeric, which makes currency operations available for all subclasses (including your own) of Numeric
-- Some structurally unsound behaviour with ruby base operators (+, -, *, /, round, floor, ceil) has been corrected. It is recommended to update to this latest version of exchange if you are using a version less than 0.7.1. 
-- the api classes have been refactored to less complex, more readable code, 
-- general performance has improved quite a bit.
-
-=== 0.6
-- Memcached, Redis, JSON and Nokogiri have been removed as explicit dependencies of the gem. The gem will now try to load the gems you want to use with it during runtime, and it will throw an exception if a gem required according to your configuration is not present.
-- The cache class is now a singleton and no class singleton anymore. This makes it easier to write a seamlessly integrating custom cache class for it.
-=== 0.5
-- Changed the currency bot api to openexchangerates.org and changed the default api to xaviermedia. Since the openexchangerates.org api still supports a free plan with reasonable conditions, it will still be supported by the exchange gem, although it may be moved to a separate gem in the future
-=== 0.4
-- Some potential 0 values on conversions when caching with memcached have been fixed.
-=== 0.3
-- The ECB API has been added to the standard apis
-
 == Features
 
 === Easy Conversion
