@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    exchange (0.7.6)
+    exchange (0.8.0)
       json (>= 1.0.0)
 
 GEM
