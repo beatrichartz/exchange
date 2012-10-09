@@ -42,7 +42,7 @@ GEM
     shoulda-context (1.0.0)
     shoulda-matchers (1.4.0)
       activesupport (>= 3.0.0)
-    yard (0.7.5)
+    yard (0.8.2.1)
 
 PLATFORMS
   java
@@ -52,9 +52,9 @@ DEPENDENCIES
   bundler (>= 1.0.0)
   dalli (>= 2.0.0)
   exchange!
-  jeweler (~> 1.8.3)
+  jeweler (>= 1.8.3)
   nokogiri (>= 1.5.0)
   redis (>= 2.2.0)
   rspec
   shoulda
-  yard (~> 0.7.4)
+  yard (>= 0.7.4)
