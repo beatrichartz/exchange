@@ -6,6 +6,18 @@ You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whate
 
 == Features
 
+=== No Floating Point errors
+
+You may know the deal: Floating Point Errors can cost you money:
+  
+  (0.29 * 50).round #=> 14, which is incorrect
+
+Whereas
+
+  (BigDecimal("0.29") * 50).round #=> 15, which is correct
+  
+Exchange uses BigDecimal in all its currency and conversion operations, so you will not be a likely victim for floating point inaccuracies.
+
 === Easy Conversion
 
 Conversion of currencies does not get any easier
