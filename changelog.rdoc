@@ -1,7 +1,8 @@
 = Changes to Exchange
 
-== 0.7.3
+== 0.8.0
 - jruby compatibility, horray!
+- readded json as an explicit dependency since its used in cache and api
 
 == 0.7.1
 - The DSL is now included into Numeric, which makes currency operations available for all subclasses (including your own) of Numeric
