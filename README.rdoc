@@ -6,27 +6,26 @@ The Exchange Gem gives you easy access to currency functions directly on your Nu
 
 === Easy Conversion
 
-Imagine a conversion as easy as 
+Conversion of currencies does not get any easier
   1.eur.to_usd
-or even better 
+or better for historic dates
   1.eur.to_usd(:at => Time.now - 84600)
-which gets you an exchange at the rates of yesterday.
 
 === Only one request per day to keep you up to date
 
-You're hitting the internet only daily to get new rates with this gem (hourly updates are available if you're eager to have the absolutely newest ones)
+You're hitting the internet only daily to get new rates (hourly updates are available if you're eager to have the absolutely newest ones)
 
 === ISO 4217 Currency formatting
 On of the issues with currencies is: You never know the format they should be in. With Exchange, you can just use the currencies
-to_s method, which takes care of the right format for you. A version with symbols is under construction. You can either have a
-a string with the currency code in front, or just the amount in the right format
+to_s method, which takes care of the right format for you. You can either have a string with the currency code in front, or just the amount in the right format
 
   Exchange::Currency.new(49.567, :usd).to_s           #=> "USD 49.57"
   Exchange::Currency.new(45, :jpy).to_s               #=> "JPY 45"
   Exchange::Currency.new(34.34, :omr).to_s            #=> "OMR 34.340"
   Exchange::ISO4217.stringif(34.34, :omr).to_s(:iso)  #=> "34.340"
 
-=== Use three great APIs or your own great API
+
+=== Use three great APIs or your own
 
 Three open APIs are already included: 
 
@@ -34,22 +33,22 @@ Three open APIs are already included:
 - European Central Bank (http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html)
 - Currency Bot (http://currencybot.github.com/)
 
-but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it with the Exchange gem. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI to see an example of a custom API Extension
+but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it. Visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI to see an example of a custom API Extension
 
 === Use great caches or your own great cache
 
-Also, the gem allows you to use one of three available caching solutions: 
+Use one of three available caching solutions: 
 
 - Memcached via the Dalli gem
 - Redis via the redis gem
 - Rails cache (This gem does however not depend on rails)
 
-But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it with Exchange. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache for an example of a cache extension
+But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache for an example of a cache extension
 
 == Installation
 === Bundler / Rails
 Add it to your Gemfile  
-  gem "exchange", ">=0.7.0"
+  gem "exchange", ">=0.7.2"
 === Manually
 Just install it as a gem
   gem install exchange
