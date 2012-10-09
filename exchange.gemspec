@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "exchange"
-  s.version = "0.7.2"
+  s.version = "0.7.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Beat Richartz"]
@@ -92,9 +92,15 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<yard>, [">= 0.7.4"])
       s.add_development_dependency(%q<bundler>, [">= 1.0.0"])
       s.add_development_dependency(%q<jeweler>, [">= 1.8.3"])
+      s.add_development_dependency(%q<yard>, [">= 0.7.4"])
+      s.add_development_dependency(%q<bundler>, [">= 1.0.0"])
+      s.add_development_dependency(%q<jeweler>, [">= 1.8.3"])
     else
       s.add_dependency(%q<exchange>, [">= 0"])
       s.add_dependency(%q<bundler>, [">= 1.0.0"])
+      s.add_dependency(%q<yard>, [">= 0.7.4"])
+      s.add_dependency(%q<bundler>, [">= 1.0.0"])
+      s.add_dependency(%q<jeweler>, [">= 1.8.3"])
       s.add_dependency(%q<yard>, [">= 0.7.4"])
       s.add_dependency(%q<bundler>, [">= 1.0.0"])
       s.add_dependency(%q<jeweler>, [">= 1.8.3"])
@@ -102,6 +108,9 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<exchange>, [">= 0"])
     s.add_dependency(%q<bundler>, [">= 1.0.0"])
+    s.add_dependency(%q<yard>, [">= 0.7.4"])
+    s.add_dependency(%q<bundler>, [">= 1.0.0"])
+    s.add_dependency(%q<jeweler>, [">= 1.8.3"])
     s.add_dependency(%q<yard>, [">= 0.7.4"])
     s.add_dependency(%q<bundler>, [">= 1.0.0"])
     s.add_dependency(%q<jeweler>, [">= 1.8.3"])
