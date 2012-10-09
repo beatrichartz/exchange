@@ -6,7 +6,7 @@ You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whate
 
 == Features
 
-=== No Floating Point errors
+=== Precise Calculation
 
 You may know the deal: Floating Point Errors can cost you money:
   
