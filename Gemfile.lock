@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     exchange (0.7.3)
-      exchange
 
 GEM
   remote: http://rubygems.org/
