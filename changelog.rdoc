@@ -1,6 +1,6 @@
 = Changes to Exchange
 
-== 0.7.2
+== 0.7.3
 - jruby compatibility, horray!
 
 == 0.7.1
