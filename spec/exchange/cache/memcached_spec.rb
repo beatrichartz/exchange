@@ -68,26 +68,52 @@ describe "Exchange::CacheDalli::Client" do
     end
     context "when no cached result exists" do
       let(:client) { mock('memcached') }
-      before(:each) do
-        subject.should_receive(:key).with('API_CLASS', {}).twice.and_return('KEY')
-        client.should_receive(:get).with('KEY').and_return(nil)
-      end
-      context "with daily cache" do
-        it "should call the block and set and return the result" do
-          client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}", 86400).once
-          subject.cached('API_CLASS') { {'RESULT' => 'YAY'} }.should == {'RESULT' => 'YAY'}
-        end
-      end
-      context "with hourly cache" do
+      context "when returning nil" do
         before(:each) do
-          Exchange.configuration.cache.expire = :hourly
+          subject.should_receive(:key).with('API_CLASS', {}).twice.and_return('KEY')
+          client.should_receive(:get).with('KEY').and_return(nil)
         end
-        after(:each) do
-          Exchange.configuration.cache.expire = :daily
+        context "with daily cache" do
+          it "should call the block and set and return the result" do
+            client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}", 86400).once
+            subject.cached('API_CLASS') { {'RESULT' => 'YAY'} }.should == {'RESULT' => 'YAY'}
+          end
         end
-        it "should call the block and set and return the result" do
-          client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}", 3600).once
-          subject.cached('API_CLASS') { {'RESULT' => 'YAY'} }.should == {'RESULT' => 'YAY'}
+        context "with hourly cache" do
+          before(:each) do
+            Exchange.configuration.cache.expire = :hourly
+          end
+          after(:each) do
+            Exchange.configuration.cache.expire = :daily
+          end
+          it "should call the block and set and return the result" do
+            client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}", 3600).once
+            subject.cached('API_CLASS') { {'RESULT' => 'YAY'} }.should == {'RESULT' => 'YAY'}
+          end
+        end
+      end
+      context "when returning an empty string" do
+        before(:each) do
+          subject.should_receive(:key).with('API_CLASS', {}).twice.and_return('KEY')
+          client.should_receive(:get).with('KEY').and_return('')
+        end
+        context "with daily cache" do
+          it "should call the block and set and return the result" do
+            client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}", 86400).once
+            subject.cached('API_CLASS') { {'RESULT' => 'YAY'} }.should == {'RESULT' => 'YAY'}
+          end
+        end
+        context "with hourly cache" do
+          before(:each) do
+            Exchange.configuration.cache.expire = :hourly
+          end
+          after(:each) do
+            Exchange.configuration.cache.expire = :daily
+          end
+          it "should call the block and set and return the result" do
+            client.should_receive(:set).with('KEY', "{\"RESULT\":\"YAY\"}", 3600).once
+            subject.cached('API_CLASS') { {'RESULT' => 'YAY'} }.should == {'RESULT' => 'YAY'}
+          end
         end
       end
     end

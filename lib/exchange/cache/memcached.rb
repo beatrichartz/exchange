@@ -34,7 +34,8 @@ module Exchange
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
        
       def cached api, opts={}, &block
-        result = opts[:plain] ? client.get(key(api, opts)).to_s.gsub(/["\s+]/, '') : JSON.load(client.get(key(api, opts)))
+        stored = client.get(key(api, opts))
+        result = opts[:plain] ? stored.to_s.gsub(/["\s+]/, '') : JSON.load(stored) if stored && !stored.empty?
         
         unless result
           result = super
