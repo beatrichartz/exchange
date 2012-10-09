@@ -30,9 +30,9 @@ module Exchange
       # @param [Exchange::ExternalAPI::Subclass] api The API class the data has to be stored for
       # @param [Hash] opts the options to cache with
       # @option opts [Time] :at the historic time of the exchange rates to be cached
-      # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
+      # @yield [] This method takes a mandatory block with an arity of 0 for caching
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
-       
+      #
       def cached api, opts={}, &block
         stored = client.get(key(api, opts))
         result = opts[:plain] ? stored.to_s.gsub(/["\s+]/, '') : JSON.load(stored) if stored && !stored.empty?
