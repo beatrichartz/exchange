@@ -1,6 +1,15 @@
 = exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://gemnasium.com/beatrichartz/exchange.png" alt="Dependency Status" />}[https://gemnasium.com/beatrichartz/exchange] {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/beatrichartz/exchange]
 
-The Exchange Gem gives you easy access to currency functions directly on your Numbers. It has been tested against ruby 1.8.7, ree, ruby 1.9.2 and 1.9.3 and rubinius in 1.9 and 1.8 mode (see travis link for details). You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
+The Exchange Gem gives you easy access to currency functions directly on your Numbers. {It has been tested against}[http://travis-ci.org/beatrichartz/exchange]: 
+- ruby 1.9.3
+- ruby 1.9.2
+- ruby 1.8.7
+- ree
+- rubinius in 1.9 mode 
+- rubinius in 1.8 mode 
+- jruby 
+
+You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
 == Features
 
@@ -29,11 +38,12 @@ to_s method, which takes care of the right format for you. You can either have a
 
 Three open APIs are already included: 
 
-- Xaviermedia (http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057)
-- European Central Bank (http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html)
-- Currency Bot (http://currencybot.github.com/)
+- {Xaviermedia}[http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057]
+- {European Central Bank}[http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html]
+- {Currency Bot}[http://currencybot.github.com/]
 
-but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it. Visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI to see an example of a custom API Extension
+but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it. 
+{Example of a custom API Extension}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI]
 
 === Use great caches or your own great cache
 
@@ -43,7 +53,8 @@ Use one of three available caching solutions:
 - Redis via the redis gem
 - Rails cache (This gem does however not depend on rails)
 
-But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it. Just visit the documentation here: http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache for an example of a cache extension
+But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it. 
+{Example of a custom cache extension}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache]
 
 == Installation
 === Bundler / Rails
