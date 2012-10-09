@@ -39,7 +39,7 @@ module Exchange
           load_url(url, options[:retries] || api_config.retries, options[:retry_with])
         end
         
-        parsed = options[:format] == :xml ? Nokogiri.parse(result) : ::JSON.load(result)
+        parsed = options[:format] == :xml ? Nokogiri::XML.parse(result.sub("\n", '')) : ::JSON.load(result)
         
         return parsed unless block_given?
         yield  parsed
@@ -51,6 +51,7 @@ module Exchange
         # @param [String] url The url to be loaded
         # @param [Integer] retries The number of retries to do if the API Call should fail with a HTTP Error
         # @param [Array] retry_with An array of urls to retry the API call with if the call to the original URL should fail. These values will be shifted until a call succeeds or the number of maximum retries is reached
+        # @todo install a timeout for slow requests, but respect when loading large files
         #
         def load_url(url, retries, retry_with)          
           begin            
