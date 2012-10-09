@@ -11,7 +11,6 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 
-require 'shoulda'
 require 'exchange'
 
 module HelperMethods
