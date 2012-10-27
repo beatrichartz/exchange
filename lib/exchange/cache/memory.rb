@@ -41,8 +41,8 @@ module Exchange
       private
       
       # Generate an instance variable name for the memory cache to get and set
-      # @param [Exchange::ExternalAPI::Subclass] api_class The API to store the data for
-      # @param [optional, Time] time The time for which the data is valid
+      # @param [Exchange::ExternalAPI::Subclass] api The API to store the data for
+      # @param [Hash] opts The options for caching
       # @return [String] A string that can be used as instance variable name
       #
       def instance_variable_name(api, opts)

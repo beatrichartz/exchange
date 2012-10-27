@@ -60,8 +60,8 @@ module Exchange
       
       # A Cache Key generator for the API Classes and the time
       # Generates a key which can handle expiration by itself
-      # @param [Exchange::ExternalAPI::Subclass] api_class The API to store the data for
-      # @param [optional, Time] time The time for which the data is valid
+      # @param [Exchange::ExternalAPI::Subclass] api The API to store the data for
+      # @param [Hash] opts The options for caching
       # @return [String] A string that can be used as cache key
       # @example
       #   Exchange::Cache::Base.key(Exchange::ExternalAPI::OpenExchangeRates, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"

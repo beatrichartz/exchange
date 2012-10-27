@@ -37,7 +37,7 @@ module Exchange
     attr_reader :api
     
     # Intialize the currency with a number and a currency
-    # @param [Integer, Float] number The number the currency is instantiated from
+    # @param [Integer, Float] value The number the currency is instantiated from
     # @param [Symbol] currency The currency the currency object is in as a downcased symbol
     # @param [Hash] opts Optional Parameters for instantiation
     # @option opts [Time] :at The time at which conversion took place
