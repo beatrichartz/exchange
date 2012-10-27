@@ -50,11 +50,16 @@ module Exchange
         # @private
         # @macro [getter] install_getter
         #
-        def install_getter key, parent_module
+        def install_getter key
           define_method key do
             config_part = @config[key]
-            config_part = OpenStruct.new(config_part) unless config_part.is_a?(OpenStruct)
-            config_part.subclass = parent_module.const_get camelize(config_part.subclass) unless config_part.subclass.is_a?(Class)
+            
+            if key == :api && !config_part.is_a?(ExternalAPI::Configuration)
+              config_part = ExternalAPI::Configuration.set(config_part)
+            elsif key == :cache && !config_part.is_a?(Cache::Configuration)
+              config_part = Cache::Configuration.set(config_part)
+            end
+
             @config[key] = config_part
           end
         end
@@ -68,13 +73,15 @@ module Exchange
     DEFAULTS = { 
                   :api => {
                     :subclass => ExternalAPI::XavierMedia, 
-                    :retries => 5
+                    :retries => 5,
+                    :app_id => nil
                   },
                   :cache => {
-                    :subclass => Cache::Memcached,
-                    :host => 'localhost',
-                    :port => 11211,
-                    :expire => :daily
+                    :subclass => Cache::Memory,
+                    :expire => :daily,
+                    :path => nil,
+                    :host => nil,
+                    :port => nil
                   },
                   :allow_mixed_operations => true
                 }
@@ -100,6 +107,16 @@ module Exchange
       super()
     end 
     
+    # Allows to reset the configuration to the defaults
+    # @version 0.9
+    # @since 0.9
+    #
+    def reset
+      api.reset
+      cache.reset
+      self.allow_mixed_operations = DEFAULTS[:allow_mixed_operations]
+    end
+    
     # Getter for the mixed operations configuration. If set to true, operations with mixed currencies will not raise errors
     # If set to false, mixed operations will raise errors
     # @since 0.6
@@ -120,7 +137,7 @@ module Exchange
     def allow_mixed_operations= data
       @config[:allow_mixed_operations] = data
     end
-    
+        
     # Setter for the api configuration.
     # @since 0.6
     # @version 0.6
@@ -147,27 +164,15 @@ module Exchange
     
     # Getter for the api configuration. Instantiates the configuration as an open struct, if called for the first time.
     # Also camelizes and constantizes the api subclass, if used for the first time.
-    # @return [OpenStruct] an openstruct with the complete api configuration
+    # @return [Exchange::ExternalAPI::Configuration] an api configuration
     #
-    install_getter :api, ExternalAPI
+    install_getter :api
     
     # Getter for the cache configuration. Instantiates the configuration as an open struct, if called for the first time.
     # Also camelizes and constantizes the cache subclass, if used for the first time.
-    # @return [OpenStruct] an openstruct with the complete cache configuration
+    # @return [Exchange::Cache::Configuration] a cache configuration
     #
-    install_getter :cache, Cache
-
-    private
-      
-      # Camelize a string or a symbol
-      # @param [String, Symbol] s The string to camelize
-      # @return [String] a camelized string
-      # @example Camelize an underscored symbol
-      #   camelize(:some_thing) #=> "SomeThing"
-      #
-      def camelize s
-        s = s.to_s.gsub(/(?:^|_)(.)/) { $1.upcase }
-      end
+    install_getter :cache
       
   end
 end

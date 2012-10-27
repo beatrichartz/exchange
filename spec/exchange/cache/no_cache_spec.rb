@@ -1,26 +1,16 @@
 require 'spec_helper'
 
-describe "Exchange::Cache::Rails" do
-  context "with rails defined" do
-    class ::Rails
-    end
-  end
+describe "Exchange::Cache::NoCache" do
   subject { Exchange::Cache::NoCache }
-  before(:each) do
+  before(:all) do
     Exchange.configuration = Exchange::Configuration.new { |c|
       c.cache = {
-        :class => :no_cache
+        :subclass => :no_cache
       }
     }
   end
-  after(:each) do
-    Exchange.configuration = Exchange::Configuration.new { |c|
-      c.cache = {
-        :class => :memcached,
-        :host => 'localhost',
-        :port => 11211
-      }
-    }
+  after(:all) do
+    Exchange.configuration.reset
   end
   describe "cached" do
     it "should directly call the block" do

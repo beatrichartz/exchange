@@ -9,16 +9,12 @@ describe "Exchange::Cache::Rails" do
   before(:each) do
     Exchange.configuration = Exchange::Configuration.new { |c|
       c.cache = {
-        :class => :rails
+        :subclass => :rails
       }
     }
   end
   after(:each) do
-    Exchange.configuration = Exchange::Configuration.new { |c|
-      c.cache = {
-        :class => :memcached
-      }
-    }
+    Exchange.configuration.reset
   end
   describe "client" do
     let(:client) { mock('rails_cache') }

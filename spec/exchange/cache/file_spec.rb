@@ -11,11 +11,7 @@ describe "Exchange::Cache::File" do
     }
   end
   after(:each) do
-    Exchange.configuration = Exchange::Configuration.new { |c|
-      c.cache      = {
-        :subclass => :memcached
-      }
-    }
+    Exchange.configuration.reset
   end
   describe "cached" do
     it "should raise an error if no block was given" do
@@ -26,20 +22,26 @@ describe "Exchange::Cache::File" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', nil).and_return('KEY')
           ::File.should_receive(:exists?).with('STORE/PATH/KEY').and_return(true)
-          ::File.should_receive(:read).with('STORE/PATH/KEY').and_return 'CONTENT'
+          ::File.should_receive(:read).with('STORE/PATH/KEY').and_return 'CONTENT'.cachify
         end
         it "should return the file contents" do
           subject.cached('API_CLASS') { 'something' }.should == 'CONTENT'
         end
+        it "should also return plain when asked to" do
+          subject.cached('API_CLASS', :plain => true) { 'something' }.should == 'CONTENT'.cachify
+        end
       end
-      context "with an monthly cache" do
+      context "with a monthly cache" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', an_instance_of(Symbol)).and_return('KEY')
           ::File.should_receive(:exists?).with('STORE/PATH/KEY').and_return(true)
-          ::File.should_receive(:read).with('STORE/PATH/KEY').and_return 'CONTENT'
+          ::File.should_receive(:read).with('STORE/PATH/KEY').and_return 'CONTENT'.cachify
         end
         it "should return the file contents" do
           subject.cached('API_CLASS', :cache_period => :monthly) { 'something' }.should == 'CONTENT'
+        end
+        it "should also return plain when asked to" do
+          subject.cached('API_CLASS', :cache_period => :monthly, :plain => true) { 'something' }.should == 'CONTENT'.cachify
         end
       end
     end

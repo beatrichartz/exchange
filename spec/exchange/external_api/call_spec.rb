@@ -8,6 +8,9 @@ describe "Exchange::ExternalAPI::Call" do
       }
     }
   end
+  after(:all) do
+    Exchange.configuration.reset
+  end
   describe "initialization" do
     context "with a json api" do
       before(:each) do

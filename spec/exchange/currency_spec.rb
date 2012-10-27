@@ -424,26 +424,26 @@ describe "Exchange::Currency" do
   end
   describe "to_s" do
     it "should render the currency according to ISO 4217 Definitions" do
-      Exchange::Currency.new(23.232524, 'TND').to_s.should == "TND 23.233"
-      Exchange::Currency.new(23.23252423, 'SAR').to_s.should == "SAR 23.23"
-      Exchange::Currency.new(23.23252423, 'CLP').to_s.should == "CLP 23"
-      Exchange::Currency.new(23.2, 'TND').to_s.should == "TND 23.200"
-      Exchange::Currency.new(23.4, 'SAR').to_s.should == "SAR 23.40"
-      Exchange::Currency.new(23.0, 'CLP').to_s.should == "CLP 23"
+      Exchange::Currency.new(23.232524, :tnd).to_s.should == "TND 23.233"
+      Exchange::Currency.new(23.23252423, :sar).to_s.should == "SAR 23.23"
+      Exchange::Currency.new(23.23252423, :clp).to_s.should == "CLP 23"
+      Exchange::Currency.new(23.2, :tnd).to_s.should == "TND 23.200"
+      Exchange::Currency.new(23.4, :sar).to_s.should == "SAR 23.40"
+      Exchange::Currency.new(23.0, :clp).to_s.should == "CLP 23"
     end
     it "should render only the currency amount if the argument amount is passed" do
-      Exchange::Currency.new(23.232524, 'TND').to_s(:amount).should == "23.233"
-      Exchange::Currency.new(23.23252423, 'SAR').to_s(:amount).should == "23.23"
-      Exchange::Currency.new(23.23252423, 'CLP').to_s(:amount).should == "23"
-      Exchange::Currency.new(23.2, 'TND').to_s(:amount).should == "23.200"
-      Exchange::Currency.new(23.4, 'SAR').to_s(:amount).should == "23.40"
-      Exchange::Currency.new(23.0, 'CLP').to_s(:amount).should == "23"
+      Exchange::Currency.new(23.232524, :tnd).to_s(:amount).should == "23.233"
+      Exchange::Currency.new(23.23252423, :sar).to_s(:amount).should == "23.23"
+      Exchange::Currency.new(23.23252423, :clp).to_s(:amount).should == "23"
+      Exchange::Currency.new(23.2, :tnd).to_s(:amount).should == "23.200"
+      Exchange::Currency.new(23.4, :sar).to_s(:amount).should == "23.40"
+      Exchange::Currency.new(23.0, :clp).to_s(:amount).should == "23"
     end
   end
   describe "methods via method missing" do
     it "should be able to convert via to_currency to other currencies" do
       mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 6)
-      {'chf' => 36.5, 'usd' => 40.0, 'dkk' => 225.12, 'sek' => 269.85, 'nok' => 232.06, 'rub' => 1205.24}.each do |currency, value|
+      {:chf => 36.5, :usd => 40.0, :dkk => 225.12, :sek => 269.85, :nok => 232.06, :rub => 1205.24}.each do |currency, value|
         c = subject.send(:"to_#{currency}")
         c.value.round(2).should == value
         c.currency.should == currency
@@ -451,7 +451,7 @@ describe "Exchange::Currency" do
     end
     it "should be able to convert via to_currency to other currencies and use historic data" do
       mock_api("http://openexchangerates.org/api/historical/2011-10-09.json?app_id=", fixture('api_responses/example_json_api.json'), 6)
-      {'chf' => 36.5, 'usd' => 40.0, 'dkk' => 225.12, 'sek' => 269.85, 'nok' => 232.06, 'rub' => 1205.24}.each do |currency, value|
+      {:chf => 36.5, :usd => 40.0, :dkk => 225.12, :sek => 269.85, :nok => 232.06, :rub => 1205.24}.each do |currency, value|
         c = subject.send(:"to_#{currency}", :at => Time.gm(2011,10,9))
         c.value.round(2).should == value
         c.currency.should == currency

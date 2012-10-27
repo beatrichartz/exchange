@@ -35,12 +35,12 @@ module Exchange
       #
       def cached api, opts={}, &block
         stored = client.get(key(api, opts))
-        result = opts[:plain] ? stored.to_s.gsub(/["\s+]/, '') : JSON.load(stored) if stored && !stored.empty?
+        result = opts[:plain] ? stored : stored.decachify if stored && !stored.to_s.empty?
         
         unless result
           result = super
           if result && !result.to_s.empty?
-            client.set key(api, opts), result.to_json, Exchange.configuration.cache.expire == :daily ? 86400 : 3600
+            client.set key(api, opts), result.cachify, Exchange.configuration.cache.expire == :daily ? 86400 : 3600
           end
         end
         

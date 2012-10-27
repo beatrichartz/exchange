@@ -25,7 +25,7 @@ module Exchange
         path  = ::File.join(dir, key(api, opts[:cache_period]))
         
         if ::File.exists?(path)
-          result = ::File.read(path)
+          result = opts[:plain] ? ::File.read(path) : ::File.read(path).decachify
         else
           result = super
           if result && !result.to_s.empty?
@@ -34,7 +34,7 @@ module Exchange
             Dir.entries(dir).each do |e|
               ::File.delete(::File.join(dir, e)) unless keep_files.include?(e) || e.match(/\A\./)
             end
-            ::File.open(path, 'w') {|f| f.write(result) }
+            ::File.open(path, 'w') {|f| f.write(result.cachify) }
           end
         end
         

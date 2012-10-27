@@ -68,13 +68,17 @@ module Exchange
       #
       def key api, opts={}
         time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
-        [ 'exchange',
+        ['exchange',
           api.to_s, 
           time.year.to_s, 
           time.yday.to_s, 
           Exchange.configuration.cache.expire == :hourly ? time.hour.to_s : nil,
           *(opts[:key_for] || [])
         ].compact.join('_')
+      end
+      
+      def cachify thing
+        thing.is_a?(String) ? thing : thing.to_json.gsub(/\A"|"$/, '') 
       end
         
     end

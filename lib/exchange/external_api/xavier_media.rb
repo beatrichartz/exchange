@@ -12,7 +12,7 @@ module Exchange
       # The base of the Xaviermedia API URL
       API_URL              = "http://api.finance.xaviermedia.com/api"
       # The currencies the Xaviermedia API URL can handle
-      CURRENCIES           = %W(eur usd jpy gbp cyp czk dkk eek huf ltl mtl pln sek sit skk chf isk nok bgn hrk rol ron rub trl aud cad cny hkd idr krw myr nzd php sgd thb zar)
+      CURRENCIES           = [:eur, :usd, :jpy, :gbp, :cyp, :czk, :dkk, :eek, :huf, :ltl, :mtl, :pln, :sek, :sit, :skk, :chf, :isk, :nok, :bgn, :hrk, :rol, :ron, :rub, :trl, :aud, :cad, :cny, :hkd, :idr, :krw, :myr, :nzd, :php, :sgd, :thb, :zar]
       
       # Updates the rates by getting the information from Xaviermedia API for today or a defined historical date
       # The call gets cached for a maximum of 24 hours.
@@ -73,18 +73,18 @@ module Exchange
         # @version 0.7
         #
         def extract_rates(result)
-          rates_array = result.css('fx currency_code').children.map(&:to_s).zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten
+          rates_array = result.css('fx currency_code').children.map{|c| c.to_s.downcase.to_sym }.zip(result.css('fx rate').children.map{|c| BigDecimal.new(c.to_s) }).flatten
           to_hash!(rates_array)
         end
         
         # Extract the base currency from the callresult
         # @param [Nokogiri::XML] result the callresult
-        # @return [String] The base currency for the rates
+        # @return [Symbol] The base currency for the rates
         # @since 0.7
         # @version 0.7
         #
         def extract_base_currency(result)
-          result.css('basecurrency').children[0].to_s
+          result.css('basecurrency').children[0].to_s.downcase.to_sym
         end
         
     end

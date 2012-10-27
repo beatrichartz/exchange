@@ -8,6 +8,9 @@ describe "Exchange::ExternalAPI::Ecb" do
       }
     }
   end
+  after(:all) do
+    Exchange.configuration.reset
+  end
   before(:each) do
     time = Time.gm(2012,2,3)
     Time.stub! :now => time
@@ -19,7 +22,7 @@ describe "Exchange::ExternalAPI::Ecb" do
     end
     it "should call the api and yield a block with the result" do
       subject.update
-      subject.base.should == 'EUR'
+      subject.base.should == :eur
     end
     it "should set a unix timestamp from the api file" do
       subject.update
@@ -32,10 +35,10 @@ describe "Exchange::ExternalAPI::Ecb" do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", fixture('api_responses/example_ecb_xml_90d.xml'))
     end
     it "should convert right" do
-      subject.convert(80, 'eur', 'usd').round(2).should == 105.28
+      subject.convert(80, :eur, :usd).round(2).should == 105.28
     end
     it "should convert negative numbers right" do
-      subject.convert(-70, 'chf', 'usd').round(2).should == BigDecimal.new("-76.45")
+      subject.convert(-70, :chf, :usd).round(2).should == BigDecimal.new("-76.45")
     end
     it "should convert when given symbols" do
       subject.convert(70, :sek, :usd).round(2).should == 10.41
@@ -47,10 +50,10 @@ describe "Exchange::ExternalAPI::Ecb" do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml", fixture('api_responses/example_ecb_xml_history.xml'))
     end
     it "should convert and be able to use history" do
-      subject.convert(70, 'eur', 'usd', :at => Time.gm(2011,9,9)).round(2).should == 91.66
+      subject.convert(70, :eur, :usd, :at => Time.gm(2011,9,9)).round(2).should == 91.66
     end
     it "should convert negative numbers right" do
-      subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-76.08")
+      subject.convert(-70, :chf, :usd, :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-76.08")
     end
     it "should convert when given symbols" do
       subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2).should == 10.35

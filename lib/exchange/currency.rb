@@ -38,7 +38,7 @@ module Exchange
     
     # Intialize the currency with a number and a currency
     # @param [Integer, Float] number The number the currency is instantiated from
-    # @param [String, Symbol] currency The currency the currency object is in
+    # @param [Symbol] currency The currency the currency object is in as a downcased symbol
     # @param [Hash] opts Optional Parameters for instantiation
     # @option opts [Time] :at The time at which conversion took place
     # @option opts [String,Symbol] :from The currency object this currency object was converted from
@@ -67,16 +67,17 @@ module Exchange
     #   Exchange::Currency.new(40,:nok).to_sek(:at => Time.gm(2012,2,2))
     #
     def method_missing method, *args, &block
-      match    = method.to_s.match /\Ato_(\w{3})$/
-      currency = $1
-      
-      if match && api_supports_currency?(currency)
-        return convert_to currency, { :at => time }.merge(args.first || {})
-      elsif match
-        test_for_no_rate_error(currency)
-      end
-
       value.send method, *args, &block
+    end
+    
+    ISO4217.currencies.each do |c|
+      define_method :"to_#{c}" do |opts={}|
+        if api_supports_currency?(c)
+          convert_to c, { :at => time }.merge(opts)
+        else
+          raise_no_rate_error(currency)
+        end
+      end
     end
     
     # Converts this instance of currency into another currency
@@ -251,9 +252,9 @@ module Exchange
       if is_same_currency?(other)
         other.round.value == self.round.value
       elsif is_currency?(other)
-        other.convert_to(self.currency, :at => other.time).round.value == self.round.value
+        other.convert_to(currency, :at => other.time).round.value == self.round.value
       else
-        self.value == other
+        value == other
       end
     end
     
@@ -273,11 +274,11 @@ module Exchange
     #
     def <=> other
       if is_same_currency?(other)
-        self.value <=> other.value
+        value <=> other.value
       elsif is_other_currency?(other)
-        self.value <=> other.convert_to(self.currency, :at => other.time).value
+        value <=> other.convert_to(currency, :at => other.time).value
       else
-        self.value <=> other
+        value <=> other
       end
     end
     
@@ -298,8 +299,8 @@ module Exchange
     #
     def to_s format=:currency
       [
-        format == :currency && ISO4217.stringify(self.value, self.currency),
-        format == :amount && ISO4217.stringify(self.value, self.currency, :amount_only => true)
+        format == :currency && ISO4217.stringify(value, currency),
+        format == :amount && ISO4217.stringify(value, currency, :amount_only => true)
       ].detect{|l| l.is_a?(String) }
     end
     
@@ -322,7 +323,7 @@ module Exchange
       # @version 0.6
       #
       def is_same_currency? other
-        is_currency?(other) && other.currency == self.currency
+        is_currency?(other) && other.currency == currency
       end
       
       # determine if another given object is an instance of Exchange::Currency and has another currency
@@ -332,7 +333,7 @@ module Exchange
       # @version 0.6
       #
       def is_other_currency? other
-        is_currency?(other) && other.currency != self.currency
+        is_currency?(other) && other.currency != currency
       end
       
       # determine wether the chosen api supports converting the given currency
@@ -350,7 +351,7 @@ module Exchange
       # @version 0.6
       #
       def test_for_currency_mix_error other
-        raise CurrencyMixError.new("You\'re trying to mix up #{self.currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != self.currency
+        raise CurrencyMixError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Currency) && other.currency != currency
       end
       
       # Helper method to raise a no rate error for a given currency if no rate is given
@@ -359,8 +360,8 @@ module Exchange
       # @since 0.7.2
       # @version 0.7.2
       #
-      def test_for_no_rate_error currency
-        raise NoRateError.new("Cannot convert to #{currency} because the defined api does not provide a rate") if ISO4217.definitions.keys.include?(currency.upcase)
+      def raise_no_rate_error currency
+        raise NoRateError.new("Cannot convert to #{currency} because the defined api does not provide a rate")
       end
   
   end

@@ -5,9 +5,9 @@ describe "Exchange::Configuration" do
   it "should have a standard configuration" do
     subject.api.retries.should == 5
     subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
-    subject.cache.subclass.should == Exchange::Cache::Memcached
-    subject.cache.host.should == 'localhost'
-    subject.cache.port.should == 11211
+    subject.cache.subclass.should == Exchange::Cache::Memory
+    subject.cache.host.should be_nil
+    subject.cache.port.should be_nil
     subject.cache.expire.should == :daily
   end
   it "should respond to all configuration getters and setters" do
@@ -46,10 +46,34 @@ describe "Exchange::Configuration" do
     subject.api.subclass.should == Exchange::ExternalAPI::Ecb
     subject.api.retries.should == 1
   end
-  after(:all) do
-    subject.api = {
-      :subclass => :currency_bot,
-      :retries => 5
+  describe "reset" do
+    Exchange.configuration = Exchange::Configuration.new {|c|
+      c.api = {
+        :subclass => :currency_bot,
+        :retries => 60,
+        :app_id => '234u230482348023'
+      }
+      c.cache = {
+        :subclass => :redis,
+        :host => 'localhost',
+        :port => 112211,
+        :path => 'PATH'
+      }
+      c.allow_mixed_operations = false
     }
+    it "should restore the defaults" do
+      subject.reset
+      subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
+      subject.api.retries.should == 5
+      subject.api.app_id.should be_nil
+      subject.cache.subclass.should == Exchange::Cache::Memory
+      subject.cache.host.should be_nil
+      subject.cache.port.should be_nil
+      subject.cache.path.should be_nil
+      subject.allow_mixed_operations.should be_true
+    end
+  end
+  after(:all) do
+    Exchange.configuration.reset
   end  
 end

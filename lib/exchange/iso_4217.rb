@@ -23,7 +23,7 @@ module Exchange
         def install_operation op      
           self.class_eval <<-EOV
             def #{op}(amount, currency, precision=nil)
-              minor = definitions[currency.to_s.upcase]['minor_unit']
+              minor = definitions[currency][:minor_unit]
               (amount.is_a?(BigDecimal) ? amount : BigDecimal.new(amount.to_s, minor)).#{op}(precision || minor)
             end
           EOV
@@ -36,7 +36,34 @@ module Exchange
     # @return [Hash] The iso427 Definitions with the currency code as keys
     #
     def definitions
-      @@definitions ||= YAML.load_file(File.join(ROOT_PATH, 'iso4217.yml'))
+      return @definitions if @definitions
+      loaded       = YAML.load_file(File.join(ROOT_PATH, 'iso4217.yml'))
+      @definitions = {}
+      
+      loaded.each_pair do |k,v| 
+        v.keys.each do |key|
+          v[key.to_sym] = v.delete(key)
+        end
+        
+        @definitions[k.downcase.to_sym] = v
+      end
+      
+      @definitions
+    end
+    
+    # All currencies defined by ISO 4217 as an array of symbols for inclusion testing
+    # @return [Array] An Array of currency symbols
+    #
+    def currencies
+      @currencies  ||= definitions.keys
+    end
+    
+    # Check if a currency is defined by ISO 4217 standards
+    # @param [Symbol] currency the downcased currency symbol
+    # @return [Boolean] true if the symbol matches a currency, false if not
+    #
+    def defines? currency
+      currencies.include? currency
     end
     
     # Use this to instantiate a currency amount. For one, it is important that we use BigDecimal here so nothing gets lost because
@@ -48,7 +75,7 @@ module Exchange
     #   Exchange::ISO4217.instantiate("4523", "usd") #=> #<Bigdecimal 4523.00>
     #
     def instantiate(amount, currency)
-      BigDecimal.new(amount.to_s, definitions[currency.to_s.upcase]['minor_unit'])
+      BigDecimal.new(amount.to_s, definitions[currency][:minor_unit])
     end
     
     # Converts the currency to a string in ISO 4217 standardized format, either with or without the currency. This leaves you
@@ -68,7 +95,7 @@ module Exchange
     #   Exchange::ISO4217.stringif(34.34, :omr, :amount_only => true) #=> "34.340"
     #
     def stringify(amount, currency, opts={})
-      format      = "%.#{definitions[currency.to_s.upcase]['minor_unit']}f"
+      format      = "%.#{definitions[currency][:minor_unit]}f"
       "#{currency.to_s.upcase + ' ' unless opts[:amount_only]}#{format % amount}"
     end
     
@@ -101,7 +128,7 @@ module Exchange
     
     # Forwards the assure_time method to the instance using singleforwardable
     #
-    def_delegators :instance, :definitions, :instantiate, :stringify, :round, :ceil, :floor
+    def_delegators :instance, :definitions, :instantiate, :stringify, :round, :ceil, :floor, :currencies, :defines?
     
   end
 end

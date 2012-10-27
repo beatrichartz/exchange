@@ -14,7 +14,7 @@ module Exchange
       
       # The currencies the Currency Bot API can convert
       #
-      CURRENCIES           = %W(xcd usd sar rub nio lak nok omr amd cdf kpw cny kes zwd khr pln mvr gtq clp inr bzd myr hkd sek cop dkk byr lyd ron dzd bif ars gip bob xof std ngn pgk aed mwk cup gmd zwl tzs cve btn xaf ugx syp mad mnt lsl top shp rsd htg mga mzn lvl fkp bwp hnl eur egp chf ils pyg lbp ang kzt wst gyd thb npr kmf irr uyu srd jpy brl szl mop bmd xpf etb jod idr mdl mro yer bam awg nzd pen vef try sll aoa tnd tjs sgd scr lkr mxn ltl huf djf bsd gnf isk vuv sdg gel fjd dop xdr mur php mmk krw lrd bbd zmk zar vnd uah tmt iqd bgn gbp kgs ttd hrk rwf clf bhd uzs twd crc aud mkd pkr afn nad bdt azn czk sos iep pab qar svc sbd all jmd bnd cad kwd ghs)
+      CURRENCIES           = [:xcd, :usd, :sar, :rub, :nio, :lak, :nok, :omr, :amd, :cdf, :kpw, :cny, :kes, :zwd, :khr, :pln, :mvr, :gtq, :clp, :inr, :bzd, :myr, :hkd, :sek, :cop, :dkk, :byr, :lyd, :ron, :dzd, :bif, :ars, :gip, :bob, :xof, :std, :ngn, :pgk, :aed, :mwk, :cup, :gmd, :zwl, :tzs, :cve, :btn, :xaf, :ugx, :syp, :mad, :mnt, :lsl, :top, :shp, :rsd, :htg, :mga, :mzn, :lvl, :fkp, :bwp, :hnl, :eur, :egp, :chf, :ils, :pyg, :lbp, :ang, :kzt, :wst, :gyd, :thb, :npr, :kmf, :irr, :uyu, :srd, :jpy, :brl, :szl, :mop, :bmd, :xpf, :etb, :jod, :idr, :mdl, :mro, :yer, :bam, :awg, :nzd, :pen, :vef, :try, :sll, :aoa, :tnd, :tjs, :sgd, :scr, :lkr, :mxn, :ltl, :huf, :djf, :bsd, :gnf, :isk, :vuv, :sdg, :gel, :fjd, :dop, :xdr, :mur, :php, :mmk, :krw, :lrd, :bbd, :zmk, :zar, :vnd, :uah, :tmt, :iqd, :bgn, :gbp, :kgs, :ttd, :hrk, :rwf, :clf, :bhd, :uzs, :twd, :crc, :aud, :mkd, :pkr, :afn, :nad, :bdt, :azn, :czk, :sos, :iep, :pab, :qar, :svc, :sbd, :all, :jmd, :bnd, :cad, :kwd, :ghs]
       
       # Updates the rates by getting the information from Currency Bot for today or a defined historical date
       # The call gets cached for a maximum of 24 hours.
@@ -27,7 +27,7 @@ module Exchange
         time = helper.assure_time(opts[:at])
         
         Call.new(api_url(time), :at => time) do |result|
-          @base                 = result['base']
+          @base                 = result['base'].downcase.to_sym
           @rates                = extract_rates(result)
           @timestamp            = result['timestamp'].to_i
         end
@@ -42,7 +42,7 @@ module Exchange
         # @version 0.7
         #
         def extract_rates parsed
-          to_hash! parsed['rates'].keys.zip(parsed['rates'].values.map{|v| BigDecimal.new(v.to_s) }).flatten
+          to_hash! parsed['rates'].keys.map{|k| k.downcase.to_sym }.zip(parsed['rates'].values.map{|v| BigDecimal.new(v.to_s) }).flatten
         end
       
         # A helper function to build an api url for either a specific time or the latest available rates

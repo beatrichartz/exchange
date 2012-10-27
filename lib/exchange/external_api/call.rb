@@ -31,7 +31,7 @@ module Exchange
       #   # Do something with that result
       #
       def initialize url, options={}, &block        
-        Exchange::GemLoader.new('nokogiri').try_load if options[:format] == :xml
+        Exchange::GemLoader.new(options[:format] == :xml ? 'nokogiri' : 'json').try_load
         
         api_config = Exchange.configuration.api
         

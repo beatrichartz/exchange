@@ -11,7 +11,7 @@ module Exchange
   #     module ExternalAPI
   #       class MyCustom < Base
   #         # Define here which currencies your API can handle
-  #         CURRENCIES = %W(usd chf)
+  #         CURRENCIES = %W(usd chf).map(&:to_sym)
   #         
   #         # Every instance of ExternalAPI Class has to have an update function which 
   #         # gets the rates from the API
@@ -120,16 +120,16 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       #
-      def rate(from, to, opts={})
-        rate = cache.cached(api, opts.merge(:key_for => [from, to], :plain => true)) do
+      def rate(from, to, opts={})        
+        rate = cache.cached(api, opts.merge(:key_for => [from, to])) do
           update(opts)
           
-          rate_from   = self.rates[to.to_s.upcase]
-          rate_to     = self.rates[from.to_s.upcase]
+          rate_from   = rates[from]
+          rate_to     = rates[to]
           
           test_for_rates_and_raise_if_nil rate_from, rate_to, opts[:at]
           
-          rate_from / rate_to
+          rate_to / rate_from
         end
         
         BigDecimal.new(rate.to_s)
@@ -165,7 +165,7 @@ module Exchange
       # @raise [NoRateError] An error indicating that there is no rate present when there is no rate present
       #
       def test_for_rates_and_raise_if_nil rate_from, rate_to, time=nil
-        raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + time.to_s if time}") unless rate_from && rate_to
+        raise NoRateError.new("No rates where found for #{rate_from} to #{rate_to} #{'at ' + time.to_s if time}") unless rate_from && rate_to
       end
     end
   end

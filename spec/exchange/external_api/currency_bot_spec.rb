@@ -8,6 +8,9 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
       }
     }
   end
+  after(:all) do
+    Exchange.configuration.reset
+  end
   describe "updating rates" do
     subject { Exchange::ExternalAPI::CurrencyBot.new }
     before(:each) do
@@ -15,7 +18,7 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
     end
     it "should call the api and yield a block with the result" do
       subject.update
-      subject.base.should == 'USD'
+      subject.base.should == :usd
     end
     it "should set a unix timestamp from the api file" do
       subject.update
@@ -28,10 +31,10 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
       mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'))
     end
     it "should convert right" do
-      subject.convert(78, 'eur', 'usd').round(2).should == BigDecimal.new("103.12")
+      subject.convert(78, :eur, :usd).round(2).should == BigDecimal.new("103.12")
     end
     it "should convert negative numbers right" do
-      subject.convert(-70, 'chf', 'usd').round(2).should == BigDecimal.new("-76.71")
+      subject.convert(-70, :chf, :usd).round(2).should == BigDecimal.new("-76.71")
     end
     it "should convert when given symbols" do
       subject.convert(70, :sek, :usd).round(2).should == 10.38
@@ -41,11 +44,11 @@ describe "Exchange::ExternalAPI::CurrencyBot" do
     subject { Exchange::ExternalAPI::CurrencyBot.new }
     it "should convert and be able to use history" do
       mock_api("http://openexchangerates.org/api/historical/2011-09-09.json?app_id=", fixture('api_responses/example_json_api.json'))
-      subject.convert(72, 'eur', 'usd', :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("95.19")
+      subject.convert(72, :eur, :usd, :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("95.19")
     end
     it "should convert negative numbers right" do
       mock_api("http://openexchangerates.org/api/historical/2011-09-09.json?app_id=", fixture('api_responses/example_json_api.json'))
-      subject.convert(-70, 'chf', 'usd', :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-76.71")
+      subject.convert(-70, :chf, :usd, :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-76.71")
     end
     it "should convert when given symbols" do
       mock_api("http://openexchangerates.org/api/historical/2011-09-09.json?app_id=", fixture('api_responses/example_json_api.json'))

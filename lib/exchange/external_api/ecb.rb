@@ -15,7 +15,7 @@ module Exchange
       
       # The currencies the ECB API URL can handle
       #
-      CURRENCIES           = %W(eur usd jpy bgn czk dkk gbp huf ltl lvl pln ron sek chf nok hrk rub try aud brl cad cny hkd idr ils inr krw mxn myr nzd php sgd thb zar)
+      CURRENCIES           = [:eur, :usd, :jpy, :bgn, :czk, :dkk, :gbp, :huf, :ltl, :lvl, :pln, :ron, :sek, :chf, :nok, :hrk, :rub, :try, :aud, :brl, :cad, :cny, :hkd, :idr, :ils, :inr, :krw, :mxn, :myr, :nzd, :php, :sgd, :thb, :zar] 
       
       # The result of the api call to the Central bank
       attr_accessor :callresult
@@ -52,7 +52,7 @@ module Exchange
 
         parsed = Nokogiri.parse(self.callresult)
         
-        @base                 = 'EUR' # We just have to assume, since it's the ECB
+        @base                 = :eur # We just have to assume, since it's the ECB
         @rates                = extract_rates(parsed.children.children)
         @timestamp            = time.to_i
       end
@@ -96,7 +96,7 @@ module Exchange
             map_to_currency_or_rate c
           }.compact.flatten
           
-          to_hash!(['EUR', BigDecimal.new("1")] + rate_array)
+          to_hash!([:eur, BigDecimal.new("1")] + rate_array)
         end
         
         # a helper method to map a key value pair to either currency or rate
@@ -109,7 +109,7 @@ module Exchange
           unless (values = xml.attributes.values).empty?
             values.map { |v|
               val = v.value
-              val.match(/\d+/) ? BigDecimal.new(val) : val 
+              val.match(/\d+/) ? BigDecimal.new(val) : val.downcase.to_sym
             }.sort_by(&:to_s).reverse 
           end
         end

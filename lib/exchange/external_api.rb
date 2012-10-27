@@ -1,3 +1,4 @@
+require 'exchange/external_api/configuration'
 require 'exchange/external_api/base'
 require 'exchange/external_api/xml'
 require 'exchange/external_api/json'
