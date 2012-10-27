@@ -10,7 +10,7 @@ describe "Exchange::Cache::Base" do
     context "with a daily cache" do
       it "should build a timestamped key with the class given, the yearday and the year" do
         subject.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61'
-        subject.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61'
+        subject.send(:key, :open_exchange_rates).should == 'exchange_open_exchange_rates_2012_61'
       end
     end
     context "with an hourly cache" do
@@ -22,7 +22,7 @@ describe "Exchange::Cache::Base" do
       end
       it "should build a timestamped key with the class given, the yearday, the year and the hour" do
         subject.send(:key, :xavier_media).should == 'exchange_xavier_media_2012_61_23'
-        subject.send(:key, :currency_bot).should == 'exchange_currency_bot_2012_61_23'
+        subject.send(:key, :open_exchange_rates).should == 'exchange_open_exchange_rates_2012_61_23'
       end
     end
   end

@@ -49,7 +49,7 @@ describe "Exchange::Configuration" do
   describe "reset" do
     Exchange.configuration = Exchange::Configuration.new {|c|
       c.api = {
-        :subclass => :currency_bot,
+        :subclass => :open_exchange_rates,
         :retries => 60,
         :app_id => '234u230482348023'
       }

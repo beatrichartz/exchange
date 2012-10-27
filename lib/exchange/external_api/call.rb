@@ -6,7 +6,7 @@ module Exchange
     # @version 0.1
     # @since 0.1
     #
-    class Call
+    class Call < Base
       
       # Initialization of the Call class is the call itself. This means that every instance of the class will only exist during the call
       # @param [String] url The url of the API to call
@@ -32,11 +32,9 @@ module Exchange
       #
       def initialize url, options={}, &block        
         Exchange::GemLoader.new(options[:format] == :xml ? 'nokogiri' : 'json').try_load
-        
-        api_config = Exchange.configuration.api
-        
-        result = Exchange.configuration.cache.subclass.cached(options[:api] || api_config.subclass, options) do
-          load_url(url, options[:retries] || api_config.retries, options[:retry_with])
+                
+        result = cache_config.subclass.cached(options[:api] || config.subclass, options) do
+          load_url(url, options[:retries] || config.retries, options[:retry_with])
         end
         
         parsed = options[:format] == :xml ? Nokogiri::XML.parse(result.sub("\n", '')) : ::JSON.load(result)
@@ -64,7 +62,7 @@ module Exchange
               url = retry_with.shift if retry_with && !retry_with.empty?
               retry
             else
-              raise APIError.new("API #{url} was not reachable")
+              raise APIError.new("API #{url} was not reachable and returned #{e.message}. May be you requested a historic rate not provided")
             end
           end
           result          

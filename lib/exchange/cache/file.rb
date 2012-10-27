@@ -21,7 +21,7 @@ module Exchange
       #
       def cached api, opts={}, &block
         today = Time.now
-        dir   = Exchange.configuration.cache.path
+        dir   = config.path
         path  = ::File.join(dir, key(api, opts[:cache_period]))
         
         if ::File.exists?(path)
@@ -29,11 +29,9 @@ module Exchange
         else
           result = super
           if result && !result.to_s.empty?
-            FileUtils.mkdir_p(dir) unless Dir.respond_to?(:exists?) && Dir.exists?(dir)
-            keep_files = [key(api, :daily), key(api, :monthly)]
-            Dir.entries(dir).each do |e|
-              ::File.delete(::File.join(dir, e)) unless keep_files.include?(e) || e.match(/\A\./)
-            end
+            make_sure_exists dir
+            clean!           dir, api
+            
             ::File.open(path, 'w') {|f| f.write(result.cachify) }
           end
         end
@@ -49,11 +47,28 @@ module Exchange
       # @param [optional, Symbol] cache_period The time for which the data is valid
       # @return [String] A string that can be used as cache key
       # @example
-      #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, :monthly) #=> "Exchange_ExternalAPI_CurrencyBot_monthly_2012_1"
+      #   Exchange::Cache::Base.key(Exchange::ExternalAPI::OpenExchangeRates, :monthly) #=> "Exchange_ExternalAPI_CurrencyBot_monthly_2012_1"
       #
       def key(api_class, cache_period=:daily)
         time      = Time.now
         [api_class.to_s.gsub(/::/, '_'), cache_period, time.year, time.send(cache_period == :monthly ? :month : :yday)].join('_')
+      end
+      
+      # Make sure the directory exists
+      # @param [String] dir the directory path
+      #
+      def make_sure_exists dir
+        FileUtils.mkdir_p(dir) unless Dir.respond_to?(:exists?) && Dir.exists?(dir)
+      end
+      
+      # Clean the files not needed anymore
+      # @param [String] dir the directory path
+      #
+      def clean! dir, api
+        keep_files = [key(api, :daily), key(api, :monthly)]
+        Dir.entries(dir).each do |e|
+          ::File.delete(::File.join(dir, e)) unless keep_files.include?(e) || e.match(/\A\./)
+        end
       end
     
     end

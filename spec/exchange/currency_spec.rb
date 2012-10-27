@@ -5,7 +5,7 @@ describe "Exchange::Currency" do
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new do |c|
       c.api = {
-        :subclass => :currency_bot
+        :subclass => :open_exchange_rates
       }
       c.cache = {
         :subclass => :no_cache

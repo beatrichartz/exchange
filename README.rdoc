@@ -45,7 +45,7 @@ Three open APIs are already included:
 
 - {Xaviermedia}[http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057]
 - {European Central Bank}[http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html]
-- {Currency Bot}[http://currencybot.github.com/]
+- {Open Exchange Rates}[http://openexchangerates.org/] (Look for the free plan at the bottom of the page)
 
 but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it. 
 {Example of a custom API Extension}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI]
@@ -174,7 +174,7 @@ You can configure the exchange gem to a variety of options, allowing you to cont
 The options available are
   
   :cache                                    Takes the cache options as a hash, the options are:
-    :subclass (default :memcached)          The cache subclass to use for caching. Available: Rails cache, Redis, Memcached, Filecache
+    :subclass (default :memory)             The cache subclass to use for caching. Available: Memory, Rails cache, Redis, Memcached, File
     :host (default '127.0.0.1')             A string with the hostname or IP to set the cache host to. Does not have to be set for Rails cache
     :port (default 11211)                   An integer for the cache port. Does not have to be set for Rails cache
     :expire (default :daily)                Which period is used to expire the cache, :daily or :hourly are available
@@ -183,6 +183,7 @@ The options available are
     :subclass (default :xavier_media)         The api to use. Available: Xavier Media, ECB, Currency Bot
     :retries (default 5)                      The number of times the gem should retry to connect to the api host
     :app_id (default nil)                     The app id to use with your api request
+    :protocol (default :http)                 The protocol to use with the request
     
   :allow_mixed_opterations (default true)   If set to false, Operations with with different currencies raise errors.
 
@@ -226,10 +227,17 @@ Use the Xaviermedia API as the source of your conversion rates
     }
   end
 
-Use the currencybot Open Source API as a source of your conversion rates
+Use the open exchange rates Open Source API as a source of your conversion rates
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.api = {
-      :subclass => :currency_bot
+      :subclass => :open_exchange_rates
+    }
+  end
+  
+Use https as request protocol of your api requests:
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.api = {
+      :protocol => :https
     }
   end
   

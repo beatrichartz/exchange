@@ -74,6 +74,7 @@ module Exchange
                   :api => {
                     :subclass => ExternalAPI::XavierMedia, 
                     :retries => 5,
+                    :protocol => :http,
                     :app_id => nil
                   },
                   :cache => {
@@ -92,7 +93,7 @@ module Exchange
     # @param [Hash] configuration The configuration as a hash
     # @param [Proc] block A block to yield the configuration with
     # @example Define the configuration with a hash
-    #   Exchange::Configuration.new(:allow_mixed_operations => false, :api => {:subclass => :currency_bot, :retries => 2})
+    #   Exchange::Configuration.new(:allow_mixed_operations => false, :api => {:subclass => :open_exchange_rates, :retries => 2})
     # @example Define the configuration with a block
     #   Exchange::Configuration.new do |c|
     #     c.allow_mixed_operations = false

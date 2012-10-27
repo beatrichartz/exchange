@@ -10,7 +10,7 @@ module Exchange
     class XavierMedia < XML
       
       # The base of the Xaviermedia API URL
-      API_URL              = "http://api.finance.xaviermedia.com/api"
+      API_URL              = "api.finance.xaviermedia.com/api"
       # The currencies the Xaviermedia API URL can handle
       CURRENCIES           = [:eur, :usd, :jpy, :gbp, :cyp, :czk, :dkk, :eek, :huf, :ltl, :mtl, :pln, :sek, :sit, :skk, :chf, :isk, :nok, :bgn, :hrk, :rol, :ron, :rub, :trl, :aud, :cad, :cny, :hkd, :idr, :krw, :myr, :nzd, :php, :sgd, :thb, :zar]
       
@@ -40,7 +40,7 @@ module Exchange
         # @return [String] An Xaviermedia API URL for the specified time
         #
         def api_url(time)
-          [API_URL, "#{time.strftime("%Y/%m/%d")}.xml"].join('/')
+          ["#{config.protocol}:/", API_URL, "#{time.strftime("%Y/%m/%d")}.xml"].join('/')
         end
         
         # Options for the API call to make
@@ -51,7 +51,7 @@ module Exchange
         # @version 0.6
         #
         def api_opts(opts={})
-          retry_urls = Exchange.configuration.api.retries.times.map { |i| api_url(opts[:at] - 86400 * (i+1)) }
+          retry_urls = config.retries.times.map { |i| api_url(opts[:at] - 86400 * (i+1)) }
           
           { :format => :xml, :at => opts[:at], :retry_with => retry_urls }
         end

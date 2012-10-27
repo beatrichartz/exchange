@@ -75,7 +75,7 @@ module Exchange
         if api_supports_currency?(c)
           convert_to c, { :at => time }.merge(opts)
         else
-          raise_no_rate_error(currency)
+          raise_no_rate_error(c)
         end
       end
     end
@@ -355,13 +355,13 @@ module Exchange
       end
       
       # Helper method to raise a no rate error for a given currency if no rate is given
-      # @param [String] currency a possible currency
+      # @param [String] other a possible currency
       # @raise [NoRateError] an error indicating that the given string is a currency, but no rate is present
       # @since 0.7.2
       # @version 0.7.2
       #
-      def raise_no_rate_error currency
-        raise NoRateError.new("Cannot convert to #{currency} because the defined api does not provide a rate")
+      def raise_no_rate_error other
+        raise NoRateError.new("Cannot convert to #{other} because the defined api does not provide a rate")
       end
   
   end

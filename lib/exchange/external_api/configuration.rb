@@ -8,9 +8,9 @@ module Exchange
     #
     class Configuration < Exchange::Configurable
 
-      attr_accessor :retries, :app_id
+      attr_accessor :retries, :app_id, :protocol
       
-      def_delegators :instance, :retries, :retries=, :app_id, :app_id=
+      def_delegators :instance, :retries, :retries=, :app_id, :app_id=, :protocol, :protocol=
       
       def parent_module
         ExternalAPI

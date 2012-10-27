@@ -13,6 +13,7 @@ doc
 
 # bundler
 .bundle
+*.rdb
 
 # filestore
 exchange_filestore

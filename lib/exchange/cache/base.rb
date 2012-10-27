@@ -64,21 +64,31 @@ module Exchange
       # @param [optional, Time] time The time for which the data is valid
       # @return [String] A string that can be used as cache key
       # @example
-      #   Exchange::Cache::Base.key(Exchange::ExternalAPI::CurrencyBot, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"
+      #   Exchange::Cache::Base.key(Exchange::ExternalAPI::OpenExchangeRates, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"
       #
       def key api, opts={}
-        time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
+        time          = helper.assure_time(opts[:at], :default => :now)
         ['exchange',
           api.to_s, 
           time.year.to_s, 
           time.yday.to_s, 
-          Exchange.configuration.cache.expire == :hourly ? time.hour.to_s : nil,
+          config.expire == :hourly ? time.hour.to_s : nil,
           *(opts[:key_for] || [])
         ].compact.join('_')
       end
       
-      def cachify thing
-        thing.is_a?(String) ? thing : thing.to_json.gsub(/\A"|"$/, '') 
+      # Convenience accessor to get to the cache configuration
+      # @return [Exchange::Cache::Configuration] the current cache configuration
+      #
+      def config
+        Exchange.configuration.cache
+      end
+      
+      # Convenience accessor for the helper
+      # @return [Exchange::Helper] the helper class
+      #
+      def helper
+        @helper ||= Exchange::Helper
       end
         
     end

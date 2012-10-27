@@ -9,14 +9,21 @@ module Exchange
   # @example Easily connect to your custom API by writing an ExternalAPI Class
   #   module Exchange
   #     module ExternalAPI
-  #       class MyCustom < Base
+  #
+  #       # Inherit from Json to write for a json api, and the json gem is automatically loaded
+  #       # Inherit from XML to write for an xml api, and nokogiri is automatically loaded
+  #       # 
+  #       class MyCustom < Json
+  #         
   #         # Define here which currencies your API can handle
+  #         #
   #         CURRENCIES = %W(usd chf).map(&:to_sym)
   #         
   #         # Every instance of ExternalAPI Class has to have an update function which 
   #         # gets the rates from the API
   #         #
   #         def update(opts={})
+  #
   #           # assure that you will get a Time object for the historical dates
   #           #
   #           time = helper.assure_time(opts[:at]) 
@@ -44,6 +51,7 @@ module Exchange
   #           # Attention, this is readonly, self.timestamp= won't work
   #           #
   #           @timestamp            = result['timestamp'].to_i
+  #
   #         end
   #         
   #         private
@@ -167,6 +175,23 @@ module Exchange
       def test_for_rates_and_raise_if_nil rate_from, rate_to, time=nil
         raise NoRateError.new("No rates where found for #{rate_from} to #{rate_to} #{'at ' + time.to_s if time}") unless rate_from && rate_to
       end
+      
+      protected
+      
+      # Convenience accessor to api configuration
+      # @return [Exchange::ExternalAPI::Configuration] the current configuration
+      #
+      def config
+        @config ||= Exchange.configuration.api
+      end
+      
+      # Convenience accessor to the cache configuration
+      # @return [Exchange::Cache::Configuration] the current configuration
+      #
+      def cache_config
+        @cache_config ||= Exchange.configuration.cache
+      end
+      
     end
   end
 end

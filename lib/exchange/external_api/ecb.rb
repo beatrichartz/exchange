@@ -11,7 +11,7 @@ module Exchange
       
       # The base of the ECB API URL
       #
-      API_URL              = "http://www.ecb.europa.eu/stats/eurofxref"
+      API_URL              = "www.ecb.europa.eu/stats/eurofxref"
       
       # The currencies the ECB API URL can handle
       #
@@ -67,7 +67,7 @@ module Exchange
         #
         def api_url(time)
           border = Time.now - 90 * 86400
-          [
+          [ "#{config.protocol}:/", 
             API_URL, 
             border <= time ? 'eurofxref-hist-90d.xml' : 'eurofxref-hist.xml'
           ].join('/')
@@ -121,7 +121,7 @@ module Exchange
         # @version 0.7
         #
         def map_retry_times time
-          Exchange.configuration.api.retries.times.map{ |i| time - 86400 * (i+1) }
+          config.retries.times.map{ |i| time - 86400 * (i+1) }
         end
         
         # a wrapper for the call options, since the cache period is quite complex
