@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe "Exchange::Currency" do
-  subject { Exchange::Currency.new(40, :usd) }
+describe "Exchange::Money" do
+  subject { Exchange::Money.new(40, :usd) }
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new do |c|
       c.api = {
@@ -22,7 +22,7 @@ describe "Exchange::Currency" do
   end
   describe "initializing with a block" do
     it "should be possible" do
-      currency = Exchange::Currency.new(40) do |c|
+      currency = Exchange::Money.new(40) do |c|
         c.currency = :usd
         c.time     = Time.gm(2012,9,9)
       end
@@ -37,7 +37,7 @@ describe "Exchange::Currency" do
       mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)
       subject.convert_to(:chf).value.round(2).should == 36.5
       subject.convert_to(:chf).currency.should == :chf
-      subject.convert_to(:chf).should be_kind_of Exchange::Currency
+      subject.convert_to(:chf).should be_kind_of Exchange::Money
     end
   end
   describe "operations" do
@@ -54,20 +54,20 @@ describe "Exchange::Currency" do
       end
       it "should be able to add another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        (subject + Exchange::Currency.new(30, :chf)).value.round(2).should == 72.87
-        (subject + Exchange::Currency.new(30, :sek)).currency.should == :usd
+        (subject + Exchange::Money.new(30, :chf)).value.round(2).should == 72.87
+        (subject + Exchange::Money.new(30, :sek)).currency.should == :usd
         subject.value.round(2).should == 40
         subject.currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
         Exchange.configuration.allow_mixed_operations = false
-        lambda { subject + Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+        lambda { subject + Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
         Exchange.configuration.allow_mixed_operations = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
         Exchange.configuration.allow_mixed_operations = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        lambda { subject + Exchange::Currency.new(30, :usd) }.should_not raise_error
+        lambda { subject + Exchange::Money.new(30, :usd) }.should_not raise_error
         Exchange.configuration.allow_mixed_operations = true
       end
       context "modifying the base value" do
@@ -87,7 +87,7 @@ describe "Exchange::Currency" do
         end
         it "should be able to add another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          added = (@instantiated += Exchange::Currency.new(30, :chf))
+          added = (@instantiated += Exchange::Money.new(30, :chf))
           added.value.round(2).should == 72.87
           added.currency.should == :usd
           @instantiated.value.round(2).should == 72.87
@@ -95,13 +95,13 @@ describe "Exchange::Currency" do
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
           Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated += Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+          lambda { @instantiated += Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
           Exchange.configuration.allow_mixed_operations = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
           Exchange.configuration.allow_mixed_operations = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          lambda { @instantiated += Exchange::Currency.new(30, :usd) }.should_not raise_error
+          lambda { @instantiated += Exchange::Money.new(30, :usd) }.should_not raise_error
           Exchange.configuration.allow_mixed_operations = true
         end
       end
@@ -120,18 +120,18 @@ describe "Exchange::Currency" do
       it "should be able to subtract another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         Exchange.configuration.allow_mixed_operations = true
-        (subject - Exchange::Currency.new(10, :chf)).value.round(2).should == 29.04
-        (subject - Exchange::Currency.new(23.3, :eur)).currency.should == :usd
+        (subject - Exchange::Money.new(10, :chf)).value.round(2).should == 29.04
+        (subject - Exchange::Money.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
         Exchange.configuration.allow_mixed_operations = false
-        lambda { subject - Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+        lambda { subject - Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
         Exchange.configuration.allow_mixed_operations = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
         Exchange.configuration.allow_mixed_operations = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        lambda { subject - Exchange::Currency.new(30, :usd) }.should_not raise_error
+        lambda { subject - Exchange::Money.new(30, :usd) }.should_not raise_error
         Exchange.configuration.allow_mixed_operations = true
       end
       context "modifying the base value" do
@@ -152,7 +152,7 @@ describe "Exchange::Currency" do
         it "should be able to subtract another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
-          added = (@instantiated -= Exchange::Currency.new(10, :chf))
+          added = (@instantiated -= Exchange::Money.new(10, :chf))
           added.value.round(2).should == 29.04
           added.currency.should == :usd
           @instantiated.value.round(2).should == 29.04
@@ -160,13 +160,13 @@ describe "Exchange::Currency" do
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
           Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated -= Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+          lambda { @instantiated -= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
           Exchange.configuration.allow_mixed_operations = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
           Exchange.configuration.allow_mixed_operations = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          lambda { @instantiated -= Exchange::Currency.new(30, :usd) }.should_not raise_error
+          lambda { @instantiated -= Exchange::Money.new(30, :usd) }.should_not raise_error
           Exchange.configuration.allow_mixed_operations = true
         end
       end
@@ -185,18 +185,18 @@ describe "Exchange::Currency" do
       it "should be able to multiply by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         Exchange.configuration.allow_mixed_operations = true
-        (subject * Exchange::Currency.new(10, :chf)).value.round(1).should == 438.3
-        (subject * Exchange::Currency.new(23.3, :eur)).currency.should == :usd
+        (subject * Exchange::Money.new(10, :chf)).value.round(1).should == 438.3
+        (subject * Exchange::Money.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
         Exchange.configuration.allow_mixed_operations = false
-        lambda { subject * Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+        lambda { subject * Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
         Exchange.configuration.allow_mixed_operations = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
         Exchange.configuration.allow_mixed_operations = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        lambda { subject * Exchange::Currency.new(30, :usd) }.should_not raise_error
+        lambda { subject * Exchange::Money.new(30, :usd) }.should_not raise_error
         Exchange.configuration.allow_mixed_operations = true
       end
       context "modifying the base value" do
@@ -217,7 +217,7 @@ describe "Exchange::Currency" do
         it "should be able to multiply by another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
-          added = (@instantiated *= Exchange::Currency.new(9, :chf))
+          added = (@instantiated *= Exchange::Money.new(9, :chf))
           added.value.round(1).should == 394.50
           added.currency.should == :usd
           @instantiated.value.round(1).should == 394.50
@@ -225,13 +225,13 @@ describe "Exchange::Currency" do
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
           Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated *= Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+          lambda { @instantiated *= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
           Exchange.configuration.allow_mixed_operations = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
           Exchange.configuration.allow_mixed_operations = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          lambda { @instantiated *= Exchange::Currency.new(30, :usd) }.should_not raise_error
+          lambda { @instantiated *= Exchange::Money.new(30, :usd) }.should_not raise_error
           Exchange.configuration.allow_mixed_operations = true
         end
       end
@@ -255,18 +255,18 @@ describe "Exchange::Currency" do
       it "should be able to divide by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         Exchange.configuration.allow_mixed_operations = true
-        (subject / Exchange::Currency.new(10, :chf)).value.round(2).should == BigDecimal.new("3.65")
-        (subject / Exchange::Currency.new(23.3, :eur)).currency.should == :usd
+        (subject / Exchange::Money.new(10, :chf)).value.round(2).should == BigDecimal.new("3.65")
+        (subject / Exchange::Money.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
         Exchange.configuration.allow_mixed_operations = false
-        lambda { subject / Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+        lambda { subject / Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
         Exchange.configuration.allow_mixed_operations = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
         Exchange.configuration.allow_mixed_operations = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        lambda { subject / Exchange::Currency.new(30, :usd) }.should_not raise_error
+        lambda { subject / Exchange::Money.new(30, :usd) }.should_not raise_error
         Exchange.configuration.allow_mixed_operations = true
       end
       context "modifying the base value" do
@@ -287,7 +287,7 @@ describe "Exchange::Currency" do
         it "should be able to divide by another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           Exchange.configuration.allow_mixed_operations = true
-          added = (@instantiated /= Exchange::Currency.new(10, :chf))
+          added = (@instantiated /= Exchange::Money.new(10, :chf))
           added.value.round(2).should == 3.65
           added.currency.should == :usd
           @instantiated.value.round(2).should == 3.65
@@ -295,25 +295,25 @@ describe "Exchange::Currency" do
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
           Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated /= Exchange::Currency.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
+          lambda { @instantiated /= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
           Exchange.configuration.allow_mixed_operations = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
           Exchange.configuration.allow_mixed_operations = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          lambda { @instantiated /= Exchange::Currency.new(30, :usd) }.should_not raise_error
+          lambda { @instantiated /= Exchange::Money.new(30, :usd) }.should_not raise_error
           Exchange.configuration.allow_mixed_operations = true
         end
       end
     end
     describe "comparison" do
-      subject { Exchange::Currency.new(40.123, :usd) }
-      let(:comp1) { Exchange::Currency.new(40.123, :usd) }
-      let(:comp2) { Exchange::Currency.new(40, :usd) }
-      let(:comp3) { Exchange::Currency.new(50, :eur) }
-      let(:comp4) { Exchange::Currency.new(45, :eur) }
-      let(:comp5) { Exchange::Currency.new(50, :eur).to_usd }
-      let(:comp6) { Exchange::Currency.new(66.1, :usd, :at => Time.gm(2011,1,1)) }
+      subject { Exchange::Money.new(40.123, :usd) }
+      let(:comp1) { Exchange::Money.new(40.123, :usd) }
+      let(:comp2) { Exchange::Money.new(40, :usd) }
+      let(:comp3) { Exchange::Money.new(50, :eur) }
+      let(:comp4) { Exchange::Money.new(45, :eur) }
+      let(:comp5) { Exchange::Money.new(50, :eur).to_usd }
+      let(:comp6) { Exchange::Money.new(66.1, :usd, :at => Time.gm(2011,1,1)) }
       before(:each) do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
       end
@@ -339,11 +339,11 @@ describe "Exchange::Currency" do
       end
     end
     describe "sorting" do
-      subject { Exchange::Currency.new(40.123, :usd) }
-      let(:comp1) { Exchange::Currency.new(40.123, :usd) }
-      let(:comp2) { Exchange::Currency.new(40, :usd) }
-      let(:comp3) { Exchange::Currency.new(50, :eur) }
-      let(:comp4) { Exchange::Currency.new(45, :eur) }
+      subject { Exchange::Money.new(40.123, :usd) }
+      let(:comp1) { Exchange::Money.new(40.123, :usd) }
+      let(:comp2) { Exchange::Money.new(40, :usd) }
+      let(:comp3) { Exchange::Money.new(50, :eur) }
+      let(:comp4) { Exchange::Money.new(45, :eur) }
       before(:each) do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 6)
       end
@@ -352,12 +352,12 @@ describe "Exchange::Currency" do
       end
     end
     describe "round" do
-      subject { Exchange::Currency.new(40.123, :usd) }
+      subject { Exchange::Money.new(40.123, :usd) }
       context "without arguments" do
         it "should apply it to its number in the iso certified format" do
           subject.round.value.should == 40.12
           subject.round.currency.should == :usd
-          subject.round.should be_kind_of Exchange::Currency
+          subject.round.should be_kind_of Exchange::Money
         end
         it "should not modify the base value" do
           subject.round.value.should == 40.12
@@ -368,22 +368,22 @@ describe "Exchange::Currency" do
         it "should apply it to its number" do
           subject.round(0).value.should == 40
           subject.round(0).currency.should == :usd
-          subject.round(0).should be_kind_of Exchange::Currency
+          subject.round(0).should be_kind_of Exchange::Money
         end
         it "should allow to round to whatever number of decimals" do
           subject.round(2).value.should == 40.12
           subject.round(2).currency.should == :usd
-          subject.round(2).should be_kind_of Exchange::Currency
+          subject.round(2).should be_kind_of Exchange::Money
         end
       end
     end
     describe "ceil" do
-      subject { Exchange::Currency.new(40.1236, :omr) }
+      subject { Exchange::Money.new(40.1236, :omr) }
       context "without arguments" do
         it "should apply it to its number in the iso certified format" do
           subject.ceil.value.should == 40.124
           subject.ceil.currency.should == :omr
-          subject.ceil.should be_kind_of Exchange::Currency
+          subject.ceil.should be_kind_of Exchange::Money
         end
         it "should not modify the base value" do
           subject.ceil.value.should == 40.124
@@ -394,22 +394,22 @@ describe "Exchange::Currency" do
         it "should apply it to its number" do
           subject.ceil(0).value.should == 41
           subject.ceil(0).currency.should == :omr
-          subject.ceil(0).should be_kind_of Exchange::Currency
+          subject.ceil(0).should be_kind_of Exchange::Money
         end
         it "should allow to round to whatever number of decimals" do
           subject.ceil(2).value.should == 40.13
           subject.ceil(2).currency.should == :omr
-          subject.ceil(2).should be_kind_of Exchange::Currency
+          subject.ceil(2).should be_kind_of Exchange::Money
         end
       end
     end
     describe "floor" do
-      subject { Exchange::Currency.new(40.723, :jpy) }
+      subject { Exchange::Money.new(40.723, :jpy) }
       context "without arguments" do
         it "should apply it to its number in the iso certified format" do
           subject.floor.value.should == 40
           subject.floor.currency.should == :jpy
-          subject.floor.should be_kind_of Exchange::Currency
+          subject.floor.should be_kind_of Exchange::Money
         end
         it "should not modify the base value" do
           subject.floor.value.should == 40
@@ -420,32 +420,32 @@ describe "Exchange::Currency" do
         it "should apply it to its number" do
           subject.floor(1).value.should == 40.7
           subject.floor(1).currency.should == :jpy
-          subject.floor(1).should be_kind_of Exchange::Currency
+          subject.floor(1).should be_kind_of Exchange::Money
         end
         it "should allow to round to whatever number of decimals" do
           subject.floor(2).value.should == 40.72
           subject.floor(2).currency.should == :jpy
-          subject.floor(2).should be_kind_of Exchange::Currency
+          subject.floor(2).should be_kind_of Exchange::Money
         end
       end
     end
   end
   describe "to_s" do
     it "should render the currency according to ISO 4217 Definitions" do
-      Exchange::Currency.new(23.232524, :tnd).to_s.should == "TND 23.233"
-      Exchange::Currency.new(23.23252423, :sar).to_s.should == "SAR 23.23"
-      Exchange::Currency.new(23.23252423, :clp).to_s.should == "CLP 23"
-      Exchange::Currency.new(23.2, :tnd).to_s.should == "TND 23.200"
-      Exchange::Currency.new(23.4, :sar).to_s.should == "SAR 23.40"
-      Exchange::Currency.new(23.0, :clp).to_s.should == "CLP 23"
+      Exchange::Money.new(23.232524, :tnd).to_s.should == "TND 23.233"
+      Exchange::Money.new(23.23252423, :sar).to_s.should == "SAR 23.23"
+      Exchange::Money.new(23.23252423, :clp).to_s.should == "CLP 23"
+      Exchange::Money.new(23.2, :tnd).to_s.should == "TND 23.200"
+      Exchange::Money.new(23.4, :sar).to_s.should == "SAR 23.40"
+      Exchange::Money.new(23.0, :clp).to_s.should == "CLP 23"
     end
     it "should render only the currency amount if the argument amount is passed" do
-      Exchange::Currency.new(23.232524, :tnd).to_s(:amount).should == "23.233"
-      Exchange::Currency.new(23.23252423, :sar).to_s(:amount).should == "23.23"
-      Exchange::Currency.new(23.23252423, :clp).to_s(:amount).should == "23"
-      Exchange::Currency.new(23.2, :tnd).to_s(:amount).should == "23.200"
-      Exchange::Currency.new(23.4, :sar).to_s(:amount).should == "23.40"
-      Exchange::Currency.new(23.0, :clp).to_s(:amount).should == "23"
+      Exchange::Money.new(23.232524, :tnd).to_s(:amount).should == "23.233"
+      Exchange::Money.new(23.23252423, :sar).to_s(:amount).should == "23.23"
+      Exchange::Money.new(23.23252423, :clp).to_s(:amount).should == "23"
+      Exchange::Money.new(23.2, :tnd).to_s(:amount).should == "23.200"
+      Exchange::Money.new(23.4, :sar).to_s(:amount).should == "23.40"
+      Exchange::Money.new(23.0, :clp).to_s(:amount).should == "23"
     end
   end
   describe "methods via method missing" do

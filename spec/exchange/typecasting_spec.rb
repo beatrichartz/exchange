@@ -39,7 +39,7 @@ describe "Exchange::Typecasting" do
       subject.price = 0.77
     end
     it "should instantiate the attribute as a currency" do
-      subject.price.should be_instance_of(Exchange::Currency)
+      subject.price.should be_instance_of(Exchange::Money)
     end
     it "should instantiate the currency with the right currency" do
       subject.price.currency.should == :eur

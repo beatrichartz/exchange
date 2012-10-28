@@ -41,6 +41,8 @@ module Exchange
   #   my_instance.price #=> instance of exchange currency in usd
   #
   module Typecasting
+
+    # installs a setter and a getter for the attribute you want to typecast as exchange money
     
     def money *attributes
       
@@ -54,7 +56,7 @@ module Exchange
           currency = evaluate_money_option(options[:currency])
           time     = evaluate_money_option(options[:at]) if options[:at]
           
-          Exchange::Currency.new(send(:"#{attribute}_without_exchange_typecasting")) do |c|
+          Exchange::Money.new(send(:"#{attribute}_without_exchange_typecasting")) do |c|
             c.currency = currency
             c.time     = time if time
           end

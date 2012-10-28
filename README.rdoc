@@ -77,25 +77,25 @@ Then require it
 
 Converting one currency to another is as easy as 1,2,3. Don't be afraid, even if it returns a currency object, all Fixed and Float operations can be applied as method missing routes to the value
 
-  1.usd.to_eur                                  #=> #<Exchange::Currency @value=0.93 @currency=:eur>
-  2.3.dkk.to_sek                                #=> #<Exchange::Currency @value=3.33 @currency=:sek>
-  45.54.nok.to_sek                              #=> #<Exchange::Currency @value=3.33 @currency=:sek>
+  1.usd.to_eur                                  #=> #<Exchange::Money @value=0.93 @currency=:eur>
+  2.3.dkk.to_sek                                #=> #<Exchange::Money @value=3.33 @currency=:sek>
+  45.54.nok.to_sek                              #=> #<Exchange::Money @value=3.33 @currency=:sek>
 
 Easily convert one currency to another at a historical rate
 
-  1.52.usd.to_eur :at => '2011-01-01'           #=> #<Exchange::Currency @value=1.23 @currency=:eur>
-  3.45.eur.to_sek :at => Time.gm(2011,3,3)      #=> #<Exchange::Currency @value=19.23 @currency=:sek>
-  345.sek.to_nok :at => Time.gm(2011,3,3)       #=> #<Exchange::Currency @value=348 @currency=:nok>
+  1.52.usd.to_eur :at => '2011-01-01'           #=> #<Exchange::Money @value=1.23 @currency=:eur>
+  3.45.eur.to_sek :at => Time.gm(2011,3,3)      #=> #<Exchange::Money @value=19.23 @currency=:sek>
+  345.sek.to_nok :at => Time.gm(2011,3,3)       #=> #<Exchange::Money @value=348 @currency=:nok>
   
 Or even define an instance of currency as historic by adding a time.
 
-  1.52.usd(:at => '2011-01-01').to_eur          #=> #<Exchange::Currency @value=1.23 @currency=:eur>
-  3.45.eur(:at => Time.gm(2011,3,3)).to_sek     #=> #<Exchange::Currency @value=19.23 @currency=:sek>
-  345.sek(:at => Time.gm(2011,3,3)).to_nok      #=> #<Exchange::Currency @value=348 @currency=:nok>
+  1.52.usd(:at => '2011-01-01').to_eur          #=> #<Exchange::Money @value=1.23 @currency=:eur>
+  3.45.eur(:at => Time.gm(2011,3,3)).to_sek     #=> #<Exchange::Money @value=19.23 @currency=:sek>
+  345.sek(:at => Time.gm(2011,3,3)).to_nok      #=> #<Exchange::Money @value=348 @currency=:nok>
   
 Do multiple conversion steps at once (if in any way useful)
 
-  3.chf.to_eur(:at => '2011-02-04').to_usd      #=> #<Exchange::Currency @value=5.3 @currency=:eur>
+  3.chf.to_eur(:at => '2011-02-04').to_usd      #=> #<Exchange::Money @value=5.3 @currency=:eur>
   
   
 === Compare
@@ -111,7 +111,7 @@ Compare Currencies, they will convert implicitly
 
 Sort multiple currencies at once
 
-  [5.eur, 4.usd, 4.chf(:at => '2010-01-01')].sort   #=> [#<Exchange::Currency @value=4 @currency=:usd>, #<Exchange::Currency @value=4 @currency=:chf>, #<Exchange::Currency @value=5 @currency=:eur>]
+  [5.eur, 4.usd, 4.chf(:at => '2010-01-01')].sort   #=> [#<Exchange::Money @value=4 @currency=:usd>, #<Exchange::Money @value=4 @currency=:chf>, #<Exchange::Money @value=5 @currency=:eur>]
   
 This is true, because it uses the same historic conversion rate
 
@@ -125,40 +125,40 @@ But this is false, obviously, because the second instance uses the present excha
 
 Add, Subtract, Multiply, Divide Currencies and don't lose a dime. The result will get returned in the currency of the first argument
 
-  1.usd + 1.32.eur                              #=> #<Exchange::Currency @value=2.54 @currency=:usd>
-  1.usd - 1.32.eur                              #=> #<Exchange::Currency @value=-0.2 @currency=:usd>
-  1.usd * 1.32.eur                              #=> #<Exchange::Currency @value=3.44 @currency=:usd>
-  1.usd / 1.32.eur                              #=> #<Exchange::Currency @value=0.89 @currency=:usd>
+  1.usd + 1.32.eur                              #=> #<Exchange::Money @value=2.54 @currency=:usd>
+  1.usd - 1.32.eur                              #=> #<Exchange::Money @value=-0.2 @currency=:usd>
+  1.usd * 1.32.eur                              #=> #<Exchange::Money @value=3.44 @currency=:usd>
+  1.usd / 1.32.eur                              #=> #<Exchange::Money @value=0.89 @currency=:usd>
   
   
 If you define a currency object as historic. It will use historic conversion if it gets converted (in this example, the 1.32 eur will get converted to usd at the rate of January 1 2008)
 
-  1.usd - 1.32.eur(:at => '2008-1-1')           #=> #<Exchange::Currency @value=2.54 @currency=:usd>
+  1.usd - 1.32.eur(:at => '2008-1-1')           #=> #<Exchange::Money @value=2.54 @currency=:usd>
 
 You can just instantiate currencies and apply operations. Rounding will by default round the currency to its ISO4217 decimal precision:
 
-  3.123.eur.round                               #=> #<Exchange::Currency @value=3.12 @currency=:eur>
+  3.123.eur.round                               #=> #<Exchange::Money @value=3.12 @currency=:eur>
   
 You can also pass the precision you wish for as an argument, round, ceil, floor act like normal:
 
-  3.1234.eur.round(0)                           #=> #<Exchange::Currency @value=3 @currency=:eur>
+  3.1234.eur.round(0)                           #=> #<Exchange::Money @value=3 @currency=:eur>
 
 Convert one currency to another and round, ceil or floor it, it still retains currency information of the actual and previous currency
 
-  1.34.usd.to_eur.round(0)                      #=> #<Exchange::Currency @value=1 @currency=:eur>
-  10.34.usd.to_nok.ceil(0)                      #=> #<Exchange::Currency @value=45 @currency=:nok>
-  5.34.usd.to_eur.floor(0)                      #=> #<Exchange::Currency @value=4 @currency=:eur>
-  5.34.usd.to_eur.floor.from                    #=> #<Exchange::Currency @value=5.34 @currency=:usd>
+  1.34.usd.to_eur.round(0)                      #=> #<Exchange::Money @value=1 @currency=:eur>
+  10.34.usd.to_nok.ceil(0)                      #=> #<Exchange::Money @value=45 @currency=:nok>
+  5.34.usd.to_eur.floor(0)                      #=> #<Exchange::Money @value=4 @currency=:eur>
+  5.34.usd.to_eur.floor.from                    #=> #<Exchange::Money @value=5.34 @currency=:usd>
   
   
 === Retain Information
 
 Access the original currency and its value after conversion, even over multiple steps
 
-  converted = 2.eur.to_usd                      #=> #<Exchange::Currency @value=2.12 @currency=:usd>
-  converted.from                                #=> #<Exchange::Currency @value=2 @currency=:eur>
-  converted2 = converted.to_nok                 #=> #<Exchange::Currency @value=22.12 @currency=:nok>
-  converted2.from                               #=> #<Exchange::Currency @value=2.12 @currency=:usd>
+  converted = 2.eur.to_usd                      #=> #<Exchange::Money @value=2.12 @currency=:usd>
+  converted.from                                #=> #<Exchange::Money @value=2 @currency=:eur>
+  converted2 = converted.to_nok                 #=> #<Exchange::Money @value=22.12 @currency=:nok>
+  converted2.from                               #=> #<Exchange::Money @value=2.12 @currency=:usd>
 
 == Configuration
 

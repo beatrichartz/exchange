@@ -20,22 +20,22 @@ describe "Exchange::Conversability" do
   end
   context "with a fixnum" do
     it "should allow to convert to a currency" do
-      3.eur.should be_kind_of Exchange::Currency
+      3.eur.should be_kind_of Exchange::Money
       3.eur.value.should == 3
     end
     it "should allow to convert to a curreny with a negative number" do
-      -3.eur.should be_kind_of Exchange::Currency
+      -3.eur.should be_kind_of Exchange::Money
       -3.eur.value.should == -3
     end
     it "should allow to do full conversions" do
       mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
-      3.eur.to_chf.should be_kind_of Exchange::Currency
+      3.eur.to_chf.should be_kind_of Exchange::Money
       3.eur.to_chf.value.round(2).should == 3.68
       3.eur.to_chf.currency.should == :chf
     end
     it "should allow to do full conversions with negative numbers" do
       mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
-      -3.eur.to_chf.should be_kind_of Exchange::Currency
+      -3.eur.to_chf.should be_kind_of Exchange::Money
       -3.eur.to_chf.value.round(2).should == -3.68
       -3.eur.to_chf.currency.should == :chf
     end
@@ -47,22 +47,22 @@ describe "Exchange::Conversability" do
   end
   context "with a float" do
     it "should allow to convert to a currency" do
-      3.25.eur.should be_kind_of Exchange::Currency
+      3.25.eur.should be_kind_of Exchange::Money
       3.25.eur.value.round(2).should == 3.25
     end
     it "should allow to convert to a curreny with a negative number" do
-      -3.25.eur.should be_kind_of Exchange::Currency
+      -3.25.eur.should be_kind_of Exchange::Money
       -3.25.eur.value.round(2).should == -3.25
     end
     it "should allow to do full conversions" do
       mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
-      3.25.eur.to_chf.should be_kind_of Exchange::Currency
+      3.25.eur.to_chf.should be_kind_of Exchange::Money
       3.25.eur.to_chf.value.round(2).should == 3.99
       3.25.eur.to_chf.currency.should == :chf
     end
     it "should allow to do full conversions with negative numbers" do
       mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
-      -3.25.eur.to_chf.should be_kind_of Exchange::Currency
+      -3.25.eur.to_chf.should be_kind_of Exchange::Money
       -3.25.eur.to_chf.value.round(2).should == -3.99
       -3.25.eur.to_chf.currency.should == :chf
     end
@@ -74,22 +74,22 @@ describe "Exchange::Conversability" do
   end
   context "with a big decimal" do
     it "should allow to convert to a currency" do
-      BigDecimal.new("3.25").eur.should be_kind_of Exchange::Currency
+      BigDecimal.new("3.25").eur.should be_kind_of Exchange::Money
       BigDecimal.new("3.25").eur.value.round(2).should == 3.25
     end
     it "should allow to convert to a curreny with a negative number" do
-      BigDecimal.new("-3.25").eur.should be_kind_of Exchange::Currency
+      BigDecimal.new("-3.25").eur.should be_kind_of Exchange::Money
       BigDecimal.new("-3.25").eur.value.round(2).should == -3.25
     end
     it "should allow to do full conversions" do
       mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
-      BigDecimal.new("3.25").eur.to_chf.should be_kind_of Exchange::Currency
+      BigDecimal.new("3.25").eur.to_chf.should be_kind_of Exchange::Money
       BigDecimal.new("3.25").eur.to_chf.value.round(2).should == 3.99
       BigDecimal.new("3.25").eur.to_chf.currency.should == :chf
     end
     it "should allow to do full conversions with negative numbers" do
       mock_api("http://api.finance.xaviermedia.com/api/2012/08/27.xml", fixture('api_responses/example_xml_api.xml'), 3)
-      BigDecimal.new("-3.25").eur.to_chf.should be_kind_of Exchange::Currency
+      BigDecimal.new("-3.25").eur.to_chf.should be_kind_of Exchange::Money
       BigDecimal.new("-3.25").eur.to_chf.value.round(2).should == -3.99
       BigDecimal.new("-3.25").eur.to_chf.currency.should == :chf
     end

@@ -12,24 +12,24 @@ module Exchange
     # and others via method missing, this is not handled via method missing because it would seriously break down performance.
     # 
     # @example Instantiate from any type of number
-    #   40.usd => #<Exchange::Currency @value=40 @currency=:usd>
-    #   -33.nok => #<Exchange::Currency @value=-33 @currency=:nok>
-    #   33.333.sek => #<Exchange::Currency @value=33.333 @currency=:sek>
+    #   40.usd => #<Exchange::Money @value=40 @currency=:usd>
+    #   -33.nok => #<Exchange::Money @value=-33 @currency=:nok>
+    #   33.333.sek => #<Exchange::Money @value=33.333 @currency=:sek>
     # @example Instantiate and immediatly convert
-    #   1.usd.to_eur => #<Exchange::Currency @value=0.79 @currency=:eur>
-    #   1.nok.to_chf => #<Exchange::Currency @value=6.55 @currency=:chf>
-    #   -3.5.dkk.to_huf => #<Exchange::Currency @value=-346.55 @currency=:huf>
+    #   1.usd.to_eur => #<Exchange::Money @value=0.79 @currency=:eur>
+    #   1.nok.to_chf => #<Exchange::Money @value=6.55 @currency=:chf>
+    #   -3.5.dkk.to_huf => #<Exchange::Money @value=-346.55 @currency=:huf>
     # @example Instantiate and immediatly convert at a specific time in the past
-    #   1.usd.to_eur(:at => Time.now - 86400) => #<Exchange::Currency @value=0.80 @currency=:eur>
-    #   1.nok.to_chf(:at => Time.now - 3600) => #<Exchange::Currency @value=6.57 @currency=:chf>
-    #   -3.5.dkk.to_huf(:at => Time.now - 172800) => #<Exchange::Currency @value=-337.40 @currency=:huf>
+    #   1.usd.to_eur(:at => Time.now - 86400) => #<Exchange::Money @value=0.80 @currency=:eur>
+    #   1.nok.to_chf(:at => Time.now - 3600) => #<Exchange::Money @value=6.57 @currency=:chf>
+    #   -3.5.dkk.to_huf(:at => Time.now - 172800) => #<Exchange::Money @value=-337.40 @currency=:huf>
     #
     # @since 0.1
     # @version 0.2
     #
     ISO4217.currencies.each do |c|
       define_method c do |*args|
-        Currency.new(self, c, *args)
+        Money.new(self, c, *args)
       end
     end
     
