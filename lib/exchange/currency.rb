@@ -12,20 +12,20 @@ module Exchange
   class Currency
     include Comparable
     
-    # @attr_reader
+    # @attr_accessor
     # @return [BigDecimal] number The number the currency object has been instantiated from
     #
-    attr_reader :value
+    attr_accessor :value
     
-    # @attr_reader
+    # @attr_accessor
     # @return [Symbol, String] currency the currency of the currency object
     #
-    attr_reader :currency
+    attr_accessor :currency
     
-    # @attr_reader
+    # @attr_accessor
     # @return [Time] The time at which the conversion has taken place or should take place if the object is involved in operations
     #
-    attr_reader :time
+    attr_accessor :time
     
     # @attr_reader
     # @return [Exchange::Currency] The original currency object this currency object was converted from
@@ -51,12 +51,15 @@ module Exchange
     #   Exchange::Currency.new(40, :usd).to_eur(:at => Time.gm(2012,9,1)) 
     #     #=> #<Exchange::Currency @number=37.0 @currency=:usd @time=#<Time> @from=#<Exchange::Currency @number=40.0 @currency=:usd>>
     #
-    def initialize value, currency, opts={}
-      @value            = ISO4217.instantiate(value, currency)
-      @currency         = currency
-      @time             = Helper.assure_time(opts[:at], :default => :now)
+    def initialize value, currency_arg=nil, opts={}, &block      
       @from             = opts[:from]
       @api              = Exchange.configuration.api.subclass
+      
+      yield(self) if block_given?
+      
+      self.time             = Helper.assure_time(time || opts[:at], :default => :now)
+      self.value            = ISO4217.instantiate(value, currency || currency_arg)
+      self.currency         = currency || currency_arg
     end
     
     # Method missing is used to handle conversions from one currency object to another. It only handles currencies which are available in
@@ -71,9 +74,9 @@ module Exchange
     end
     
     ISO4217.currencies.each do |c|
-      define_method :"to_#{c}" do |opts={}|
+      define_method :"to_#{c}" do |*args|
         if api_supports_currency?(c)
-          convert_to c, { :at => time }.merge(opts)
+          convert_to c, { :at => time }.merge(args.first || {})
         else
           raise_no_rate_error(c)
         end

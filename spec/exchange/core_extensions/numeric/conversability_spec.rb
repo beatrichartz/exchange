@@ -13,9 +13,9 @@ describe "Exchange::Conversability" do
   end
   it "should define all currencies on Fixnum, Float and BigDecimal" do
     Exchange::ISO4217.definitions.keys.each do |c|
-      1.should be_respond_to(c.downcase.to_sym)
-      1.1.should be_respond_to(c.downcase.to_sym)
-      BigDecimal.new("1").should be_respond_to(c.downcase.to_sym)
+      1.should be_respond_to(c.to_s.downcase.to_sym)
+      1.1.should be_respond_to(c.to_s.downcase.to_sym)
+      BigDecimal.new("1").should be_respond_to(c.to_s.downcase.to_sym)
     end
   end
   context "with a fixnum" do

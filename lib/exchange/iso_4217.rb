@@ -55,7 +55,7 @@ module Exchange
     # @return [Array] An Array of currency symbols
     #
     def currencies
-      @currencies  ||= definitions.keys
+      @currencies  ||= definitions.keys.map(&:to_s).sort.map(&:to_sym)
     end
     
     # Check if a currency is defined by ISO 4217 standards

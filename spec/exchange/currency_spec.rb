@@ -24,6 +24,18 @@ describe "Exchange::Currency" do
     subject.value.should == 40
     subject.currency.should == :usd
   end
+  describe "initializing with a block" do
+    it "should be possible" do
+      currency = Exchange::Currency.new(40) do |c|
+        c.currency = :usd
+        c.time     = Time.gm(2012,9,9)
+      end
+      
+      currency.value.should == 40
+      currency.currency.should == :usd
+      currency.time.should == Time.gm(2012,9,9)
+    end
+  end
   describe "convert_to" do
     it "should be able to convert itself to other currencies" do
       mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)

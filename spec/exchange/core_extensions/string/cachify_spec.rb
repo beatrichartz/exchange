@@ -5,7 +5,7 @@ describe "Exchange::Cachify" do
   describe "cachify" do
     subject { "bla" }
     it "should marshal dump" do
-      subject.cachify.should == "\x04\bI\"\bbla\x06:\x06EF"
+      subject.cachify.should == Marshal.dump(subject)
     end
   end
   
