@@ -14,11 +14,7 @@ describe "Exchange::Currency" do
     end
   end
   after(:all) do
-    Exchange.configuration = Exchange::Configuration.new do |c|
-      c.api = {
-        :subclass => :memcached
-      }
-    end
+    Exchange.configuration.reset
   end
   it "should initialize with a number and a currency" do
     subject.value.should == 40

@@ -30,6 +30,12 @@ module Exchange
       set Exchange::Configuration::DEFAULTS[key]
     end
     
+    [:key, :parent_module].each do |subclass_method|
+      define_method subclass_method do
+        raise StandardError.new("Subclass Responsibility")
+      end
+    end
+    
     private
 
       # Camelize a string or a symbol
