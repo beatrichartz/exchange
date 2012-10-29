@@ -35,26 +35,17 @@ module Exchange
         time          = helper.assure_time(opts[:at], :default => :now)
         times         = map_retry_times time
         
-        # Since the Ecb File retrieved can be very large (> 5MB for the history file) and parsing takes a fair amount of time,
-        # caching is doubled on this API
-        # 
-        cache.cached(self.class, :at => time) do
-          Call.new(api_url(time), call_opts(time)) do |result|
-            t = time
-            
-            # Weekends do not have rates present
-            #
-            t = times.shift while (r = find_rate!(result, t)).empty? && !times.empty?
-            
-            @callresult = r.to_s
-          end
+        Call.new(api_url(time), call_opts(time)) do |result|
+          t = time
+          
+          # Weekends do not have rates present
+          #
+          t = times.shift while (r = find_rate!(result, t)).empty? && !times.empty?
+                    
+          @base                 = :eur # We just have to assume, since it's the ECB
+          @rates                = extract_rates(r.children)
+          @timestamp            = time.to_i
         end
-
-        parsed = Nokogiri.parse(self.callresult)
-        
-        @base                 = :eur # We just have to assume, since it's the ECB
-        @rates                = extract_rates(parsed.children.children)
-        @timestamp            = time.to_i
       end
       
       private
