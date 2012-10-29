@@ -39,7 +39,7 @@ Exchange uses BigDecimal in all its currency and conversion operations, so you w
   (50.usd * 0.29).round 0 #=> "USD 15.00"
   (0.29 * 50.usd).round 0 #=> 15
   
-=== BigDecimal? Sounds slooow to me
+=== BigDecimal? Sounds slow to me
 
 If performance combined with conversion is your concern, {head over to this benchmark}[https://github.com/beatrichartz/exchange/tree/master/benchmark]. With ruby 1.9.3, you'll get about the following results
 
@@ -47,7 +47,7 @@ If performance combined with conversion is your concern, {head over to this benc
 
   Normal Float Operation takes 	0.000196s
   Big Decimal Operation takes 	0.001239s
-  Money gem Operation takes 	  0.05348s
+  Money gem Operation takes 	0.05348s
   Exchange gem Operation takes 	0.035287s
 
 You're right that Big Decimal is slower than Float operations, but then again, the exchange gem outscores the money gem.
