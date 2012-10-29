@@ -9,7 +9,7 @@ describe "Exchange::Conversability" do
     Time.stub! :now => @time
   end
   after(:all) do
-    Exchange::configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :memcached } }
+    Exchange.configuration.reset
   end
   it "should define all currencies on Fixnum, Float and BigDecimal" do
     Exchange::ISO4217.definitions.keys.each do |c|
