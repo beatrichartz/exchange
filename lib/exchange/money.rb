@@ -118,7 +118,7 @@ module Exchange
           self.class_eval <<-EOV
             def #{op}(other)
               test_for_currency_mix_error(other)
-              new_value = value #{op} (other.kind_of?(Money) ? other.convert_to(self.currency, :at => other.time) : other)
+              new_value = value #{op} (other.kind_of?(Money) ? other.convert_to(self.currency, :at => other.time) : BigDecimal.new(other.to_s))
               Exchange::Money.new(new_value, currency, :at => time, :from => self)
             end
           EOV

@@ -175,12 +175,17 @@ describe "Exchange::Money" do
       it "should be able to multiply by an integer" do
         (subject * 40).value.should == 1600
       end
-      it "should be able to multiply a float" do
-        (subject * 40.5).value.should == 1620
+      context "with a float" do
+        subject { Exchange::Money.new(50, :usd) }
+        it "should be able to multiply a float" do
+          (subject * 40.5).value.should == 2025
+        end
+        it "should not fall for rounding errors" do
+          (subject * 0.29).round(0).value.should == 15
+        end
       end
-      it "should not modify the base value" do
-        (subject * 40).value.should == 1600
-        subject.value.should == 40.0
+      it "should not fall for float rounding errors" do
+        (subject * 40.5)
       end
       it "should be able to multiply by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
@@ -240,9 +245,16 @@ describe "Exchange::Money" do
       it "should be able to divide by an integer" do
         (subject / 40).value.should == 1
       end
-      it "should be able to divide by a float" do
-        BigDecimal.new((subject / 40.5).value.to_s).round(4).should == 0.9877
+      context "with a float" do
+        subject { Exchange::Money.new(1829.82, :omr) }
+        it "should be able to divide by a float" do
+          (subject / 40.5).value.round(4).should == 45.1807
+        end
+        it "should not fall for floating point errors" do
+          (subject / 12.0).round(2).value.should == 152.49
+        end
       end
+
       it "should not modify the base value" do
         (subject / 40).value.should == 1
         subject.value.should == 40.0
