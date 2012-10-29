@@ -37,7 +37,7 @@ describe "Exchange::Cache::Memory" do
     end
     it "should unset all expired instance variables" do
       subject.send(:clean!)
-      subject.instance_variables.reject{|i| i == :@helper }.map{|i| subject.instance_variable_get(i) }.compact.sort_by(&:to_s).should == %W(Valid1 Valid2 Valid3 Valid4).sort
+      subject.instance_variables.reject{|i| i == "@helper" }.map{|i| subject.instance_variable_get(i) }.compact.sort_by(&:to_s).should == %W(Valid1 Valid2 Valid3 Valid4).sort
     end
   end
   describe "cached" do
