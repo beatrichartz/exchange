@@ -41,7 +41,7 @@ Exchange uses BigDecimal in all its currency and conversion operations, so you w
   
 === BigDecimal? Sounds slow to me
 
-If performance combined with conversion is your concern, {head over to this benchmark}[https://github.com/beatrichartz/exchange/tree/master/benchmark]. With ruby 1.9.3, you'll get about the following results
+If performance combined with conversion is your concern, {head over to this benchmark}[https://github.com/beatrichartz/exchange/blob/master/benchmark/benchmark.rb]. With ruby 1.9.3, you'll get about the following results
 
   1000 operations
 
