@@ -4,6 +4,16 @@ The Exchange Gem gives you easy access to currency functions directly on your Nu
 
 You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
+== Installation
+=== Bundler / Rails
+Add it to your Gemfile  
+  gem "exchange", ">=0.8.0"
+=== Manually
+Just install it as a gem
+  gem install exchange
+Then require it
+  require 'exchange'
+
 == Features
 
 === Easy Conversion
@@ -24,8 +34,51 @@ Whereas
 
   (BigDecimal("0.29") * 50).round #=> 15, which is correct
   
-Exchange uses BigDecimal in all its currency and conversion operations, so you will not be a likely victim for floating point inaccuracies.
+Exchange uses BigDecimal in all its currency and conversion operations, so you will not be a likely victim for floating point inaccuracies. It even does implicitly convert counterparts of basic operations like (* / - +) to calculate your values safely:
 
+  (50.usd * 0.29).round 0 #=> "USD 15.00"
+  (0.29 * 50.usd).round 0 #=> 15
+  
+=== BigDecimal? Sounds slooow to me
+
+If performance combined with conversion is your concern, {head over to this benchmark}[https://github.com/beatrichartz/exchange/tree/master/benchmark]. With ruby 1.9.3, you'll get about the following results
+
+  1000 operations
+
+  Normal Float Operation takes 	0.000196s
+  Big Decimal Operation takes 	0.001239s
+  Money gem Operation takes 	  0.05348s
+  Exchange gem Operation takes 	0.035287s
+
+You're right that Big Decimal is slower than Float operations, but then again, the exchange gem outscores the money gem.
+  
+=== A mixin for typecasting
+
+There may be a need for you to typecast an attribute of an object as money. Exchange features a typecasting mixin, which you can use with Rails, Ohm, Datamapper, or just plain ruby classes to typecast an attribute as money. Use it like this:
+
+  class Article
+    # make the class method available
+    #
+    extend Exchange::Typecasting
+    
+    # Install the typecasting for price
+    #
+    money :price, :currency => :currency
+    
+    # let's say you have currency set in a unique place
+    #
+    def currency
+      manager.currency
+    end
+  end
+  
+Now you're able to do this:
+  
+  article = Article.new
+  article.price #=> will give you money in the currency defined on the manager
+  article.price = 3.45.usd #Will implicitly convert the price if manager.currency is not :usd
+  
+You can feed the currency option with a proc or a symbol representing the method. For in-depth information about typecasting {visit the documentation here}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/Typecasting]
 
 === Only one request per day to keep you up to date
 
@@ -60,16 +113,6 @@ Use one of three available caching solutions:
 
 But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it. 
 {Example of a custom cache extension}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache]
-
-== Installation
-=== Bundler / Rails
-Add it to your Gemfile  
-  gem "exchange", ">=0.8.0"
-=== Manually
-Just install it as a gem
-  gem install exchange
-Then require it
-  require 'exchange'
 
 == Basic Operations
 

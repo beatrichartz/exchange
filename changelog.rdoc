@@ -1,5 +1,11 @@
 = Changes to Exchange
 
+== 0.9.0
+- added memory cache support as the new default. This allows you to cache without any external requirement, directly in ruby.
+- Added a typecasting helper for money to exchange. This allows you to typecast any given attribute into a instance of Exchange::Money
+- made the base operations more floating point error save. Now even when you use a float with exchange, it will convert it to bigdecimal before doing base calculations (* / + -) in both ways. This does not mean you will not encounter any floating point errors, but it makes it highly unlikely.
+- improved performance quite a bit on the conversion methods. Exchange now beats every other known gem for currency conversion in conversion speed
+
 == 0.8.0
 - jruby compatibility, horray!
 - readded json as an explicit dependency since its used in cache and api
