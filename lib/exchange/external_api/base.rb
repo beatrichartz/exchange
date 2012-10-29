@@ -140,7 +140,7 @@ module Exchange
           rate_to / rate_from
         end
         
-        BigDecimal.new(rate.to_s)
+        rate.is_a?(BigDecimal) ? rate : BigDecimal.new(rate.to_s)
       end
       
       # Converts an amount of one currency into another

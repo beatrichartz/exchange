@@ -22,7 +22,7 @@ module Exchange
       #
       def client
         Exchange::GemLoader.new('dalli').try_load unless defined?(::Dalli)
-        @client ||= Dalli::Client.new("#{Exchange.configuration.cache.host}:#{Exchange.configuration.cache.port}")
+        @client ||= Dalli::Client.new("#{config.host}:#{config.port}")
       end
       
       # returns either cached data from the memcached client or calls the block and caches it in memcached.
@@ -40,7 +40,7 @@ module Exchange
         unless result
           result = super
           if result && !result.to_s.empty?
-            client.set key(api, opts), result.cachify, Exchange.configuration.cache.expire == :daily ? 86400 : 3600
+            client.set key(api, opts), result.cachify, config.expire == :daily ? 86400 : 3600
           end
         end
         

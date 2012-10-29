@@ -21,7 +21,7 @@ module Exchange
       #
       def client
         Exchange::GemLoader.new('redis').try_load unless defined?(::Redis)
-        @client ||= ::Redis.new(:host => Exchange.configuration.cache.host, :port => Exchange.configuration.cache.port)
+        @client ||= ::Redis.new(:host => config.host, :port => config.port)
       end
       
       # returns either cached data from the redis client or calls the block and caches it in redis.
@@ -39,7 +39,7 @@ module Exchange
           result = super
           if result && !result.to_s.empty?
             client.set key(api, opts), result.cachify
-            client.expire key(api, opts), Exchange.configuration.cache.expire == :daily ? 86400 : 3600
+            client.expire key(api, opts), config.expire == :daily ? 86400 : 3600
           end
         end
         

@@ -46,9 +46,9 @@ module Exchange
       # @return [String] A string that can be used as instance variable name
       #
       def instance_variable_name(api, opts)
-        conversion_time          = Exchange::Helper.assure_time(opts[:at], :default => :now)
+        conversion_time          = helper.assure_time(opts[:at], :default => :now)
         time                     = Time.now
-        expire_hourly            = Exchange.configuration.cache.expire == :hourly || nil
+        expire_hourly            = config.expire == :hourly || nil
         
         [
           '@' + api.to_s.downcase.gsub(/::/, '_'),

@@ -12,17 +12,14 @@ module Exchange
   class Money
     include Comparable
     
-    # @attr_accessor
     # @return [BigDecimal] number The number the money object has been instantiated from
     #
     attr_accessor :value
     
-    # @attr_accessor
     # @return [Symbol, String] currency the currency of the money object
     #
     attr_accessor :currency
     
-    # @attr_accessor
     # @return [Time] The time at which the conversion has taken place or should take place if the object is involved in operations
     #
     attr_accessor :time
@@ -38,7 +35,7 @@ module Exchange
     
     # Intialize the currency with a number and a currency
     # @param [Integer, Float] value The number the currency is instantiated from
-    # @param [Symbol] currency The currency the money object is in as a downcased symbol
+    # @param [Symbol] currency_arg The currency the money object is in as a downcased symbol
     # @param [Hash] opts Optional Parameters for instantiation
     # @option opts [Time] :at The time at which conversion took place
     # @option opts [String,Symbol] :from The money object this money object was converted from
@@ -94,7 +91,8 @@ module Exchange
     #   Exchange::Money.new(40,:nok).convert_to('sek', :at => Time.gm(2012,2,2))
     #
     def convert_to other, opts={}
-      Money.new(Exchange.configuration.api.subclass.new.convert(value, currency, other, opts), other, opts.merge(:from => self))
+      opts[:from] = self
+      Money.new(api.new.convert(value, currency, other, opts), other, opts)
     end
     
     class << self

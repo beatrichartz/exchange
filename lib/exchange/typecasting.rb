@@ -51,9 +51,9 @@ module Exchange
       attributes.each do |attribute|
         
         define_method :"#{attribute}_with_exchange_typecasting" do
-          raise NoCurrencyError.new("No currency is given for typecasting #{attributes.join(', ')}. Make sure a currency is present") unless options[:currency]
-
-          currency = evaluate_money_option(options[:currency])
+          currency = evaluate_money_option(options[:currency]) if options[:currency]
+          raise NoCurrencyError.new("No currency is given for typecasting #{attributes.join(', ')}. Make sure a currency is present") unless currency
+          
           time     = evaluate_money_option(options[:at]) if options[:at]
           
           Exchange::Money.new(send(:"#{attribute}_without_exchange_typecasting")) do |c|
