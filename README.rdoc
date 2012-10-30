@@ -236,7 +236,14 @@ If you're afraid of mixed currency operations, just don't allow them
 
 === Caching Options  
 
-Use Memcached to cache the result (default). Exchange will cache the API files with a key starting with 'exchange_'
+Use Memory to cache the result (default). 
+  Exchange.configuration = Exchange::Configuration.new do |c|
+    c.cache = {
+      :subclass => :memory
+    }
+  end
+
+Use Memcached to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
       :subclass => :memcached,
