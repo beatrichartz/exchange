@@ -85,7 +85,7 @@ You can feed the currency option with a proc or a symbol representing the method
 You're hitting the internet only daily to get new rates (hourly updates are available if you're eager to have the absolutely newest ones)
 
 === ISO 4217 Currency formatting
-On of the issues with currencies is: You never know the format they should be in. With Exchange, you can just use the currencies
+One of the issues with currencies is: You never know the format they should be in. With Exchange, you can just use the currencies
 to_s method, which takes care of the right format for you. You can either have a string with the currency code in front, or just the amount in the right format
 
   49.567.usd.to_s           #=> "USD 49.57"
