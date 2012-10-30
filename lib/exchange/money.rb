@@ -39,7 +39,7 @@ module Exchange
     # @param [Hash] opts Optional Parameters for instantiation
     # @option opts [Time] :at The time at which conversion took place
     # @option opts [String,Symbol] :from The money object this money object was converted from
-    # @version 0.2
+    # @version 0.9
     #
     # @example Instantiate a money object of 40 US Dollars
     #   Exchange::Money.new(40, :usd) 

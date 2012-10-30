@@ -40,10 +40,24 @@ module Exchange
   #   managermanager.update :currency => :usd
   #   my_instance.price #=> instance of exchange currency in usd
   #
+  # @author Beat Richartz
+  # @since 0.9.0
+  # @version 0.9.0
+  #
   module Typecasting
 
     # installs a setter and a getter for the attribute you want to typecast as exchange money
-    
+    # @overload def money(*attributes, options={})
+    #   @param [Symbol] attributes The attributes you want to typecast as money. 
+    #   @param [Hash] options Pass a hash as last argument as options
+    #   @option options [Symbol, Proc] :currency The currency to evaluate the money with. Can be a symbol or a proc
+    #   @option options [Symbol, Proc] :at The time at which the currency should be casted. All conversions of this currency will take place at this time
+    # @raise [NoCurrencyError] if no currency option is given or the currency evals to nil
+    # @example configure money with symbols, the currency option here will call the method currency in the object context
+    #   money :price, :currency => :currency, :time => :created_at
+    # @example configure money with a proc, the proc will be called with the object as an argument. This is equivalent to the example above
+    #   money :price, :currency => lambda {|o| o.currency}, :time => lambda{|o| o.created_at}
+    #
     def money *attributes
       
       options = attributes.last.is_a?(Hash) ? attributes.pop : {}
