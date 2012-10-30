@@ -100,7 +100,7 @@ module Exchange
       private
       
         # @private
-        # @macro [attach] install_operations
+        # @!macro [attach] install_operation
         #
         def install_operation op
           define_method op do |*precision|
@@ -109,7 +109,7 @@ module Exchange
         end
       
         # @private
-        # @macro [attach] base_operations
+        # @!macro [attach] base_operation
         #   @method $1(other)
         #   
         def base_operation op

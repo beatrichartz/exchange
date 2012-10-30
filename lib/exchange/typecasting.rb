@@ -46,8 +46,9 @@ module Exchange
   #
   module Typecasting
     
-    # @private
-    # @macro [attach] install_money_getters
+    # Installs a money getter
+    # @!macro [attach] install_money_getter
+    #   @method $1
     #
     def install_money_getter attribute, options={}
       
@@ -67,8 +68,9 @@ module Exchange
       
     end
     
-    # @private
-    # @macro [attach] install_money_setters
+    # Installs a money setter
+    # @!macro [attach] install_money_setter
+    #   @method $1(data)
     #
     def install_money_setter attribute, options={}
       define_method :"#{attribute}_with_exchange_typecasting=" do |data|
@@ -95,8 +97,8 @@ module Exchange
       alias_method :"#{attribute}#{setter}", :"#{attribute}_with_exchange_typecasting#{setter}"
     end
     
-    # @private
-    # @macro [attach] install_money_option_eval
+    # @!macro [attach] install_money_option_eval
+    #   @method evaluate_money_option
     #
     def install_money_option_eval
       define_method :evaluate_money_option do |option|
@@ -104,8 +106,8 @@ module Exchange
       end
     end
     
-    # @private
-    # @macro [attach] install_currency_error_tester
+    # @!macro [attach] install_currency_error_tester
+    #   @method test_for_currency_error
     #
     def install_currency_error_tester
       define_method :test_for_currency_error do |currency|
