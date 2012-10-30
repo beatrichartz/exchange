@@ -236,6 +236,8 @@ If you're afraid of mixed currency operations, just don't allow them
 
 === Caching Options  
 
+In Key/Value stores, exchange will cache the API files with a key starting with 'exchange_'
+
 Use Memory to cache the result (default). 
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
@@ -243,7 +245,7 @@ Use Memory to cache the result (default).
     }
   end
 
-Use Memcached to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
+Use Memcached to cache the result. 
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
       :subclass => :memcached,
@@ -252,7 +254,7 @@ Use Memcached to cache the result. Exchange will cache the API files with a key 
     }
   end
 
-Use Redis to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
+Use Redis to cache the result.
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
       :subclass => :redis,
@@ -261,7 +263,7 @@ Use Redis to cache the result. Exchange will cache the API files with a key star
     }
   end
 
-Use Rails to cache the result. Exchange will cache the API files with a key starting with 'exchange_'
+Use Rails to cache the result.
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
       :subclass => :rails
@@ -270,17 +272,18 @@ Use Rails to cache the result. Exchange will cache the API files with a key star
   
 === API Options
 
-Use the Xaviermedia API as the source of your conversion rates
+Use the Xaviermedia API
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.api = {
       :subclass => :xavier_media
     }
   end
 
-Use the open exchange rates Open Source API as a source of your conversion rates
+Use the open exchange rates Open Source API
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.api = {
-      :subclass => :open_exchange_rates
+      :subclass => :open_exchange_rates,
+      :app_id => "Your open exchange rates app id"
     }
   end
   
