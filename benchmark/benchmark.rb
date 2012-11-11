@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'benchmark'
 require 'bigdecimal'
 
@@ -6,7 +7,7 @@ class Helper
     begin
       require a_gem.to_s
       return true
-    rescue LoadError => e
+    rescue LoadError
       puts "You do not have #{a_gem} installed. gem install #{a_gem} to benchmark it\n\n"
       return false
     end
@@ -31,15 +32,15 @@ two = BigDecimal.new("4.234")
 3.times { results[:big_decimal] << Benchmark.realtime { operations.times { one * two } } }
 
 if helper.load_or_omit(:money)
-  Money.add_rate("USD", "CAD", 1.24515)
+  m = Money.us_dollar(50)
   results[:money] = []
-  3.times { results[:money] << Benchmark.realtime { operations.times { Money.us_dollar(50) * 0.29 } } }
+  3.times { results[:money] << Benchmark.realtime { operations.times { m * 0.29 } } }
 end
 
 if helper.load_or_omit(:exchange)
-  1.usd.to_cad #make the rate available in memory
+  m = 50.usd
   results[:exchange] = []
-  3.times { results[:exchange] << Benchmark.realtime { operations.times { 50.usd * 0.29 } } }
+  3.times { results[:exchange] << Benchmark.realtime { operations.times { m * 0.29 } } }
 end
 
 puts "#{operations} operations\n\n"

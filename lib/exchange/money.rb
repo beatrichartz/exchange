@@ -352,7 +352,7 @@ module Exchange
       # @version 0.6
       #
       def test_for_currency_mix_error other
-        raise CurrencyMixError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.kind_of?(Money) && other.currency != currency
+        raise CurrencyMixError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.is_a?(Money) && other.currency != currency
       end
       
       # Helper method to raise a no rate error for a given currency if no rate is given

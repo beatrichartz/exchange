@@ -59,7 +59,7 @@ describe "Exchange::ExternalAPI::OpenExchangeRates" do
       subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2).should == 10.38
     end
     it "should convert right when the year is the same, but the yearday is not" do
-      mock_api("https://openexchangerates.org/api/historical/#{Time.now.year}-0#{Time.now.month > 9 ? Time.now.month - 1 : Time.now.month + 1}-01.json?app_id=", fixture('api_responses/example_json_api.json'))
+      mock_api("https://openexchangerates.org/api/historical/#{Time.now.year}-#{'0' if Time.now.month < 11}#{Time.now.month > 9 ? Time.now.month - 1 : Time.now.month + 1}-01.json?app_id=", fixture('api_responses/example_json_api.json'))
       subject.convert(70, :sek, :usd, :at => Time.gm(Time.now.year,Time.now.month > 9 ? Time.now.month - 1 : Time.now.month + 1,1)).round(2).should == 10.38
     end
     it "should convert right when the yearday is the same, but the year is not" do
