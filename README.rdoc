@@ -40,7 +40,7 @@ Whereas
 Exchange uses BigDecimal in all its currency and conversion operations, so you will not be a likely victim for floating point inaccuracies. It even does implicitly convert counterparts of basic operations like (* / - +) to calculate your values safely:
 
   (50.in(:usd) * 0.29).round 0 #=> "USD 15.00"
-  (0.29 * 50.usd).round 0 #=> 15
+  (0.29 * 50.in(:usd)).round 0 #=> 15
   
 === BigDecimal? Sounds slow to me
 

@@ -73,7 +73,7 @@ module Exchange
     # Converts this instance of currency into another currency
     # @return [Exchange::Money] An instance of Exchange::Money with the converted number and the converted currency
     # @param [Symbol, String] other The currency to convert the number to
-    # @param [Hash] opts An options hash
+    # @param [Hash] options An options hash
     # @option [Time] :at The timestamp of the rate the conversion took place in
     # @example convert to 'chf'
     #   Exchange::Money.new(40,:usd).to(:chf)
