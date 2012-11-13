@@ -38,7 +38,7 @@ if helper.load_or_omit(:money)
 end
 
 if helper.load_or_omit(:exchange)
-  m = 50.usd
+  m = 50.in(:usd)
   results[:exchange] = []
   3.times { results[:exchange] << Benchmark.realtime { operations.times { m * 0.29 } } }
 end

@@ -32,12 +32,12 @@ describe "Exchange::Money" do
       currency.time.should == Time.gm(2012,9,9)
     end
   end
-  describe "convert_to" do
+  describe "to" do
     it "should be able to convert itself to other currencies" do
       mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)
-      subject.convert_to(:chf).value.round(2).should == 36.5
-      subject.convert_to(:chf).currency.should == :chf
-      subject.convert_to(:chf).should be_kind_of Exchange::Money
+      subject.to(:chf).value.round(2).should == 36.5
+      subject.to(:chf).currency.should == :chf
+      subject.to(:chf).should be_kind_of Exchange::Money
     end
   end
   describe "operations" do
@@ -324,7 +324,7 @@ describe "Exchange::Money" do
       let(:comp2) { Exchange::Money.new(40, :usd) }
       let(:comp3) { Exchange::Money.new(50, :eur) }
       let(:comp4) { Exchange::Money.new(45, :eur) }
-      let(:comp5) { Exchange::Money.new(50, :eur).to_usd }
+      let(:comp5) { Exchange::Money.new(50, :eur).to(:usd) }
       let(:comp6) { Exchange::Money.new(66.1, :usd, :at => Time.gm(2011,1,1)) }
       before(:each) do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
@@ -464,7 +464,7 @@ describe "Exchange::Money" do
     it "should be able to convert via to_currency to other currencies" do
       mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 6)
       {:chf => 36.5, :usd => 40.0, :dkk => 225.12, :sek => 269.85, :nok => 232.06, :rub => 1205.24}.each do |currency, value|
-        c = subject.send(:"to_#{currency}")
+        c = subject.to(currency)
         c.value.round(2).should == value
         c.currency.should == currency
       end
@@ -472,17 +472,17 @@ describe "Exchange::Money" do
     it "should be able to convert via to_currency to other currencies and use historic data" do
       mock_api("http://openexchangerates.org/api/historical/2011-10-09.json?app_id=", fixture('api_responses/example_json_api.json'), 6)
       {:chf => 36.5, :usd => 40.0, :dkk => 225.12, :sek => 269.85, :nok => 232.06, :rub => 1205.24}.each do |currency, value|
-        c = subject.send(:"to_#{currency}", :at => Time.gm(2011,10,9))
+        c = subject.to(currency, :at => Time.gm(2011,10,9))
         c.value.round(2).should == value
         c.currency.should == currency
       end
     end
     it "should use the own time if defined as historic to convert" do
       mock_api("http://openexchangerates.org/api/historical/2011-01-01.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-      5.eur(:at => Time.gm(2011,1,1)).to_usd.value.should == 5.eur.to_usd(:at => Time.gm(2011,1,1)).value
+      5.in(:eur, :at => Time.gm(2011,1,1)).to(:usd).value.should == 5.in(:eur).to(:usd, :at => Time.gm(2011,1,1)).value
     end
     it "should raise errors for currency conversions it does not have rates for" do
-      lambda { subject.to_ssp }.should raise_error(Exchange::NoRateError)
+      lambda { subject.to(:ssp) }.should raise_error(Exchange::NoRateError)
     end
     it "should pass on methods it does not understand to its number" do
       subject.to_f.should == 40

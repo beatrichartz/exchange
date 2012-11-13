@@ -19,9 +19,9 @@ Jeweler::Tasks.new do |gem|
   gem.license = "MIT"
   gem.summary = %Q{Simple Exchange Rate operations for your ruby app}
   gem.description = %Q{The Exchange Gem gives you easy access to currency functions directly on your Numbers. Imagine a conversion as easy as 
-    1.eur.to_usd
+    1.in(:eur).to(:usd)
   or even better 
-    1.eur.to_usd(:at => Time.now - 84600)
+    1.in(:eur).to(:usd, :at => Time.now - 84600)
   which gets you an exchange at the rates of yesterday.}
   gem.email = "exchange_gem@gmail.com"
   gem.authors = ["Beat Richartz"]

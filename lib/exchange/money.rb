@@ -45,7 +45,7 @@ module Exchange
     #   Exchange::Money.new(40, :usd) 
     #     #=> #<Exchange::Money @number=40.0 @currency=:usd @time=#<Time>>
     # @example Instantiate a money object of 40 US Dollars and convert it to Euro. It shows the conversion date and the original currency
-    #   Exchange::Money.new(40, :usd).to_eur(:at => Time.gm(2012,9,1)) 
+    #   Exchange::Money.new(40, :usd).to(:eur, :at => Time.gm(2012,9,1)) 
     #     #=> #<Exchange::Money @number=37.0 @currency=:usd @time=#<Time> @from=#<Exchange::Money @number=40.0 @currency=:usd>>
     #
     def initialize value, currency_arg=nil, opts={}, &block      
@@ -61,23 +61,13 @@ module Exchange
     
     # Method missing is used to handle conversions from one money object to another. It only handles currencies which are available in
     # the API class set in the configuration.
-    # @example Calls convert_to with 'chf'
-    #   Exchange::Money.new(40,:usd).to_chf
-    # @example Calls convert_to with 'sek' and :at => Time.gm(2012,2,2)
-    #   Exchange::Money.new(40,:nok).to_sek(:at => Time.gm(2012,2,2))
+    # @example convert to chf
+    #   Exchange::Money.new(40,:usd).to(:chf)    
+    # @example convert to sek at a given time
+    #   Exchange::Money.new(40,:nok).to(:sek, :at => Time.gm(2012,2,2))
     #
     def method_missing method, *args, &block
       value.send method, *args, &block
-    end
-    
-    ISO4217.currencies.each do |c|
-      define_method :"to_#{c}" do |*args|
-        if api_supports_currency?(c)
-          convert_to c, { :at => time }.merge(args.first || {})
-        else
-          raise_no_rate_error(c)
-        end
-      end
     end
     
     # Converts this instance of currency into another currency
@@ -86,13 +76,17 @@ module Exchange
     # @param [Hash] opts An options hash
     # @option [Time] :at The timestamp of the rate the conversion took place in
     # @example convert to 'chf'
-    #   Exchange::Money.new(40,:usd).convert_to('chf')
+    #   Exchange::Money.new(40,:usd).to(:chf)
     # @example convert to 'sek' at a specific rate
-    #   Exchange::Money.new(40,:nok).convert_to('sek', :at => Time.gm(2012,2,2))
+    #   Exchange::Money.new(40,:nok).to(:sek, :at => Time.gm(2012,2,2))
     #
-    def convert_to other, opts={}
-      opts[:from] = self
-      Money.new(api.new.convert(value, currency, other, opts), other, opts)
+    def to other, options={}
+      if api_supports_currency?(other)
+        opts = { :at => time, :from => self }.merge(options)
+        Money.new(api.new.convert(value, currency, other, opts), other, opts)
+      else
+        raise_no_rate_error(other)
+      end
     end
     
     class << self
@@ -116,7 +110,7 @@ module Exchange
           self.class_eval <<-EOV
             def #{op}(other)
               test_for_currency_mix_error(other)
-              new_value = value #{op} (other.kind_of?(Money) ? other.convert_to(self.currency, :at => other.time) : BigDecimal.new(other.to_s))
+              new_value = value #{op} (other.kind_of?(Money) ? other.to(self.currency, :at => other.time) : BigDecimal.new(other.to_s))
               Exchange::Money.new(new_value, currency, :at => time, :from => self)
             end
           EOV
@@ -253,7 +247,7 @@ module Exchange
       if is_same_currency?(other)
         other.round.value == self.round.value
       elsif is_currency?(other)
-        other.convert_to(currency, :at => other.time).round.value == self.round.value
+        other.to(currency, :at => other.time).round.value == self.round.value
       else
         value == other
       end
@@ -277,7 +271,7 @@ module Exchange
       if is_same_currency?(other)
         value <=> other.value
       elsif is_other_currency?(other)
-        value <=> other.convert_to(currency, :at => other.time).value
+        value <=> other.to(currency, :at => other.time).value
       else
         value <=> other
       end

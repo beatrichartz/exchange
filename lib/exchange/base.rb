@@ -2,7 +2,7 @@ module Exchange
   
   # The current version of the exchange gem
   #
-  VERSION = '0.9.0'
+  VERSION = '0.10.0'
   
   # The root installation path of the gem
   # @version 0.5
@@ -15,5 +15,11 @@ module Exchange
   # @since 0.1
   #
   NoRateError       = Class.new StandardError
+  
+  # The error that gets thrown if the given currency is not a currency
+  # @version 0.10
+  # @since 0.10
+  #
+  NoCurrencyError   = Class.new(ArgumentError)
   
 end

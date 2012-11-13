@@ -16,7 +16,7 @@ module Exchange
   #
   #   end
   #   
-  #   MyClass.find(1).update_attributes :price => 1.usd
+  #   MyClass.find(1).update_attributes :price => 1.in(:usd)
   #   MyClass.find(1).price #=> 0.77 EUR
   # 
   # @example The getter sets the currency automatically to the currency set in the definition (example in Ohm)
@@ -82,7 +82,7 @@ module Exchange
         elsif att.currency == data.currency
           send(attribute_setter, data.value)
         elsif att.currency != data.currency
-          send(attribute_setter, data.send(:"to_#{att.currency}").value)
+          send(attribute_setter, data.to(att.currency).value)
         end
       end
       exchange_typecasting_alias_method_chain attribute, '='
@@ -156,10 +156,6 @@ module Exchange
       #
       install_currency_error_tester
     end
-        
-    # Is raised when no currency is given for typecasting
-    #
-    NoCurrencyError = Class.new(ArgumentError)
     
   end
 
