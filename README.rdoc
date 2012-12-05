@@ -1,6 +1,6 @@
 = exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://gemnasium.com/beatrichartz/exchange.png" alt="Dependency Status" />}[https://gemnasium.com/beatrichartz/exchange] {<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/beatrichartz/exchange]
 
-The Exchange Gem gives you easy access to currency functions directly on your Numbers. {It is tested against}[http://travis-ci.org/beatrichartz/exchange]: ruby 1.9, ruby 1.8.7, ree, rubinius (1.8 and 1.9 mode) and jruby 
+The Exchange Gem gives you easy access to currency functions directly on your Numbers. {It is tested against}[http://travis-ci.org/beatrichartz/exchange]: ruby 1.9, ruby 1.8.7, ree and rubinius (1.8 and 1.9 mode)
 
 You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whatever Framework you like.
 
