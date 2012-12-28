@@ -28,6 +28,8 @@ body {
   background-position: left center;
   width: 100%;
   height: 100%;
+  left: 0;
+  top: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -63,12 +65,12 @@ a {
 }
 
 a:hover, a:visited, a:active {
-  color:#506650;
+  color:#FFF;
 }
 
 a small {
   font-size:11px;
-  color:#506650;
+  color:#FFF;
   margin-top:-0.6em;
   display:block;
 }
@@ -275,6 +277,69 @@ footer {
   position:fixed;
   bottom: 0px;
   padding: 3%;
+}
+
+#banner{
+	height: 239px;
+	width: 239px;
+	overflow:hidden;
+	padding: 0;
+	margin: 0;
+	position:fixed;
+	right: 0px;
+	top: 0px;
+}
+		
+#banner a {
+			
+	display: block;
+	width: 230px;
+	font-size: 18px;
+	font-family: regular, sans serif;
+	background-color: #FFF;
+	color: rgb(147,111,27);
+	word-spacing: 2px;
+	text-decoration: none;
+	padding: 10px 20px 10px 30px;
+	text-align: center;
+  position: relative;
+  top: -42px;
+  left: 82px;
+			
+	-moz-transform-origin: 0 0 ;
+	-moz-transform:rotate(45deg);
+	-moz-box-shadow:    1px 1px 5px 1px rgba(0,0,0,0.2);
+			
+	-webkit-transform-origin: 0 0 ;	
+	-webkit-transform:rotate(45deg);
+	-webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
+			
+	-ms-transform-origin: 0 0 ;	
+	-ms-transform:rotate(45deg);
+	-ms-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
+			
+	transform-origin: 0 0 ;	
+	transform:rotate(45deg);
+	box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
+			
+	background-image: linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
+	background-image: -o-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
+	background-image: -moz-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
+	background-image: -webkit-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
+	background-image: -ms-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
+			
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.03, #FFF),
+		color-stop(0.05, rgb(147,111,27)),
+		color-stop(0.07, #FFF),
+		color-stop(0.93, #FFF),
+		color-stop(0.95, rgb(147,111,27)),
+		color-stop(0.97, #FFF)
+	);	
+			
 }
 
 @media print, screen and (max-width: 960px) {
