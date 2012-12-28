@@ -49,14 +49,19 @@ h1 {
   color: #222;
 }
 
-h1 a {
+#badges {
+  margin: 1em 0;
+  width: 400px;
+}
+
+#badges a {
   vertical-align: top;
   display: inline-block;
   margin-right: 7px;
   line-height: 36px;
 }
 
-h1 a img {
+#badges a img {
   vertical-align: middle;
 }
 
