@@ -2,7 +2,7 @@ module Exchange
   
   # The current version of the exchange gem
   #
-  VERSION = '0.10.0'
+  VERSION = '0.10.1'
   
   # The root installation path of the gem
   # @version 0.5

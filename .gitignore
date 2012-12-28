@@ -11,6 +11,9 @@ rdoc
 doc
 .yardoc
 
+# the gem binary
+*.gem
+
 # bundler
 .bundle
 *.rdb
