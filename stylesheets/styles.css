@@ -1,54 +1,107 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+@font-face {
+    font-family: 'regular';
+    src: url('../fonts/typo-regular.eot');
+    src: url('../fonts/typo-regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/typo-regular.woff') format('woff'),
+         url('../fonts/typo-regular.ttf') format('truetype'),
+         url('../fonts/typo-regular.svg#typoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
 
 body {
-  padding:50px;
-  background-image: url('../images/money.jpg');
-  font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#777;
-  font-weight:300;
+  font:18px/1.5 regular;
+  color:#222;
+  margin: 0;
+  padding: 0;
+  letter-spacing: -0.05em;
+  font-weight:400;
+  text-rendering: optimizelegibility;
+}
+
+.background {
+  position: fixed;
+  z-index: -1;
+  background-image: url(../images/bg.jpg);
+  background-size: 250%;
+  background-position: left center;
+  width: 100%;
+  height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: regular;
+  font-weight: 700;
+  font-style: normal;
   color:#222;
-  margin:0 0 20px;
+  margin:0 0 0.35em 0;
+}
+
+h2, h3, h4, h5, h6 {
+  font-size: 36px;
+}
+
+h1 {
+  font-size: 36px;
+  color: #222;
 }
 
 p, ul, ol, table, pre, dl {
-  margin:0 0 20px;
+  max-width: 600px;
+  margin:0 0 1em;
 }
 
 h1, h2, h3 {
   line-height:1.1;
 }
 
-h1 {
-  font-size:28px;
-}
-
-h2 {
-  color:#393939;
-}
-
-h3, h4, h5, h6 {
-  color:#494949;
-}
-
 a {
-  color:#39c;
+  color: #84AE84;
   font-weight:400;
   text-decoration:none;
 }
 
+a:hover, a:visited, a:active {
+  color:#506650;
+}
+
 a small {
   font-size:11px;
-  color:#777;
+  color:#506650;
   margin-top:-0.6em;
   display:block;
 }
 
 .wrapper {
-  width:860px;
+  width:100%;
+  max-width: 1440px;
   margin:0 auto;
+}
+
+
+.third, .two_third {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.third {
+  float: left;
+  width: 25%;
+  padding: 3%;
+  margin-right: 1%;
+}
+
+.two_third {
+  width: 60%;
+  padding: 3%;
+  background: rgba(11,11,11,0.92);
+  float: right;
+  color: #CCC;
+}
+
+.two_third h3 {
+  color: #CCC;
 }
 
 blockquote {
@@ -59,28 +112,54 @@ blockquote {
 }
 
 code, pre {
-  font-family:Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
-  color:#333;
-  font-size:12px;
+  font-family: "source-code-pro", Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
+  color:#BBB;
+  font-size:15px;
 }
 
-pre {
-  padding:8px 15px;
-  background: #f8f8f8;  
-  border-radius:5px;
-  border:1px solid #e5e5e5;
+.bash.functions, .ruby.color2 {
+  color: rgb(180,230,179);
+}
+
+.ruby.color1 {
+  color: #E6B4CD;
+}
+
+.ruby.constants {
+  color: #998270;
+}
+
+.ruby.comments {
+  color: #777;
+}
+
+.ruby.keyword {
+  color: #7AACB3;
+}
+
+.ruby.string {
+  color: #594C41;
+}
+
+div.ruby, div.bash {
+  padding:0.35em 40px;
+  background: rgba(255,255,255,0.04);
+  border-top: 1px dotted rgba(255,255,255,0.04);
+  border-bottom: 1px dotted rgba(255,255,255,0.04);
   overflow-x: auto;
+  margin: 0 -40px 1em -40px;
 }
 
 table {
   width:100%;
   border-collapse:collapse;
+  padding: 0;
+  margin: 0;
 }
 
 th, td {
   text-align:left;
-  padding:5px 10px;
-  border-bottom:1px solid #e5e5e5;
+  padding: 0;
 }
 
 dt {
@@ -97,12 +176,23 @@ img {
 }
 
 header {
-  width:270px;
+  width:27%;
   float:left;
   position:fixed;
 }
 
+header a, header a:hover, header a:visited, header a:active {
+  color: #222;
+}
+
 header ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 300px;
+}
+
+/*header ul {
   list-style:none;
   height:40px;
   
@@ -137,14 +227,14 @@ header ul a {
   text-align:center;
   padding-top:6px;
   height:40px;
-}
+}*/
 
 strong {
   color:#222;
   font-weight:700;
 }
 
-header ul li + li {
+/*header ul li + li {
   width:88px;
   border-left:1px solid #fff;
 }
@@ -159,11 +249,13 @@ header ul a strong {
   display:block;
   color:#222;
 }
-
+*/
 section {
-  width:500px;
-  float:right;
-  padding-bottom:50px;
+  padding:2em 0 0;
+}
+
+#about {
+  padding-top: 0;
 }
 
 small {
@@ -181,7 +273,8 @@ footer {
   width:270px;
   float:left;
   position:fixed;
-  bottom:50px;
+  bottom: 0px;
+  padding: 3%;
 }
 
 @media print, screen and (max-width: 960px) {

@@ -13,56 +13,215 @@
     <![endif]-->
   </head>
   <body>
+    <div class="background"></div>
     <div class="wrapper">
-      <header>
-        <h1>Exchange</h1>
-        <p>Let the money flow.</p>
+      <div class="third">
+        <header>
+          <h1>Exchange</h1>
+          <ul class="links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#basics">Basics</a></li>
+            <li><a href="#conversion">Conversion</a></li>
+            <li><a href="#rounding">Rounding</a></li>
+            <li><a href="#arithmetics">Arithmetics</a></li>
+            <li><a href="#comparison">Comparing and Sorting</a></li>
+            <li><a href="#safe">Safe Operations</a></li>
+            <li><a href="#typecasting">Typecasting Money</a></li>
+            <li><a href="#apis">Conversion APIs</a></li>
+            <li><a href="#cache">Caching</a></li>
+            <li><a href="#configuration">Configuring Exchange</a></li>
+            <li><a href="#contributing">Contributing</a></li>
+          </ul>
 
+          <p class="view"><br/>External Links</p>
+          <ul><li><a href="https://github.com/beatrichartz/exchange">Source Code</a></li>
+          <li><a href="http://rubydoc.info/github/beatrichartz/exchange">Full Documentation</a></li>
+          <li><a href="https://github.com/beatrichartz/exchange/issues">Issue Tracker</a></li>
+          <li><a href="http://rubygems.org/gems/exchange">Exchange on Rubygems</a></li></ul>
 
-        <p class="view"><a href="https://github.com/beatrichartz/exchange">Source Code</a></p>
-
-      </header>
-      <section>
-        <h3>What it is</h3>
-
-<p>Exchange is a library helping you to deal with money in your ruby application. It installs an intuitive DSL on all Numeric Ruby instances to instantiate currencies, and helps you deal with exchanging currencies (even at historic rates), ISO4217-compatible currency formatting, preventing floating point errors, and much more (scroll down to features to read about it)</p>
-
-<h3>How to</h3>
-<pre><code class="ruby">gem "exchange"</code></pre>
-<p>in your gemfile and</p>
-<pre><code class="bash">$ bundle install exchange</code></pre>
-<p>or simply
-  <pre><code class="bash">$ gem install exchange</code></pre>
-</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
+        </header>
+      </div>
+      <div class="two_third">
+        <section id="about">
+          <p>Exchange is a library helping you to deal with money in your ruby application. It features an intuitive DSL, Measures to prevent Floating Point Errors, Currency Conversion, Typecasting and other niceties. It's goal is to make your life easier by dealing with money in its natural, decimal format and relieving you of most of the pitfalls involved in money handling.</p>
+        </section>
+        <section id="installation">
+          <h3>Installation</h3>
+          <pre class="brush: bash">$ gem install exchange</pre>
+        </section>
+        <section id="basics">
+          <h3>Basics</h3>
+          <p>Instantiate a currency</p>
+          <pre class="brush: ruby">1.in(:usd)</pre>
+          <p>Convert a currency to another</p>
+          <pre class="brush: ruby">1.2.in(:eur).to(:jpy)</pre>
+          <p>to_s converts the currency to a string in an ISO4217-compatible format, complete with the right precision.</p>
+          <pre class="brush: ruby">220.2.in(:jpy).to_s #=> "JPY 220"</pre>
+          <p>Apply any method you would apply to a normal instance of numeric. Method missing is routed to the currency value.</p>
+          <pre class="brush: ruby">1.2.in(:eur).zero?</pre>
+        </section>
+        <section id="conversion">
+          <h3>Conversion</h3>
+          <p>Convert at today's rate</p>
+          <pre class="brush: ruby">1.in(:usd).to(:eur)</pre>
+          <p>Convert at yesterday's rate</p>
+          <pre class="brush: ruby">1.2.in(:eur).to(:jpy, at: Time.now - 86400)</pre>
+          <p>Exchange keeps a the instance the currency was converted from for information purposes</p>
+          <pre class="brush: ruby">1.in(:usd).to(:eur).from == 1.in(:usd) #=> true</pre>
+        </section>
+        <section id="rounding">
+          <h3>Rounding</h3>
+          <p>Round, ceil or floor without an argument always rounds to the precision defined by ISO4217. Apply an argument to get rounding to a certain amount of decimals.</p>
+          <pre class="brush: ruby">10.345.in(:usd).round #=> 10.35
+10.345.in(:usd).round(0) #=> 10</pre>
+        </section>
+        <section id="arithmetics">
+          <h3>Arithmetics</h3>
+          <p>Use basic arithmetic operations with different types of currencies. If two different currencies are used, the currency right of the expression is converted to the currency left of the expression.</p>
+          <pre class="brush: ruby">1.in(:usd) + 3.in(:usd)
+5.in(:usd) - 3.in(:eur)
+1000.in(:jpy) / 30.in(:usd)
+7.in(:jpy) * 3.in(:usd)</pre>
+        </section>
+        <section id="comparison">
+          <h3>Comparing and Sorting</h3>
+          <p>Currencies get converted implicitly, at the time defined when instantiated</p>
+          <pre class="brush: ruby">2.in(:eur) > 2.in(:usd) #=> true
+2.in(:nok) < 2.in(:sek) #=> false
+50.in(:eur, :at => '2011-1-1') == 50.in(:sek) #=> false</pre>
+<p>Sorting also implicitly converts the currencies</p>
+<pre class="brush: ruby">[5.in(:eur), 4.in(:usd), 4.in(:chf, :at => '2010-01-01')].sort</pre>
+        </section>
+        <section id="safe">
+          <h3>Safe operations</h3>
+          <p>Operations with money are safeguarded against most floating point errors through exchange. Upon instantiation of a currency, Exchange always converts the value to a big decimal. Additional Measures are implemented when Exchange::Money instances are used with floats in normal operations. Although BigDecimal operations are a bit slower than Float operations, the Exchange gem performs operations very efficiently. Float Operations not involving money are left untouched.</p>
+          <p>Floating Point errors in ruby</p>
+          <pre class="brush: ruby">(0.29 * 50).round(0) #=> 14
+(1.0e+25 - BigDecimal.new("9999999999999999900000000")) #=> 0</pre>
+          <p>Correct operations with instances of Exchange::Money</p>
+          <pre class="brush: ruby">(50.in(:usd) * 0.29).round(0) #=> "USD 15.00"
+(0.29 * 50.in(:usd)).round(0) #=> 15
+(1.0e+25 - BigDecimal.new("9999999999999999900000000").in(:usd)).round #=> 100000000</pre>
+        </section>
+        <section id="typecasting">
+          <h3>Typecasting</h3>
+          <p>Exchange features a typecasting module for you to use with your ruby classes. Using it is very easy:</p>
+          <pre class="brush: ruby">class Article
+  # make the class method available
+  #
+  extend Exchange::Typecasting
+  
+  # any kind of attribute will work, let's have attr_accessor for demo purposes
+  #
+  attr_accessor :price
+    
+  # Install the typecasting for price
+  #
+  money :price, currency: :currency
+    
+  # let's say you have currency set in a unique place
+  #
+  def currency
+    manager.currency
+  end
+end</pre>
+          <p>Now, this will work:</p>
+          <pre class="brush: ruby">a = Article.new
+a.manager = Manager.new(currency: :eur)
+a.price = 2
+a.price #=> 2.in(:eur)</pre>
+          <p>And also this; Exchange implicitly converts to the used currency if another than the one set is used in the assignment:</p>
+          <pre class="brush: ruby">a.price = 3.in(:usd)
+a.price == 3.in(:usd).to(:eur) #=> true
+          </pre>
+          <p><a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/Typecasting" target="_blank">More in-depth info about typecasting</a></p>
+        </section>
+        <section id="apis">
+          <h3>Conversion Rate APIs</h3>
+          <p>Exchange has 3 APIs built in for you to choose from, or you can easily build a custom API Extension</p>
+          <ul>
+            <li><a href="http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057" target="_blank">Xaviermedia (XML API)</a></li>
+            <li><a href="http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html" target="_blank">European Central Bank</a></li>
+            <li><a href="http://openexchangerates.org/" target="_blank">Open Exchange Rates API (Free Plan supported)</a></li>
+          </ul>
+          <p>To connect to a custom / private API, writing a small class is needed: <a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI" target="_blank">How to connect to a custom / private API using Exchange</a></p>
+        </section>
+        <section id="cache">
+          <h3>Caching Exchange Rates</h3>
+          <p>Exchange generally stores your exchange rates in memory using instance variables of a singleton instance. For more persistent caching, you can also use 3 other provided caching solutions</p>
+          <ul>
+            <li>Memcached via the Dalli gem</li>
+            <li>Redis via the Redis Gem</li>
+            <li>Rails cache</li>
+          </ul>
+          <p>Please note that this gem does not list the any of these gems as explicit dependencies. If configured to use one of these caching solutions, Exchange tries to load the appropriate gem / constants and produces an error if it fails to do so / installation of the gem is needed.</p>
+          <p>You can also write a caching extension supporting your custom caching solution: <a target="_blank" href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache">How to write your own caching extension</a></p>
+        </section>
+        <section id="configuration">
+          <h3>Configuring</h3>
+          <p>You can configure Exchange to a number of options. Configuration is a setter on the exchange module. This allows you to have different configurations, which you can then assign easily to exchange. This is how to define a configuration:</p>
+          <pre class="brush: ruby">config = Exchange::Configuration.new do |c|
+  c.allow_mixed_operations = false
+  c.cache = {
+    :subclass => :memcached,
+    :host     => 'yourhost',
+    :port     => 2434, #yourport
+  }
+end</pre>
+    <p>And this is how to assign it as the current one</p>
+      <pre class="brush: ruby">Exchange.configuration = config</pre>
+      <p>These are the options available</p>
+      <pre class="brush: ruby">:cache (Takes the cache options as a hash, the options are:)
+  :subclass 
+    (default :memory, takes an underscored symbol 
+     which gets constantized: :redis, :your_cache)
+  :host (default '127.0.0.1')
+  :port (default 11211)
+  :expire (default :daily)
+  
+:api (Takes the conversion api as a hash, the options are:)
+  :subclass 
+    (default :xavier_media, takes an underscored symbol 
+     which gets constantized: :open_exchange_rates, :your_api)
+  :retries (default 5)
+  :app_id (default nil)
+  :protocol (default :http)
+    
+:allow_mixed_operations 
+  (default true, 
+    if set to false, operations involving multiple currencies 
+    produce errors)
+</pre>
+        </section>
+        <section id="contributing">
+          <h3>Contributing</h3>
+          <p>Please note that only open source APIs can be accepted as contributions to this gem. Private / Premium APIs have to be written as your own extension and will not be added to the gem code.
+          </p>
+          <ul>
+            <li>Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.</li>
+            <li>Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.</li>
+            <li>Fork the project.</li>
+            <li>Start a feature/bugfix branch.</li>
+            <li>Commit and push until you are happy with your contribution.</li>
+            <li>Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.</li>
+            <li>Make sure to add documentation for it. This is important so everyone else can see what your code can do.</li>
+            <li>Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.</li></ul>
+        </section>
+      </div>
       <footer>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+        <p><small>Hosted on GitHub Pages</small></p>
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+    <script src="javascripts/shCore.js"></script>
+    <script src="javascripts/shBrushRuby.js"></script>
+    <script src="javascripts/shBrushBash.js"></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.defaults.toolbar = false;
+      SyntaxHighlighter.defaults.gutter  = false;
+      SyntaxHighlighter.highlight();
+    </script>
+    <script src="http://use.edgefonts.net/source-code-pro:n4.js"></script>
   </body>
 </html>
