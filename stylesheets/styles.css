@@ -49,6 +49,19 @@ h1 {
   color: #222;
 }
 
+h1 a {
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 7px;
+  line-height: 36px;
+}
+
+h1 a img {
+  vertical-align: middle;
+}
+
+
+
 p, ul, ol, table, pre, dl {
   max-width: 600px;
   margin:0 0 1em;
