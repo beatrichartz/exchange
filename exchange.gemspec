@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.require_paths     = ["lib"]
   
   s.add_dependency             "nokogiri", ">= 1.0.0"
+  s.add_development_dependency "json", ">= 1.0.0"
   s.add_development_dependency "yard", ">= 0.7.4"
   s.add_development_dependency "bundler", ">= 1.0.0"
 end
