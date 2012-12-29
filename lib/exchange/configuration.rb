@@ -84,7 +84,7 @@ module Exchange
                     :host => nil,
                     :port => nil
                   },
-                  :allow_mixed_operations => true
+                  :implicit_conversions => true
                 }
     
     # Initialize a new configuration. Takes a hash and/or a block. Lets you easily set the configuration the way you want it to be
@@ -93,10 +93,10 @@ module Exchange
     # @param [Hash] configuration The configuration as a hash
     # @param [Proc] block A block to yield the configuration with
     # @example Define the configuration with a hash
-    #   Exchange::Configuration.new(:allow_mixed_operations => false, :api => {:subclass => :open_exchange_rates, :retries => 2})
+    #   Exchange::Configuration.new(:implicit_conversions => false, :api => {:subclass => :open_exchange_rates, :retries => 2})
     # @example Define the configuration with a block
     #   Exchange::Configuration.new do |c|
-    #     c.allow_mixed_operations = false
+    #     c.implicit_conversions = false
     #     c.cache = {
     #       :subclass => Exhange::Cache::Redis,
     #       :expire => :hourly
@@ -115,28 +115,28 @@ module Exchange
     def reset
       api.reset
       cache.reset
-      self.allow_mixed_operations = DEFAULTS[:allow_mixed_operations]
+      self.implicit_conversions = DEFAULTS[:implicit_conversions]
     end
     
-    # Getter for the mixed operations configuration. If set to true, operations with mixed currencies will not raise errors
-    # If set to false, mixed operations will raise errors
+    # Getter for the implicit Conversions configuration. If set to true, implicit conversions will not raise errors
+    # If set to false, implicit conversions will raise errors
     # @since 0.6
     # @version 0.6
-    # @return [Boolean] True if mixed operations are allowed, false if not
+    # @return [Boolean] True if implicit conversions are allowed, false if not
     #
-    def allow_mixed_operations
-      @config[:allow_mixed_operations]
+    def implicit_conversions
+      @config[:implicit_conversions]
     end
     
-    # Setter for the mixed operations configuration. If set to true, operations with mixed currencies will not raise errors
-    # If set to false, mixed operations will raise errors
+    # Setter for the implicit conversions configuration. If set to true, implicit conversions will not raise errors
+    # If set to false, implicit conversions will raise errors
     # @since 0.6
     # @version 0.6
     # @param [Boolean] data The configuration to set
     # @return [Boolean] The configuration set
     #
-    def allow_mixed_operations= data
-      @config[:allow_mixed_operations] = data
+    def implicit_conversions= data
+      @config[:implicit_conversions] = data
     end
         
     # Setter for the api configuration.

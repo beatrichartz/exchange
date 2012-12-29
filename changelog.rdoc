@@ -1,5 +1,8 @@
 = Changes to Exchange
 
+== 0.11.0
+- Better implementation for preventing implicit conversions, if wished for: Now all operations including comparisons throw errors when implicit conversions are not allowed and currencies are to be converted implicitly.
+
 == 0.10.0
 - Changed the gem API to be less invasive in the numeric classes. The deprecated API had issues with three letter methods defined in active support, mainly the try method. The new API has just two methods, in(currency) and to(currency). There are no known conflicts at this time.
 

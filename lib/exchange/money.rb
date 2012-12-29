@@ -169,11 +169,11 @@ module Exchange
     # Add value to the currency
     # @param [Integer, Float, Exchange::Money] other The value to be added to the currency. If an Exchange::Money, it is converted to the instance's currency and then the converted value is added.
     # @return [Exchange::Money] The currency with the added value
-    # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
+    # @raise [ImplicitConversionError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange.configuration.allow_mixed_operations = false
+    #   Exchange.configuration.implicit_conversions = false
     #   Exchange::Money.new(20,:nok) + Exchange::Money.new(20,:sek)
-    #     #=> #<CurrencyMixError "You tried to mix currencies">
+    #     #=> #<ImplicitConversionError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
     #   Exchange::Money.new(20,:nok) + Exchange::Money.new(20,:sek)
     #     #=> #<Exchange::Money @value=37.56 @currency=:nok>
@@ -185,11 +185,11 @@ module Exchange
     # Subtract a value from the currency
     # @param [Integer, Float, Exchange::Money] other The value to be subtracted from the currency. If an Exchange::Money, it is converted to the instance's currency and then subtracted from the converted value.
     # @return [Exchange::Money] The currency with the added value
-    # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
-    # @example Configuration disallows mixed operations
-    #   Exchange.configuration.allow_mixed_operations = false
+    # @raise [ImplicitConversionError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
+    # @example Configuration disallows implicit conversions
+    #   Exchange.configuration.implicit_conversions = false
     #   Exchange::Money.new(20,:nok) - Exchange::Money.new(20,:sek)
-    #     #=> #<CurrencyMixError "You tried to mix currencies">
+    #     #=> #<ImplicitConversionError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
     #   Exchange::Money.new(20,:nok) - Exchange::Money.new(20,:sek)
     #     #=> #<Exchange::Money @value=7.56 @currency=:nok>
@@ -201,11 +201,11 @@ module Exchange
     # Multiply a value with the currency
     # @param [Integer, Float, Exchange::Money] other The value to be multiplied with the currency. If an Exchange::Money, it is converted to the instance's currency and multiplied with the converted value.
     # @return [Exchange::Money] The currency with the multiplied value
-    # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
+    # @raise [ImplicitConversionError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange.configuration.allow_mixed_operations = false
+    #   Exchange.configuration.implicit_conversions = false
     #   Exchange::Money.new(20,:nok) * Exchange::Money.new(20,:sek)
-    #     #=> #<CurrencyMixError "You tried to mix currencies">
+    #     #=> #<ImplicitConversionError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
     #   Exchange::Money.new(20,:nok) * Exchange::Money.new(20,:sek)
     #     #=> #<Exchange::Money @value=70.56 @currency=:nok>
@@ -217,11 +217,11 @@ module Exchange
     # Divide the currency by a value
     # @param [Integer, Float, Exchange::Money] other The value to be divided by the currency. If an Exchange::Money, it is converted to the instance's currency and divided by the converted value.
     # @return [Exchange::Money] The currency with the divided value
-    # @raise [CurrencyMixError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
+    # @raise [ImplicitConversionError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
     # @example Configuration disallows mixed operations
-    #   Exchange.configuration.allow_mixed_operations = false
+    #   Exchange.configuration.implicit_conversions = false
     #   Exchange::Money.new(20,:nok) / Exchange::Money.new(20,:sek)
-    #     #=> #<CurrencyMixError "You tried to mix currencies">
+    #     #=> #<ImplicitConversionError "You tried to mix currencies">
     # @example Configuration allows mixed operations (default)
     #   Exchange::Money.new(20,:nok) / Exchange::Money.new(20,:sek)
     #     #=> #<Exchange::Money @value=1.56 @currency=:nok>
@@ -241,12 +241,13 @@ module Exchange
     # @example Compare a currency with a number, the value of the currency will get compared
     #   Exchange::Money.new(35, :usd) == 35 #=> true
     # @since 0.1
-    # @version 0.6
+    # @version 0.11
     #
     def == other
       if is_same_currency?(other)
         other.round.value == self.round.value
-      elsif is_currency?(other)
+      elsif is_other_currency?(other)
+        test_for_currency_mix_error(other)
         other.to(currency, :at => other.time).round.value == self.round.value
       else
         value == other
@@ -258,7 +259,7 @@ module Exchange
     # @param [Whatever you want to throw at it] other The counterpart to compare
     # @return [Fixed] a number which can be used for sorting
     # @since 0.3
-    # @version 0.6
+    # @version 0.11
     # @todo which historic conversion should be used when two are present?
     # @example Compare two currencies in terms of value
     #   Exchange::Money.new(40, :usd) <=> Exchange::Money.new(28, :usd) #=> -1
@@ -271,6 +272,7 @@ module Exchange
       if is_same_currency?(other)
         value <=> other.value
       elsif is_other_currency?(other)
+        test_for_currency_mix_error(other)
         value <=> other.to(currency, :at => other.time).value
       else
         value <=> other
@@ -341,12 +343,12 @@ module Exchange
       
       # Test if another currency is used in an operation, and if so, if the operation is allowed
       # @param [Numeric, Exchange::Money] other The counterpart in the operation
-      # @raise [CurrencyMixError] an error if mixing currencies is not allowed and currencies where mixed
+      # @raise [ImplicitConversionError] an error if mixing currencies is not allowed and currencies where mixed
       # @since 0.6
       # @version 0.6
       #
       def test_for_currency_mix_error other
-        raise CurrencyMixError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.allow_mixed_operations && other.is_a?(Money) && other.currency != currency
+        raise ImplicitConversionError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.implicit_conversions && other.is_a?(Money) && other.currency != currency
       end
       
       # Helper method to raise a no rate error for a given currency if no rate is given
@@ -361,8 +363,8 @@ module Exchange
   
   end
   
-  # The error that will get thrown when currencies get mixed up in base operations
+  # The error that will get thrown when implicit conversions take place and are not allowed
   #
-  CurrencyMixError = Class.new(ArgumentError)
+  ImplicitConversionError = Class.new(StandardError)
   
 end

@@ -231,11 +231,11 @@ The options available are
     :app_id (default nil)                     The app id to use with your api request
     :protocol (default :http)                 The protocol to use with the request
     
-  :allow_mixed_opterations (default true)   If set to false, Operations with with different currencies raise errors.
+  :implicit_conversions (default true)      If set to false, Operations with with different currencies raise errors.
 
-If you're afraid of mixed currency operations, just don't allow them
-  Exchange.configuration.allow_mixed_operations = false
-  1.in(:usd) + 1.in(:eur)                                 #=> MixedCurrencyError
+If you want to maintain control over when a currency is converted, turn implicit conversions off
+  Exchange.configuration.implicit_conversions = false
+  1.in(:usd) + 1.in(:eur)                                 #=> raises ImplicitConversionDenied
 
 === Caching Options  
 
