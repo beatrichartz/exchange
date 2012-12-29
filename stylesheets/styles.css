@@ -12,7 +12,7 @@
 
 body {
   font:18px/1.5 regular;
-  color:#222;
+  color: rgb(147,111,27);
   margin: 0;
   padding: 0;
   letter-spacing: -0.05em;
@@ -23,9 +23,19 @@ body {
 .background {
   position: fixed;
   z-index: -1;
-  background-image: url(../images/bg.jpg);
-  background-size: 250%;
-  background-position: left center;
+  background-image: url(../images/bg2.jpg);
+  background-size: 200%;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.overdub {
+  position: fixed;
+  z-index: -1;
+  background-color: rgba(255,255,255,0.77);
   width: 100%;
   height: 100%;
   left: 0;
@@ -36,7 +46,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: regular;
   font-weight: 700;
   font-style: normal;
-  color:#222;
+  color: rgb(147,111,27);
   margin:0 0 0.35em 0;
 }
 
@@ -46,7 +56,7 @@ h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 36px;
-  color: #222;
+  color: rgb(147,111,27);
 }
 
 #badges {
@@ -77,7 +87,7 @@ h1, h2, h3 {
 }
 
 a {
-  color: #84AE84;
+  color: rgb(147,111,27);
   font-weight:400;
   text-decoration:none;
 }
@@ -113,15 +123,16 @@ a small {
 }
 
 .two_third {
-  width: 60%;
+  width: 45%;
   padding: 3%;
-  background: rgba(11,11,11,0.92);
-  float: right;
-  color: #CCC;
+  background: rgba(255,255,255,1);
+  border-left: 3px solid rgb(147,111,27);
+  border-right: 3px solid rgb(147,111,27);
+  color: rgb(147,111,27);
 }
 
 .two_third h3 {
-  color: #CCC;
+  color: rgb(147,111,27);
 }
 
 blockquote {
@@ -133,7 +144,7 @@ blockquote {
 
 code, pre {
   font-family: "source-code-pro", Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal;
-  color:#BBB;
+  color:rgb(147,111,27);
   font-size:15px;
 }
 
@@ -145,12 +156,16 @@ code, pre {
   color: #E6B4CD;
 }
 
+.ruby.plain {
+  color: rgba(147,111,27,1);
+}
+
 .ruby.constants {
-  color: #998270;
+  color: rgba(147,111,27,1);
 }
 
 .ruby.comments {
-  color: #777;
+  color: #AAA;
 }
 
 .ruby.keyword {
@@ -158,14 +173,14 @@ code, pre {
 }
 
 .ruby.string {
-  color: #594C41;
+  color: #DDD;
 }
 
 div.ruby, div.bash {
   padding:0.35em 40px;
-  background: rgba(255,255,255,0.04);
-  border-top: 1px dotted rgba(255,255,255,0.04);
-  border-bottom: 1px dotted rgba(255,255,255,0.04);
+  background: rgba(147,111,27,0.05);
+  //border-top: 2px dotted rgba(147,111,27,1);
+  //border-bottom: 2px dotted rgba(147,111,27,1);
   overflow-x: auto;
   margin: 0 -40px 1em -40px;
 }
@@ -183,12 +198,12 @@ th, td {
 }
 
 dt {
-  color:#444;
+  color:rgb(147,111,27);
   font-weight:700;
 }
 
 th {
-  color:#444;
+  color:rgb(147,111,27);;
 }
 
 img {
@@ -202,7 +217,7 @@ header {
 }
 
 header a, header a:hover, header a:visited, header a:active {
-  color: #222;
+  color: rgb(147,111,27);
 }
 
 header ul {
@@ -340,11 +355,11 @@ footer {
 	transform:rotate(45deg);
 	box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
 			
-	background-image: linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
-	background-image: -o-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
-	background-image: -moz-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
-	background-image: -webkit-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
-	background-image: -ms-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 7%, #FFF 93%, rgb(147,111,27) 95%, #FFF 97%);
+	background-image: linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
+	background-image: -o-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
+	background-image: -moz-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
+	background-image: -webkit-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
+	background-image: -ms-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
 			
 	background-image: -webkit-gradient(
 		linear,
