@@ -35,7 +35,7 @@ body {
 .overdub {
   position: fixed;
   z-index: -1;
-  background-color: rgba(255,255,255,0.77);
+  background-color: rgba(255,255,255,0.9);
   width: 100%;
   height: 100%;
   left: 0;
@@ -93,7 +93,7 @@ a {
 }
 
 a:hover, a:visited, a:active {
-  color:#FFF;
+  color: rgb(127,91,7);
 }
 
 a small {
