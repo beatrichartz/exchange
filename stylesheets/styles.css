@@ -206,8 +206,6 @@ code, pre {
 div.ruby, div.bash {
   padding:0.35em 42px;
   background: rgba(147,111,27,0.05);
-  //border-top: 2px dotted rgba(147,111,27,1);
-  //border-bottom: 2px dotted rgba(147,111,27,1);
   overflow-x: auto;
   margin: 0 -42px 1em -42px;
 }
@@ -403,48 +401,81 @@ footer {
 			
 }
 
-@media print, screen and (max-width: 960px) {
+@media print, screen and (max-width: 1200px) {
   
   div.wrapper {
     width:auto;
     margin:0;
   }
   
-  header, section, footer {
+  .two_third {
+    width: 55%;
+    border-bottom: 3px solid rgba(147,111,27,0.05);
+  }
+  
+/*  header, section, footer {
     float:none;
     position:static;
     width:auto;
+  }*/
+  
+  footer {
+    position: static;
   }
   
-  header {
-    padding-right:320px;
+  #badges a {
+    float: left;
+    clear: left;
+    line-height: 20px;
   }
   
   section {
-    border:1px solid #e5e5e5;
-    border-width:1px 0;
-    padding:20px 0;
-    margin:0 0 20px;
+
   }
   
   header a small {
     display:inline;
   }
   
-  header ul {
+/*  header ul {
     position:absolute;
     right:50px;
     top:52px;
-  }
+  }*/
 }
 
 @media print, screen and (max-width: 720px) {
+  
+  .background {
+    background-size: 300%;
+  }
+  
+  #banner {
+    width: 150px;
+    height: 150px;
+  }
+  
+  #banner a {
+    font-size: 14px;
+    width: 150px;
+    left: 45px;
+    top: -35px;
+  }
   body {
     word-wrap:break-word;
+    font-size: 14px;
+  }
+  
+  div.ruby, div.bash, code, pre {
+    font-size: 11px;
   }
   
   header {
     padding:0;
+  }
+  
+  h1,h2,h3,h4,h5,h6 {
+    font-size: 28px;
   }
   
   header ul, header p.view {
@@ -457,19 +488,38 @@ footer {
 }
 
 @media print, screen and (max-width: 480px) {
+  
+  .two_third {
+    border-top: 3px solid rgba(147,111,27,0.05);
+    width: 90%;
+  }
+  
+  .third {
+    padding: 3% 3% 0 3%;
+  }
+  
+  header {
+    position: static;
+  }
+  
   body {
     padding:15px;
   }
   
+  header, .third {
+    width: 100%;
+  }
   header ul {
     display:none;
   }
 }
 
 @media print {
+  
   body {
     padding:0.4in;
     font-size:12pt;
     color:#444;
   }
+  
 }
