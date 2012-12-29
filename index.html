@@ -95,7 +95,7 @@
           <h3>Comparing and Sorting</h3>
           <p>Currencies get converted implicitly, at the time defined when instantiated</p>
           <pre class="brush: ruby">2.in(:eur) > 2.in(:usd) #=> true
-2.in(:nok) < 2.in(:sek) #=> false
+2.in(:nok) &lt; 2.in(:sek) #=> false
 50.in(:eur, at: '2011-1-1') == 50.in(:sek) #=> false</pre>
 <p>Sorting also implicitly converts the currencies</p>
 <pre class="brush: ruby">[5.in(:eur), 4.in(:usd), 4.in(:chf, at: '2010-01-01')].sort</pre>
