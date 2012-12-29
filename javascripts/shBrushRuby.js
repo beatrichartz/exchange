@@ -27,7 +27,7 @@
 						'END end ensure false for if extend include module new next nil not or raise redo rescue retry return ' +
 						'self super then throw true undef unless until when while yield';
 
-		var builtins =	'Array Bignum Binding Class Continuation Dir Exception FalseClass File::Stat File Fixnum Fload ' +
+		var builtins =	'Array BigDecimal Exchange::Typecasting Exchange::Configuration Exchange Article Manager Bignum Binding Class Continuation Dir Exception FalseClass File::Stat File Fixnum Fload ' +
 						'Hash Integer IO MatchData Method Module NilClass Numeric Object Proc Range Regexp String Struct::TMS Symbol ' +
 						'ThreadGroup Thread Time TrueClass';
 

@@ -10,6 +10,11 @@
 
 }
 
+::selection {
+  background: rgba(147,111,27, 0.5);
+  color: white;
+}
+
 body {
   font:18px/1.5 regular;
   color: rgb(147,111,27);
@@ -140,6 +145,28 @@ blockquote {
   margin:0;
   padding:0 0 0 20px;
   font-style:italic;
+}
+
+.code textarea {
+  width: 100%;
+  border: none;
+  font-family: source-code-pro;
+  font-size: 15px;
+  background: rgba(255,255,255,0.9);
+  margin: 0 -5px;
+  padding: 5px;
+  display; inline-block;
+  outline: none;
+  overflow: hidden;
+}
+
+.code textarea:focus {
+  outline: none;
+}
+
+.code textarea ::selection {
+  background: rgba(147,111,27, 0.9);
+  color: white;
 }
 
 code, pre {
