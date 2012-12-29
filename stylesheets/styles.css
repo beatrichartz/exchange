@@ -126,8 +126,8 @@ a small {
   width: 45%;
   padding: 3%;
   background: rgba(255,255,255,1);
-  border-left: 3px solid rgb(147,111,27);
-  border-right: 3px solid rgb(147,111,27);
+  border-left: 3px solid rgba(147,111,27,0.05);
+  border-right: 3px solid rgba(147,111,27,0.05);
   color: rgb(147,111,27);
 }
 
@@ -177,12 +177,12 @@ code, pre {
 }
 
 div.ruby, div.bash {
-  padding:0.35em 40px;
+  padding:0.35em 42px;
   background: rgba(147,111,27,0.05);
   //border-top: 2px dotted rgba(147,111,27,1);
   //border-bottom: 2px dotted rgba(147,111,27,1);
   overflow-x: auto;
-  margin: 0 -40px 1em -40px;
+  margin: 0 -42px 1em -42px;
 }
 
 table {
@@ -341,19 +341,15 @@ footer {
 			
 	-moz-transform-origin: 0 0 ;
 	-moz-transform:rotate(45deg);
-	-moz-box-shadow:    1px 1px 5px 1px rgba(0,0,0,0.2);
 			
 	-webkit-transform-origin: 0 0 ;	
 	-webkit-transform:rotate(45deg);
-	-webkit-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
 			
 	-ms-transform-origin: 0 0 ;	
 	-ms-transform:rotate(45deg);
-	-ms-box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
 			
 	transform-origin: 0 0 ;	
 	transform:rotate(45deg);
-	box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.2);
 			
 	background-image: linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
 	background-image: -o-linear-gradient(bottom, #FFF 3%, rgb(147,111,27) 5%, #FFF 10%, #FFF 93%, rgb(147,111,27) 92%, #FFF 97%);
