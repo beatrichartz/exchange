@@ -149,19 +149,19 @@ code, pre {
 }
 
 .bash.functions, .ruby.color2 {
-  color: rgb(180,230,179);
+  color: #2DA073;
 }
 
 .ruby.color1 {
-  color: #E6B4CD;
+  color: #D3266E;
 }
 
 .ruby.plain {
-  color: rgba(147,111,27,1);
+  color: rgb(147,111,27);
 }
 
 .ruby.constants {
-  color: rgba(147,111,27,1);
+  color: rgb(127,91,7);
 }
 
 .ruby.comments {
@@ -169,11 +169,11 @@ code, pre {
 }
 
 .ruby.keyword {
-  color: #7AACB3;
+  color: #4579A0;
 }
 
 .ruby.string {
-  color: rgb(127,91,7);
+  color: #DFAF3F;
 }
 
 div.ruby, div.bash {
