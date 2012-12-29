@@ -10,7 +10,7 @@ describe "Exchange::Money" do
       c.cache = {
         :subclass => :no_cache
       }
-      c.allow_mixed_operations = true
+      c.implicit_conversions = true
     end
   end
   after(:all) do
@@ -60,15 +60,15 @@ describe "Exchange::Money" do
         subject.currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
-        Exchange.configuration.allow_mixed_operations = false
-        lambda { subject + Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = false
+        lambda { subject + Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+        Exchange.configuration.implicit_conversions = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-        Exchange.configuration.allow_mixed_operations = false
+        Exchange.configuration.implicit_conversions = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         lambda { subject + Exchange::Money.new(30, :usd) }.should_not raise_error
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
       end
       context "modifying the base value" do
         before(:each) do
@@ -94,15 +94,15 @@ describe "Exchange::Money" do
           @instantiated.currency.should == :usd
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
-          Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated += Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = false
+          lambda { @instantiated += Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+          Exchange.configuration.implicit_conversions = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-          Exchange.configuration.allow_mixed_operations = false
+          Exchange.configuration.implicit_conversions = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           lambda { @instantiated += Exchange::Money.new(30, :usd) }.should_not raise_error
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
         end
       end
     end
@@ -119,20 +119,20 @@ describe "Exchange::Money" do
       end
       it "should be able to subtract another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
         (subject - Exchange::Money.new(10, :chf)).value.round(2).should == 29.04
         (subject - Exchange::Money.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
-        Exchange.configuration.allow_mixed_operations = false
-        lambda { subject - Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = false
+        lambda { subject - Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+        Exchange.configuration.implicit_conversions = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-        Exchange.configuration.allow_mixed_operations = false
+        Exchange.configuration.implicit_conversions = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         lambda { subject - Exchange::Money.new(30, :usd) }.should_not raise_error
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
       end
       context "modifying the base value" do
         before(:each) do
@@ -151,7 +151,7 @@ describe "Exchange::Money" do
         end
         it "should be able to subtract another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
           added = (@instantiated -= Exchange::Money.new(10, :chf))
           added.value.round(2).should == 29.04
           added.currency.should == :usd
@@ -159,15 +159,15 @@ describe "Exchange::Money" do
           @instantiated.currency.should == :usd
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
-          Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated -= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = false
+          lambda { @instantiated -= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+          Exchange.configuration.implicit_conversions = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-          Exchange.configuration.allow_mixed_operations = false
+          Exchange.configuration.implicit_conversions = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           lambda { @instantiated -= Exchange::Money.new(30, :usd) }.should_not raise_error
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
         end
       end
     end
@@ -189,20 +189,20 @@ describe "Exchange::Money" do
       end
       it "should be able to multiply by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
         (subject * Exchange::Money.new(10, :chf)).value.round(1).should == 438.3
         (subject * Exchange::Money.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
-        Exchange.configuration.allow_mixed_operations = false
-        lambda { subject * Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = false
+        lambda { subject * Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+        Exchange.configuration.implicit_conversions = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-        Exchange.configuration.allow_mixed_operations = false
+        Exchange.configuration.implicit_conversions = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         lambda { subject * Exchange::Money.new(30, :usd) }.should_not raise_error
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
       end
       context "modifying the base value" do
         before(:each) do
@@ -221,7 +221,7 @@ describe "Exchange::Money" do
         end
         it "should be able to multiply by another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
           added = (@instantiated *= Exchange::Money.new(9, :chf))
           added.value.round(1).should == 394.50
           added.currency.should == :usd
@@ -229,15 +229,15 @@ describe "Exchange::Money" do
           @instantiated.currency.should == :usd
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
-          Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated *= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = false
+          lambda { @instantiated *= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+          Exchange.configuration.implicit_conversions = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-          Exchange.configuration.allow_mixed_operations = false
+          Exchange.configuration.implicit_conversions = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           lambda { @instantiated *= Exchange::Money.new(30, :usd) }.should_not raise_error
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
         end
       end
     end
@@ -266,20 +266,20 @@ describe "Exchange::Money" do
       end
       it "should be able to divide by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
         (subject / Exchange::Money.new(10, :chf)).value.round(2).should == BigDecimal.new("3.65")
         (subject / Exchange::Money.new(23.3, :eur)).currency.should == :usd
       end
       it "should raise when currencies get mixed and the configuration does not allow it" do
-        Exchange.configuration.allow_mixed_operations = false
-        lambda { subject / Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = false
+        lambda { subject / Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+        Exchange.configuration.implicit_conversions = true
       end
       it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-        Exchange.configuration.allow_mixed_operations = false
+        Exchange.configuration.implicit_conversions = false
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         lambda { subject / Exchange::Money.new(30, :usd) }.should_not raise_error
-        Exchange.configuration.allow_mixed_operations = true
+        Exchange.configuration.implicit_conversions = true
       end
       context "modifying the base value" do
         before(:each) do
@@ -298,7 +298,7 @@ describe "Exchange::Money" do
         end
         it "should be able to divide by another currency value" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
           added = (@instantiated /= Exchange::Money.new(10, :chf))
           added.value.round(2).should == 3.65
           added.currency.should == :usd
@@ -306,15 +306,15 @@ describe "Exchange::Money" do
           @instantiated.currency.should == :usd
         end
         it "should raise when currencies get mixed and the configuration does not allow it" do
-          Exchange.configuration.allow_mixed_operations = false
-          lambda { @instantiated /= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::CurrencyMixError)
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = false
+          lambda { @instantiated /= Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+          Exchange.configuration.implicit_conversions = true
         end
         it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
-          Exchange.configuration.allow_mixed_operations = false
+          Exchange.configuration.implicit_conversions = false
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           lambda { @instantiated /= Exchange::Money.new(30, :usd) }.should_not raise_error
-          Exchange.configuration.allow_mixed_operations = true
+          Exchange.configuration.implicit_conversions = true
         end
       end
     end
@@ -348,6 +348,17 @@ describe "Exchange::Money" do
           mock_api("http://openexchangerates.org/api/historical/2011-01-01.json?app_id=", fixture('api_responses/example_historic_json.json'), 2)
           (comp3 == comp6).should be_false
         end
+        context "with implicit conversion turned off" do
+          before(:each) do
+            Exchange.configuration.implicit_conversions = false
+          end
+          after(:each) do
+            Exchange.configuration.implicit_conversions = true
+          end
+          it "should raise an error" do
+            lambda { comp3 == comp5 }.should raise_error(Exchange::ImplicitConversionError)
+          end
+        end
       end
     end
     describe "sorting" do
@@ -361,6 +372,17 @@ describe "Exchange::Money" do
       end
       it "should sort and by doing conversions" do
         [subject, comp1, comp2, comp3, comp4].sort.should == [comp2, subject, comp1, comp4, comp3]
+      end
+      context "with implicit conversion turned off" do
+        before(:each) do
+          Exchange.configuration.implicit_conversions = false
+        end
+        after(:each) do
+          Exchange.configuration.implicit_conversions = true
+        end
+        it "should raise an error" do
+          lambda { [subject, comp1, comp2, comp3, comp4].sort }.should raise_error(Exchange::ImplicitConversionError)
+        end
       end
     end
     describe "round" do
