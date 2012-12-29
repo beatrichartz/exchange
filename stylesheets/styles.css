@@ -173,7 +173,7 @@ code, pre {
 }
 
 .ruby.string {
-  color: #DDD;
+  color: rgb(127,91,7);
 }
 
 div.ruby, div.bash {
