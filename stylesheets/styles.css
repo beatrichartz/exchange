@@ -51,7 +51,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: regular;
   font-weight: 700;
   font-style: normal;
-  color: rgb(147,111,27);
+  color: rgb(127,91,7);
   margin:0 0 0.35em 0;
 }
 
@@ -61,7 +61,7 @@ h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 36px;
-  color: rgb(147,111,27);
+  color: rgb(127,91,7);
 }
 
 #badges {
@@ -245,6 +245,11 @@ header {
 
 header a, header a:hover, header a:visited, header a:active {
   color: rgb(147,111,27);
+}
+
+header a:hover {
+  color: rgb(127,91,7);
+  text-shadow: 1px 1px 0px rgba(147,111,27,0.1);
 }
 
 header ul {
