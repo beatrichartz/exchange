@@ -12,12 +12,15 @@ module Exchange
     def_delegators :instance, :subclass, :subclass=, :set
      
     def subclass_with_constantize
-      self.subclass = parent_module.const_get camelize(self.subclass_without_constantize) unless self.subclass_without_constantize.is_a?(Class)
+      self.subclass = parent_module.const_get camelize(self.subclass_without_constantize) unless !self.subclass_without_constantize || self.subclass_without_constantize.is_a?(Class)
       subclass_without_constantize
     end
     alias_method :subclass_without_constantize, :subclass
     alias_method :subclass, :subclass_with_constantize
     
+    # Set a configuration via a hash of options
+    # @params [Hash] hash The hash of options to set the configuration to
+    #
     def set hash
       hash.each_pair do |k,v|
         self.send(:"#{k}=", v)
@@ -26,6 +29,8 @@ module Exchange
       self
     end
     
+    # Reset the configuration to a set of defaults
+    #
     def reset
       set Exchange::Configuration::DEFAULTS[key]
     end

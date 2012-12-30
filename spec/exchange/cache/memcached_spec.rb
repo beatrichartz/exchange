@@ -26,6 +26,16 @@ describe "Exchange::CacheDalli::Client" do
       subject.client.should == client
     end
   end
+  describe "wipe_client!" do
+    let(:client) { mock('memcached') }
+    
+    it "should set the client to nil" do
+      Dalli::Client.should_receive(:new).with("HOST:PORT").and_return(client)
+      subject.client.should == client
+      subject.wipe_client!
+      subject.instance_variable_get("@client").should be_nil
+    end
+  end
   describe "cached" do
     let(:client) { mock('memcached', :get => '') }
     before(:each) do

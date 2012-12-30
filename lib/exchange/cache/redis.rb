@@ -12,7 +12,9 @@ module Exchange
     #     c.cache_port = 'Your redis port (an Integer)'
     #   end
     class Redis < Base
-              
+      
+      def_delegators :instance, :client, :wipe_client!
+      
       # instantiates a redis client and memoizes it in a class variable.
       # Use this client to access redis data. For further explanation of use visit the redis gem documentation
       # @example
@@ -22,6 +24,12 @@ module Exchange
       def client
         Exchange::GemLoader.new('redis').try_load unless defined?(::Redis)
         @client ||= ::Redis.new(:host => config.host, :port => config.port)
+      end
+      
+      # Wipe the client instance variable
+      #
+      def wipe_client!
+        @client = nil
       end
       
       # returns either cached data from the redis client or calls the block and caches it in redis.
