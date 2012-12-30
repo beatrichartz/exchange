@@ -1,5 +1,11 @@
 = Changes to Exchange
 
+== 0.12.0
+- Currencies can now be instantiated via ISO country codes
+- Setting the host and the port now wipes existing cache clients in favor of a new one
+- Better Dealing with Big Decimal precisions
+- JRuby support
+
 == 0.11.0
 - Better implementation for preventing implicit conversions, if wished for: Now all operations including comparisons throw errors when implicit conversions are not allowed and currencies are to be converted implicitly.
 
