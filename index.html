@@ -60,6 +60,8 @@
           <h3>Basics</h3>
           <p>Instantiate a currency</p>
           <pre class="brush: ruby">1.in(:usd)</pre>
+          <p>You can also instantiate currencies from ISO 3166 country codes</p>
+          <pre class="brush: ruby">1.in(:it) #=> same as 1.in(:eur)</pre>
           <p>Convert a currency to another</p>
           <pre class="brush: ruby">1.2.in(:eur).to(:jpy)</pre>
           <p>to_s converts the currency to a string in an ISO4217-compatible format, complete with the right precision and the ISO standard currency abbreviation. You can also choose to only print the amount with the right precision by passing an argument.</p>
