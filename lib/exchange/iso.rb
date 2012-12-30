@@ -24,7 +24,7 @@ module Exchange
           self.class_eval <<-EOV
             def #{op}(amount, currency, precision=nil)
               minor = definitions[currency][:minor_unit]
-              (amount.is_a?(BigDecimal) ? amount : BigDecimal.new(amount.to_s, minor)).#{op}(precision || minor)
+              (amount.is_a?(BigDecimal) ? amount : BigDecimal.new(amount.to_s, precision_for(amount, currency))).#{op}(precision || minor)
             end
           EOV
         end
@@ -51,7 +51,7 @@ module Exchange
     # @return [Array] An Array of currency symbols
     #
     def currencies
-      @currencies  ||= definitions.keys.map(&:to_s).sort.map(&:to_sym)
+      @currencies  ||= definitions.keys.sort_by(&:to_s)
     end
     
     # Check if a currency is defined by ISO 4217 standards
@@ -83,9 +83,7 @@ module Exchange
       if amount.is_a?(BigDecimal)
         amount
       else
-        defined_minor_precision                         = definitions[currency][:minor_unit]
-        given_major_precision, given_minor_precision    = amount.to_s.match(/^-?(\d*)\.?(\d*)$/).to_a[1..2].map(&:size)
-        BigDecimal.new(amount.to_s, given_major_precision + [given_minor_precision, defined_minor_precision].max)
+        BigDecimal.new(amount.to_s, precision_for(amount, currency))
       end
     end
     
@@ -160,6 +158,17 @@ module Exchange
       end
       
       new_hsh
+    end
+    
+    # get a precision for a specified amount and a specified currency
+    # @params [Float, Integer] amount The amount to get the precision for
+    # @params [Symbol] currency the currency to get the precision for
+    #
+    def precision_for amount, currency
+      defined_minor_precision                         = definitions[currency][:minor_unit]
+      given_major_precision, given_minor_precision    = amount.to_s.match(/^-?(\d*)\.?(\d*)$/).to_a[1..2].map(&:size)
+      
+      given_major_precision + [defined_minor_precision, given_minor_precision].max
     end
     
   end
