@@ -181,7 +181,7 @@ If you define a currency object as historic. It will use historic conversion if 
 
   1.in(:usd) - 1.32.in(:eur, :at => '2008-1-1')           #=> #<Exchange::Money @value=2.54 @currency=:usd>
 
-You can just instantiate currencies and apply operations. Rounding will by default round the currency to its ISO4217 decimal precision:
+You can just instantiate currencies and apply operations. Rounding will by default round the currency to its ISO decimal precision:
 
   3.123.in(:eur).round                               #=> #<Exchange::Money @value=3.12 @currency=:eur>
   

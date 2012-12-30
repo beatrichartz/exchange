@@ -38,7 +38,7 @@ describe "Exchange::Conversability" do
       3.in(:chf, :at => '2010-01-01').time.year.should == 2010
     end
     it "should raise a no currency error if the currency does not exist" do
-      lambda { 35.in(:zzz) }.should raise_error(Exchange::NoCurrencyError, "zzz is not a currency")
+      lambda { 35.in(:zzz) }.should raise_error(Exchange::NoCurrencyError, "zzz is not a currency nor a country code matchable to a currency")
     end
   end
   context "with a float" do
@@ -68,7 +68,7 @@ describe "Exchange::Conversability" do
       3.25.in(:chf, :at => '2010-01-01').time.year.should == 2010
     end
     it "should raise a no currency error if the currency does not exist" do
-      lambda { 35.23.in(:zzz) }.should raise_error(Exchange::NoCurrencyError, "zzz is not a currency")
+      lambda { 35.23.in(:zzz) }.should raise_error(Exchange::NoCurrencyError, "zzz is not a currency nor a country code matchable to a currency")
     end
   end
   context "with a big decimal" do
@@ -98,7 +98,7 @@ describe "Exchange::Conversability" do
       BigDecimal.new("3.25").in(:chf, :at => '2010-01-01').time.year.should == 2010
     end
     it "should raise a no currency error if the currency does not exist" do
-      lambda { BigDecimal.new("3.25").in(:zzz) }.should raise_error(Exchange::NoCurrencyError, "zzz is not a currency")
+      lambda { BigDecimal.new("3.25").in(:zzz) }.should raise_error(Exchange::NoCurrencyError, "zzz is not a currency nor a country code matchable to a currency")
     end
   end
 end

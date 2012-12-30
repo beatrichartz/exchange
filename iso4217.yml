@@ -1,589 +1,751 @@
---- 
-NIO: 
+---
+NIO:
   minor_unit: 2
   currency: Cordoba Oro
-LAK: 
+  symbol: C$
+LAK:
   minor_unit: 2
   currency: Kip
-SAR: 
-  format: "#,###.##"
+  symbol: ₭
+SAR:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Saudi Riyal
-NOK: 
-  format: "#.###,##"
+  symbol: ﷼
+NOK:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Norwegian Krone
-USD: 
-  format: "#,###.##"
+  symbol: kr
+USD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: US Dollar
-RUB: 
-  format: "#.###,##"
+  symbol: $
+RUB:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Russian Ruble
-XCD: 
-  format: "#,###.##"
+  symbol: руб
+XCD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: East Caribbean Dollar
-OMR: 
-  format: "#,###.###"
+  symbol: $
+OMR:
+  format: ! '#,###.###'
   minor_unit: 3
   currency: Rial Omani
-AMD: 
-  format: "#,###.##"
+  symbol: ﷼
+AMD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Armenian Dram
-CDF: 
+  symbol: 
+CDF:
   minor_unit: 2
   currency: Congolese Franc
-KPW: 
+  symbol: 
+KPW:
   minor_unit: 2
   currency: North Korean Won
-CNY: 
-  format: "#,###.##"
+  symbol: ₩
+CNY:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Yuan Renminbi
-KES: 
-  format: "#,###.##"
+  symbol: ¥
+KES:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Kenyan Shilling
-KHR: 
+  symbol: 
+KHR:
   minor_unit: 2
   currency: Riel
-PLN: 
-  format: "# ###,##"
+  symbol: ៛
+PLN:
+  format: ! '# ###,##'
   minor_unit: 2
   currency: Zloty
-MVR: 
+  symbol: zł
+MVR:
   minor_unit: 2
   currency: Rufiyaa
-GTQ: 
-  format: "#,###.##"
+  symbol: 
+GTQ:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Quetzal
-CLP: 
-  format: "#.###"
+  symbol: Q
+CLP:
+  format: ! '#.###'
   minor_unit: 0
   currency: Chilean Peso
-INR: 
-  format: "#,##,###.##"
+  symbol: $
+INR:
+  format: ! '#,##,###.##'
   minor_unit: 2
   currency: Indian Rupee
-BZD: 
-  format: "#,###.##"
+  symbol: ''
+BZD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Belize Dollar
-MYR: 
-  format: "#,###.##"
+  symbol: BZ$
+MYR:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Malaysian Ringgit
-HKD: 
-  format: "#,###.##"
+  symbol: RM
+HKD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Hong Kong Dollar
-COP: 
-  format: "#.###,##"
+  symbol: $
+COP:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Colombian Peso
-DKK: 
-  format: "#.###,##"
+  symbol: $
+DKK:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Danish Krone
-SEK: 
-  format: "#.###,##"
+  symbol: kr
+SEK:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Swedish Krona
-BYR: 
+  symbol: kr
+BYR:
   minor_unit: 0
   currency: Belarussian Ruble
-LYD: 
+  symbol: p.
+LYD:
   minor_unit: 3
   currency: Libyan Dinar
-RON: 
-  format: "#.###,##"
+  symbol: 
+RON:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: New Romanian Leu
-DZD: 
+  symbol: lei
+DZD:
   minor_unit: 2
   currency: Algerian Dinar
-BIF: 
+  symbol: 
+BIF:
   minor_unit: 0
   currency: Burundi Franc
-ARS: 
-  format: "#.###,##"
+  symbol: 
+ARS:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Argentine Peso
-GIP: 
-  format: "#,###.##"
+  symbol: $
+GIP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Gibraltar Pound
-UYI: 
+  symbol: £
+UYI:
   minor_unit: 0
   currency: Uruguay Peso en Unidades Indexadas (URUIURUI)
-BOB: 
-  format: "#,###.##"
+  symbol: 
+BOB:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Boliviano
-SSP: 
+  symbol: $b
+SSP:
   minor_unit: 2
   currency: South Sudanese Pound
-NGN: 
+  symbol: 
+NGN:
   minor_unit: 2
   currency: Naira
-PGK: 
+  symbol: ₦
+PGK:
   minor_unit: 2
   currency: Kina
-STD: 
+  symbol: 
+STD:
   minor_unit: 2
   currency: Dobra
-XOF: 
+  symbol: 
+XOF:
   minor_unit: 0
   currency: CFA Franc BCEAO
-AED: 
-  format: "#,###.##"
+  symbol: 
+AED:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: UAE Dirham
-ERN: 
+  symbol: 
+ERN:
   minor_unit: 2
   currency: Nakfa
-MWK: 
+  symbol: 
+MWK:
   minor_unit: 2
   currency: Kwacha
-CUP: 
-  format: "#,###.##"
+  symbol: 
+CUP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Cuban Peso
-USN: 
+  symbol: ₱
+USN:
   minor_unit: 2
   currency: US Dollar (Next day)
-GMD: 
+  symbol: 
+GMD:
   minor_unit: 2
   currency: Dalasi
-CVE: 
+  symbol: 
+CVE:
   minor_unit: 2
   currency: Cape Verde Escudo
-TZS: 
-  format: "#,###.##"
+  symbol: 
+TZS:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Tanzanian Shilling
-COU: 
+  symbol: 
+COU:
   minor_unit: 2
   currency: Unidad de Valor Real
-BTN: 
+  symbol: 
+BTN:
   minor_unit: 2
   currency: Ngultrum
-ZWL: 
+  symbol: 
+ZWL:
   minor_unit: 2
   currency: Zimbabwe Dollar
-UGX: 
+  symbol: 
+UGX:
   minor_unit: 2
   currency: Uganda Shilling
-SYP: 
+  symbol: 
+SYP:
   minor_unit: 2
   currency: Syrian Pound
-MAD: 
+  symbol: £
+MAD:
   minor_unit: 2
   currency: Moroccan Dirham
-MNT: 
+  symbol: 
+MNT:
   minor_unit: 2
   currency: Tugrik
-LSL: 
+  symbol: ₮
+LSL:
   minor_unit: 2
   currency: Loti
-XAF: 
+  symbol: 
+XAF:
   minor_unit: 0
   currency: CFA Franc BEAC
-SHP: 
+  symbol: 
+SHP:
   minor_unit: 2
   currency: Saint Helena Pound
-HTG: 
+  symbol: £
+HTG:
   minor_unit: 2
   currency: Gourde
-RSD: 
+  symbol: 
+RSD:
   minor_unit: 2
   currency: Serbian Dinar
-MGA: 
+  symbol: Дин.
+MGA:
   minor_unit: 2
   currency: Malagasy Ariary
-TOP: 
-  format: "#,###.##"
+  symbol: 
+TOP:
+  format: ! '#,###.##'
   minor_unit: 2
-  currency: !binary |
-    UGHigJlhbmdh
-
-MZN: 
+  currency: Pa’anga
+  symbol: 
+MZN:
   minor_unit: 2
   currency: Mozambique Metical
-LVL: 
-  format: "#,###.##"
+  symbol: MT
+LVL:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Latvian Lats
-FKP: 
+  symbol: Ls
+FKP:
   minor_unit: 2
   currency: Falkland Islands Pound
-USS: 
+  symbol: £
+USS:
   minor_unit: 2
   currency: US Dollar (Same day)
-BWP: 
-  format: "#,###.##"
+  symbol: 
+BWP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Pula
-HNL: 
-  format: "#,###.##"
+  symbol: P
+HNL:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Lempira
-CHE: 
-  minor_unit: 2
-  currency: WIR Euro
-EUR: 
-  format: "#,###.##"
+  symbol: L
+EUR:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Euro
-EGP: 
-  format: "#,###.##"
+  symbol: €
+EGP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Egyptian Pound
-CHF: 
-  format: "#'###.##"
+  symbol: £
+CHF:
+  format: ! '#''###.##'
   minor_unit: 2
   currency: Swiss Franc
-ILS: 
-  format: "#,###.##"
+  symbol: CHF
+ILS:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: New Israeli Sheqel
-PYG: 
+  symbol: ₪
+PYG:
   minor_unit: 0
   currency: Guarani
-LBP: 
-  format: "# ###"
+  symbol: Gs
+LBP:
+  format: ! '# ###'
   minor_unit: 2
   currency: Lebanese Pound
-ANG: 
-  format: "#.###,##"
+  symbol: £
+ANG:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Netherlands Antillean Guilder
-KZT: 
+  symbol: ƒ
+KZT:
   minor_unit: 2
   currency: Tenge
-GYD: 
+  symbol: лв
+GYD:
   minor_unit: 2
   currency: Guyana Dollar
-WST: 
+  symbol: $
+WST:
   minor_unit: 2
   currency: Tala
-NPR: 
-  format: "#,###.##"
+  symbol: 
+NPR:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Nepalese Rupee
-KMF: 
+  symbol: ₨
+KMF:
   minor_unit: 0
   currency: Comoro Franc
-THB: 
-  format: "#,###.##"
+  symbol: 
+THB:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Baht
-IRR: 
-  format: "#,###.##"
+  symbol: ฿
+IRR:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Iranian Rial
-SRD: 
+  symbol: ﷼
+SRD:
   minor_unit: 2
   currency: Surinam Dollar
-JPY: 
-  format: "#,###"
+  symbol: $
+JPY:
+  format: ! '#,###'
   minor_unit: 0
   currency: Yen
-BRL: 
-  format: "#.###,##"
+  symbol: ¥
+BRL:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Brazilian Real
-UYU: 
-  format: "#.###,##"
+  symbol: R$
+UYU:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Peso Uruguayo
-MOP: 
+  symbol: $U
+MOP:
   minor_unit: 2
   currency: Pataca
-BMD: 
-  format: "#,###.##"
+  symbol: 
+BMD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Bermudian Dollar
-SZL: 
-  format: "#, ###.##"
+  symbol: $
+SZL:
+  format: ! '#, ###.##'
   minor_unit: 2
   currency: Lilangeni
-ETB: 
+  symbol: 
+ETB:
   minor_unit: 2
   currency: Ethiopian Birr
-JOD: 
-  format: "#,###.###"
+  symbol: 
+JOD:
+  format: ! '#,###.###'
   minor_unit: 3
   currency: Jordanian Dinar
-IDR: 
-  format: "#.###,##"
+  symbol: 
+IDR:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Rupiah
-MDL: 
+  symbol: Rp
+MDL:
   minor_unit: 2
   currency: Moldovan Leu
-XPF: 
+  symbol: 
+XPF:
   minor_unit: 0
   currency: CFP Franc
-MRO: 
+  symbol: 
+MRO:
   minor_unit: 2
   currency: Ouguiya
-YER: 
+  symbol: 
+YER:
   minor_unit: 2
   currency: Yemeni Rial
-BAM: 
-  format: "#,###.##"
+  symbol: ﷼
+BAM:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Convertible Mark
-AWG: 
-  format: "#,###.##"
+  symbol: KM
+AWG:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Aruban Florin
-NZD: 
-  format: "#,###.##"
+  symbol: ƒ
+NZD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: New Zealand Dollar
-PEN: 
-  format: "#,###.##"
+  symbol: $
+PEN:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Nuevo Sol
-AOA: 
+  symbol: S/.
+AOA:
   minor_unit: 2
   currency: Kwanza
-KYD: 
-  format: "#,###.##"
+  symbol: 
+KYD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Cayman Islands Dollar
-SLL: 
+  symbol: $
+SLL:
   minor_unit: 2
   currency: Leone
-TRY: 
-  format: "#,###.##"
+  symbol: 
+TRY:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Turkish Lira
-VEF: 
-  format: "#.###,##"
+  symbol: ''
+VEF:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Bolivar Fuerte
-ISK: 
-  format: "#.###"
+  symbol: Bs
+ISK:
+  format: ! '#.###'
   minor_unit: 0
   currency: Iceland Krona
-GNF: 
+  symbol: kr
+GNF:
   minor_unit: 0
   currency: Guinea Franc
-BSD: 
-  format: "#,###.##"
+  symbol: 
+BSD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Bahamian Dollar
-DJF: 
+  symbol: $
+DJF:
   minor_unit: 0
   currency: Djibouti Franc
-HUF: 
-  format: "#.###"
+  symbol: 
+HUF:
+  format: ! '#.###'
   minor_unit: 2
   currency: Forint
-LTL: 
-  format: "# ###,##"
+  symbol: Ft
+LTL:
+  format: ! '# ###,##'
   minor_unit: 2
   currency: Lithuanian Litas
-MXN: 
-  format: "#,###.##"
+  symbol: Lt
+MXN:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Mexican Peso
-SCR: 
+  symbol: $
+SCR:
   minor_unit: 2
   currency: Seychelles Rupee
-SGD: 
-  format: "#,###.##"
+  symbol: ₨
+SGD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Singapore Dollar
-LKR: 
+  symbol: $
+LKR:
   minor_unit: 2
   currency: Sri Lanka Rupee
-TJS: 
+  symbol: ₨
+TJS:
   minor_unit: 2
   currency: Somoni
-TND: 
+  symbol: 
+TND:
   minor_unit: 3
   currency: Tunisian Dinar
-DOP: 
-  format: "#,###.##"
+  symbol: 
+DOP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Dominican Peso
-FJD: 
+  symbol: RD$
+FJD:
   minor_unit: 2
   currency: Fiji Dollar
-GEL: 
+  symbol: $
+GEL:
   minor_unit: 2
   currency: Lari
-SDG: 
+  symbol: 
+SDG:
   minor_unit: 2
   currency: Sudanese Pound
-VUV: 
-  format: "#,###"
+  symbol: 
+VUV:
+  format: ! '#,###'
   minor_unit: 0
   currency: Vatu
-BBD: 
+  symbol: 
+BBD:
   minor_unit: 2
   currency: Barbados Dollar
-LRD: 
+  symbol: $
+LRD:
   minor_unit: 2
   currency: Liberian Dollar
-KRW: 
-  format: "#,###"
+  symbol: $
+KRW:
+  format: ! '#,###'
   minor_unit: 0
   currency: Won
-MMK: 
+  symbol: ₩
+MMK:
   minor_unit: 2
   currency: Kyat
-MUR: 
-  format: "#,###"
+  symbol: 
+MUR:
+  format: ! '#,###'
   minor_unit: 2
   currency: Mauritius Rupee
-PHP: 
-  format: "#,###.##"
+  symbol: ₨
+PHP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Philippine Peso
-ZAR: 
-  format: "# ###.##"
+  symbol: ₱
+ZAR:
+  format: ! '# ###.##'
   minor_unit: 2
   currency: Rand
-KGS: 
+  symbol: R
+KGS:
   minor_unit: 2
   currency: Som
-GBP: 
-  format: "#,###.##"
+  symbol: лв
+GBP:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Pound Sterling
-BGN: 
+  symbol: £
+BGN:
   minor_unit: 2
   currency: Bulgarian Lev
-IQD: 
+  symbol: лв
+IQD:
   minor_unit: 3
   currency: Iraqi Dinar
-TMT: 
+  symbol: 
+TMT:
   minor_unit: 2
   currency: Turkmenistan New Manat
-UAH: 
-  format: "# ###,##"
+  symbol: 
+UAH:
+  format: ! '# ###,##'
   minor_unit: 2
   currency: Hryvnia
-VND: 
-  format: "#.###"
+  symbol: ₴
+VND:
+  format: ! '#.###'
   minor_unit: 0
   currency: Dong
-ZMK: 
+  symbol: ₫
+ZMK:
   minor_unit: 2
   currency: Zambian Kwacha
-BOV: 
+  symbol: 
+BOV:
   minor_unit: 2
   currency: Mvdol
-HRK: 
-  format: "#.###,##"
+  symbol: 
+HRK:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Croatian Kuna
-TTD: 
+  symbol: kn
+TTD:
   minor_unit: 2
   currency: Trinidad and Tobago Dollar
-BHD: 
-  format: "#,###.###"
+  symbol: TT$
+BHD:
+  format: ! '#,###.###'
   minor_unit: 3
   currency: Bahraini Dinar
-CLF: 
+  symbol: 
+CLF:
   minor_unit: 0
   currency: Unidades de fomento
-RWF: 
+  symbol: 
+RWF:
   minor_unit: 0
   currency: Rwanda Franc
-MKD: 
-  format: "#,###.##"
+  symbol: 
+MKD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Denar
-AUD: 
-  format: "# ###.##"
+  symbol: ден
+AUD:
+  format: ! '# ###.##'
   minor_unit: 2
   currency: Australian Dollar
-CRC: 
-  format: "#.###,##"
+  symbol: $
+CRC:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Costa Rican Colon
-PKR: 
-  format: "#,###.##"
+  symbol: ₡
+PKR:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Pakistan Rupee
-TWD: 
+  symbol: ₨
+TWD:
   minor_unit: 2
   currency: New Taiwan Dollar
-UZS: 
+  symbol: NT$
+UZS:
   minor_unit: 2
   currency: Uzbekistan Sum
-CZK: 
-  format: "#.###,##"
+  symbol: лв
+CZK:
+  format: ! '#.###,##'
   minor_unit: 2
   currency: Czech Koruna
-AZN: 
+  symbol: Kč
+AZN:
   minor_unit: 2
   currency: Azerbaijanian Manat
-BDT: 
-  format: "#,###.##"
+  symbol: ман
+BDT:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Taka
-NAD: 
+  symbol: 
+NAD:
   minor_unit: 2
   currency: Namibia Dollar
-AFN: 
+  symbol: $
+AFN:
   minor_unit: 2
   currency: Afghani
-MXV: 
+  symbol: ؋
+MXV:
   minor_unit: 2
   currency: Mexican Unidad de Inversion (UDI)
-CUC: 
-  format: "#,###.##"
+  symbol: 
+CUC:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Peso Convertible
-PAB: 
+  symbol: 
+PAB:
   minor_unit: 2
   currency: Balboa
-QAR: 
+  symbol: B/.
+QAR:
   minor_unit: 2
   currency: Qatari Rial
-SOS: 
+  symbol: ﷼
+SOS:
   minor_unit: 2
   currency: Somali Shilling
-CHW: 
+  symbol: S
+CHW:
   minor_unit: 2
   currency: WIR Franc
-CAD: 
-  format: "#,###.##"
+  symbol: 
+CAD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Canadian Dollar
-JMD: 
-  format: "#,###.##"
+  symbol: $
+JMD:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Jamaican Dollar
-BND: 
-  format: "#,###.##"
+  symbol: J$
+BND:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: Brunei Dollar
-ALL: 
+  symbol: $
+ALL:
   minor_unit: 2
   currency: Lek
-SVC: 
-  format: "#,###.##"
+  symbol: Lek
+SVC:
+  format: ! '#,###.##'
   minor_unit: 2
   currency: El Salvador Colon
-SBD: 
+  symbol: $
+SBD:
   minor_unit: 2
   currency: Solomon Islands Dollar
-GHS: 
+  symbol: $
+GHS:
   minor_unit: 2
   currency: Ghana Cedi
-KWD: 
-  format: "#,###.###"
+  symbol: 
+KWD:
+  format: ! '#,###.###'
   minor_unit: 3
   currency: Kuwaiti Dinar
+  symbol: 

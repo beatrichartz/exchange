@@ -20,6 +20,11 @@ describe "Exchange::Money" do
     subject.value.should == 40
     subject.currency.should == :usd
   end
+  it "should initialize with a number and a country code" do
+    from_country_code = Exchange::Money.new(50, :de)
+    from_country_code.value.should == 50
+    from_country_code.currency.should == :eur
+  end
   describe "initializing with a block" do
     it "should be possible" do
       currency = Exchange::Money.new(40) do |c|
@@ -33,11 +38,21 @@ describe "Exchange::Money" do
     end
   end
   describe "to" do
-    it "should be able to convert itself to other currencies" do
-      mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)
-      subject.to(:chf).value.round(2).should == 36.5
-      subject.to(:chf).currency.should == :chf
-      subject.to(:chf).should be_kind_of Exchange::Money
+    context "with a currency" do
+      it "should be able to convert itself to other currencies" do
+        mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)
+        subject.to(:chf).value.round(2).should == 36.5
+        subject.to(:chf).currency.should == :chf
+        subject.to(:chf).should be_kind_of Exchange::Money
+      end
+    end
+    context "with a country argument" do
+      it "should be able to convert itself to the currency of the country" do
+        mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)
+        subject.to(:ch).value.round(2).should == 36.5
+        subject.to(:ch).currency.should == :chf
+        subject.to(:ch).should be_kind_of Exchange::Money
+      end
     end
   end
   describe "operations" do

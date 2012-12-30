@@ -48,14 +48,16 @@ module Exchange
     #   Exchange::Money.new(40, :usd).to(:eur, :at => Time.gm(2012,9,1)) 
     #     #=> #<Exchange::Money @number=37.0 @currency=:usd @time=#<Time> @from=#<Exchange::Money @number=40.0 @currency=:usd>>
     #
-    def initialize value, currency_arg=nil, opts={}, &block      
+    def initialize value, currency_arg=nil, opts={}, &block
+      currency_arg      = ISO.assert_currency!(currency_arg) if currency_arg
+      
       @from             = opts[:from]
       @api              = Exchange.configuration.api.subclass
       
       yield(self) if block_given?
       
       self.time             = Helper.assure_time(time || opts[:at], :default => :now)
-      self.value            = ISO4217.instantiate(value, currency || currency_arg)
+      self.value            = ISO.instantiate(value, currency || currency_arg)
       self.currency         = currency || currency_arg
     end
     
@@ -81,6 +83,8 @@ module Exchange
     #   Exchange::Money.new(40,:nok).to(:sek, :at => Time.gm(2012,2,2))
     #
     def to other, options={}
+      other = ISO.assert_currency!(other)
+      
       if api_supports_currency?(other)
         opts = { :at => time, :from => self }.merge(options)
         Money.new(api.new.convert(value, currency, other, opts), other, opts)
@@ -88,6 +92,7 @@ module Exchange
         raise_no_rate_error(other)
       end
     end
+    alias :in :to
     
     class << self
       
@@ -98,7 +103,7 @@ module Exchange
         #
         def install_operation op
           define_method op do |*precision|
-            Exchange::Money.new(ISO4217.send(op, self.value, self.currency, precision.first), currency, :at => time, :from => self)
+            Exchange::Money.new(ISO.send(op, self.value, self.currency, precision.first), currency, :at => time, :from => self)
           end
         end
       
@@ -292,12 +297,12 @@ module Exchange
     # @example Convert a currency with a three decimal minor to a string
     #   Exchange::Money.new(34.34, :omr).to_s #=> "OMR 34.340"
     # @example Convert a currency to a string without the currency
-    #   Exchange::ISO4217.stringif(34.34, :omr).to_s(:iso) #=> "34.340"
+    #   Exchange::ISO.stringif(34.34, :omr).to_s(:iso) #=> "34.340"
     #
     def to_s format=:currency
       [
-        format == :currency && ISO4217.stringify(value, currency),
-        format == :amount && ISO4217.stringify(value, currency, :amount_only => true)
+        format == :currency && ISO.stringify(value, currency),
+        format == :amount && ISO.stringify(value, currency, :amount_only => true)
       ].detect{|l| l.is_a?(String) }
     end
     
