@@ -196,13 +196,34 @@ describe "Exchange::ISO4217" do
     end
   end
   describe "self.instantiate" do
-    it "should instantiate a big decimal according to the iso standards" do
-      BigDecimal.should_receive(:new).with('23.23', 3).and_return('INSTANCE')
-      subject.instantiate(23.23, :tnd).should == 'INSTANCE'
-      BigDecimal.should_receive(:new).with('23.23', 2).and_return('INSTANCE')
-      subject.instantiate(23.23, :sar).should == 'INSTANCE'
-      BigDecimal.should_receive(:new).with('23.23', 0).and_return('INSTANCE')
-      subject.instantiate(23.23, :clp).should == 'INSTANCE'
+    context "given a float or an integer" do
+      context "with bigger precision than the definition" do
+        it "should instantiate a big decimal with the given precision" do
+          BigDecimal.should_receive(:new).with('23.2345', 6).and_return('INSTANCE')
+          subject.instantiate(23.2345, :tnd).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with('22223.2323444', 12).and_return('INSTANCE')
+          subject.instantiate(22223.2323444, :sar).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with('23.23', 4).and_return('INSTANCE')
+          subject.instantiate(23.23, :clp).should == 'INSTANCE'
+        end
+      end
+      context "with smaller precision than the definition" do
+        it "should instantiate a big decimal with the defined precision" do
+          BigDecimal.should_receive(:new).with('23382343.1',11).and_return('INSTANCE')
+          subject.instantiate(23382343.1, :tnd).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with('23',4).and_return('INSTANCE')
+          subject.instantiate(23, :sar).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with('23.2',5).and_return('INSTANCE')
+          subject.instantiate(23.2, :omr).should == 'INSTANCE'
+        end
+      end
+    end
+    context "given a big decimal" do
+      let!(:bigdecimal) { BigDecimal.new("23.23") }
+      it "should instantiate a big decimal according to the iso standards" do
+        BigDecimal.should_receive(:new).never
+        subject.instantiate(bigdecimal, :tnd).should == bigdecimal
+      end
     end
   end
   describe "self.round" do

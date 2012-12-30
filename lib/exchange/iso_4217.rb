@@ -73,9 +73,16 @@ module Exchange
     # @return [BigDecimal] The instantiated currency
     # @example instantiate a currency from a string
     #   Exchange::ISO4217.instantiate("4523", "usd") #=> #<Bigdecimal 4523.00>
+    # @note Reinstantiation is not needed in case the amount is already a big decimal. In this case, the maximum precision is already given.
     #
-    def instantiate(amount, currency)
-      BigDecimal.new(amount.to_s, definitions[currency][:minor_unit])
+    def instantiate(amount, currency)      
+      if amount.is_a?(BigDecimal)
+        amount
+      else
+        defined_minor_precision                         = definitions[currency][:minor_unit]
+        given_major_precision, given_minor_precision    = amount.to_s.match(/^-?(\d*)\.?(\d*)$/).to_a[1..2].map(&:size)
+        BigDecimal.new(amount.to_s, given_major_precision + [given_minor_precision, defined_minor_precision].max)
+      end
     end
     
     # Converts the currency to a string in ISO 4217 standardized format, either with or without the currency. This leaves you
