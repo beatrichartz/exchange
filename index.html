@@ -62,8 +62,9 @@
           <pre class="brush: ruby">1.in(:usd)</pre>
           <p>Convert a currency to another</p>
           <pre class="brush: ruby">1.2.in(:eur).to(:jpy)</pre>
-          <p>to_s converts the currency to a string in an ISO4217-compatible format, complete with the right precision.</p>
-          <pre class="brush: ruby">220.2.in(:jpy).to_s #=> "JPY 220"</pre>
+          <p>to_s converts the currency to a string in an ISO4217-compatible format, complete with the right precision and the ISO standard currency abbreviation. You can also choose to only print the amount with the right precision by passing an argument.</p>
+          <pre class="brush: ruby">220.2.in(:jpy).to_s #=> "JPY 220"
+245.934.in(:usd).to_s(:amount) #=> "245.93"</pre>
           <p>Apply any method you would apply to a normal instance of numeric. Method missing is routed to the currency value.</p>
           <pre class="brush: ruby">1.2.in(:eur).zero?</pre>
         </section>
@@ -73,6 +74,10 @@
           <pre class="brush: ruby">1.in(:usd).to(:eur)</pre>
           <p>Convert at yesterday's rate</p>
           <pre class="brush: ruby">1.2.in(:eur).to(:jpy, at: Time.now - 86400)</pre>
+          <p>Currencies can be defined with a timestamp which is applied whenever a currency takes place. In the example, the defined currency is always converted using the rates of January 2, 2000</p>
+          <pre class="brush: ruby">currency = 1.2.in(:eur, at: Time.gm(2000,1,2))
+currency.to(:jpy)
+currency.to(:omr)</pre>
           <p>Exchange keeps a the instance the currency was converted from for information purposes</p>
           <pre class="brush: ruby">1.in(:usd).to(:eur).from == 1.in(:usd) #=> true</pre>
         </section>
@@ -80,7 +85,9 @@
           <h3>Rounding</h3>
           <p>Round, ceil or floor without an argument always rounds to the precision defined by ISO4217. Apply an argument to get rounding to a certain amount of decimals.</p>
           <pre class="brush: ruby">10.345.in(:usd).round #=> 10.35
-10.345.in(:usd).round(0) #=> 10</pre>
+9.999.in(:eur).floor #=> 9.99
+10.345.in(:usd).round(0) #=> 10
+9.999.in(:eur).floor(1) #=> 9.9</pre>
         </section>
         <section id="arithmetics">
           <h3>Arithmetics</h3>
@@ -109,10 +116,14 @@
           <pre class="brush: ruby">(50.in(:usd) * 0.29).round(0) #=> "USD 15.00"
 (0.29 * 50.in(:usd)).round(0) #=> 15
 (1.0e+25 - BigDecimal.new("9999999999999999900000000").in(:usd)).round #=> 100000000</pre>
+<p>Keep control over every conversion of currency in your app: if you do not want implicit conversions in arithmetic operations and comparisons to take place, you can configure Exchange to raise Errors on operations and comparisons involving multiple currencies.</p>
+          <pre class="brush: ruby">Exchange.configuration.implicit_conversions = false
+1.in(:eur) + 3.in(:usd) #=> raises ImplicitConversionError
+1.in(:jpy) == 3.in(:chf) #=> raises ImplicitConversionError</pre>
         </section>
         <section id="typecasting">
           <h3>Typecasting</h3>
-          <p>Exchange features a typecasting module for you to use with your ruby classes. Using it is very easy:</p>
+          <p>Exchange features a typecasting module for you to use with your ruby classes, which instantiates Exchange::Money from three attributes: the amount, the currency and the creation date of the price (which defaults to Time.now if not used). Using it is simple:</p>
           <pre class="brush: ruby">class Article
   # make the class method available
   #
@@ -141,7 +152,7 @@ a.price #=> 2.in(:eur)</pre>
           <pre class="brush: ruby">a.price = 3.in(:usd)
 a.price == 3.in(:usd).to(:eur) #=> true
           </pre>
-          <p><a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/Typecasting" target="_blank">More in-depth info about typecasting</a></p>
+          <p>For more information about how to use the typecasting module, you can always visit the<a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/Typecasting" target="_blank">full documentation</a></p>
         </section>
         <section id="apis">
           <h3>Conversion Rate APIs</h3>
@@ -149,7 +160,7 @@ a.price == 3.in(:usd).to(:eur) #=> true
           <ul>
             <li><a href="http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057" target="_blank">Xaviermedia (XML API)</a></li>
             <li><a href="http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html" target="_blank">European Central Bank</a></li>
-            <li><a href="http://openexchangerates.org/" target="_blank">Open Exchange Rates API (Free Plan supported)</a></li>
+            <li><a href="http://openexchangerates.org/" target="_blank">Open Exchange Rates API (There is a free plan provided)</a></li>
           </ul>
           <p>To connect to a custom / private API, writing a small class is needed: <a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI" target="_blank">How to connect to a custom / private API using Exchange</a></p>
         </section>
