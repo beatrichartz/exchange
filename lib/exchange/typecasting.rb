@@ -77,13 +77,13 @@ module Exchange
         att = send(attribute)
         attribute_setter = :"#{attribute}_without_exchange_typecasting="
         
-        if !data.respond_to?(:currency)
-          send(attribute_setter, data)
+        send(attribute_setter, if !data.respond_to?(:currency)
+          data
         elsif att.currency == data.currency
-          send(attribute_setter, data.value)
+          data.value
         elsif att.currency != data.currency
-          send(attribute_setter, data.to(att.currency).value)
-        end
+          data.to(att.currency).value
+        end)
       end
       exchange_typecasting_alias_method_chain attribute, '='
     end

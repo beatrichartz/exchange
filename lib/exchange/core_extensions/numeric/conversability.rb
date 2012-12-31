@@ -29,11 +29,7 @@ module Exchange
     # @version 0.10
     #
     def in currency, options={}
-      if ISO4217.currencies.include? currency
-        Money.new(self, currency, options)
-      else
-        raise Exchange::NoCurrencyError.new("#{currency} is not a currency")
-      end
+      Money.new(self, currency, options)
     end    
   end
 end

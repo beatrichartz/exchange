@@ -19,7 +19,7 @@ module Exchange
     def self.prevent_errors_with_exchange_for base, meth
       base.send(:define_method, :"#{meth}without_errors", lambda { |other|
         if other.is_a?(Exchange::Money)
-          BigDecimal.new(self.to_s).send(meth, other).to_f
+          BigDecimal.new(self.to_s).send(meth, other.value).to_f
         else
           send(:"#{meth}with_errors", other)
         end

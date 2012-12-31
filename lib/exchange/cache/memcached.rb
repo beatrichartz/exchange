@@ -14,6 +14,8 @@ module Exchange
     #
     class Memcached < Base
         
+      def_delegators :instance, :client, :wipe_client!
+        
       # instantiates a memcached client and memoizes it in a class variable.
       # Use this client to access memcached data. For further explanation of use visit the memcached gem documentation
       # @example
@@ -23,6 +25,12 @@ module Exchange
       def client
         Exchange::GemLoader.new('dalli').try_load unless defined?(::Dalli)
         @client ||= Dalli::Client.new("#{config.host}:#{config.port}")
+      end
+      
+      # Wipe the client instance variable
+      #
+      def wipe_client!
+        @client = nil
       end
       
       # returns either cached data from the memcached client or calls the block and caches it in memcached.
