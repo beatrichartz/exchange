@@ -51,12 +51,14 @@ describe "Exchange::Cache::Configuration" do
       end
       it "should do so for the host" do
         subject.subclass.client.should_not be_nil
+        subject.subclass.client
         subject.subclass.instance.instance_variable_get("@client").should_not be_nil
         subject.host = 'new'
         subject.subclass.instance.instance_variable_get("@client").should be_nil
       end
       it "should do so for the port" do
         subject.subclass.client.should_not be_nil
+        subject.subclass.client
         subject.subclass.instance.instance_variable_get("@client").should_not be_nil
         subject.port = 112
         subject.subclass.instance.instance_variable_get("@client").should be_nil

@@ -12,6 +12,7 @@ rescue Bundler::BundlerError => e
 end
 
 require 'exchange'
+require 'dalli'
 
 module HelperMethods
   def fixture(name)
