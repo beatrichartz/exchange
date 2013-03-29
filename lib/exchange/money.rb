@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Top Level Module of the the gem.
 # @author Beat Richartz
 # @version 0.9
@@ -302,7 +303,8 @@ module Exchange
     def to_s format=:currency
       [
         format == :currency && ISO.stringify(value, currency),
-        format == :amount && ISO.stringify(value, currency, :amount_only => true)
+        format == :amount && ISO.stringify(value, currency, :amount_only => true),
+        format == :symbol && ISO.stringify(value, currency, :symbol => true)
       ].detect{|l| l.is_a?(String) }
     end
     

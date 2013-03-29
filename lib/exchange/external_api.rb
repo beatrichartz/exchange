@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'exchange/external_api/configuration'
 require 'exchange/external_api/base'
 require 'exchange/external_api/xml'

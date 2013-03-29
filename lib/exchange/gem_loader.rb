@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   
   # The gem loader takes care of loading gems without adding too many unnecessary dependencies to the gem

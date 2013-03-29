@@ -8,37 +8,51 @@ LAK:
   currency: Kip
   symbol: ₭
 SAR:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Saudi Riyal
   symbol: ﷼
 NOK:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Norwegian Krone
   symbol: kr
 USD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: US Dollar
   symbol: $
 RUB:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Russian Ruble
   symbol: руб
 XCD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: East Caribbean Dollar
   symbol: $
 OMR:
-  format: ! '#,###.###'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 3
   currency: Rial Omani
   symbol: ﷼
 AMD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Armenian Dram
   symbol: 
@@ -51,12 +65,16 @@ KPW:
   currency: North Korean Won
   symbol: ₩
 CNY:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Yuan Renminbi
   symbol: ¥
 KES:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Kenyan Shilling
   symbol: 
@@ -65,7 +83,9 @@ KHR:
   currency: Riel
   symbol: ៛
 PLN:
-  format: ! '# ###,##'
+  separators:
+    major: ' '
+    minor: ','
   minor_unit: 2
   currency: Zloty
   symbol: zł
@@ -74,47 +94,65 @@ MVR:
   currency: Rufiyaa
   symbol: 
 GTQ:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Quetzal
   symbol: Q
 CLP:
-  format: ! '#.###'
+  separators:
+    major: '.'
   minor_unit: 0
   currency: Chilean Peso
   symbol: $
 INR:
+  separators:
+    major: ','
+    minor: '.'
   format: ! '#,##,###.##'
   minor_unit: 2
   currency: Indian Rupee
   symbol: ''
 BZD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Belize Dollar
   symbol: BZ$
 MYR:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Malaysian Ringgit
   symbol: RM
 HKD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Hong Kong Dollar
   symbol: $
 COP:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Colombian Peso
   symbol: $
 DKK:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Danish Krone
   symbol: kr
 SEK:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Swedish Krona
   symbol: kr
@@ -127,7 +165,9 @@ LYD:
   currency: Libyan Dinar
   symbol: 
 RON:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: New Romanian Leu
   symbol: lei
@@ -140,12 +180,16 @@ BIF:
   currency: Burundi Franc
   symbol: 
 ARS:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Argentine Peso
   symbol: $
 GIP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Gibraltar Pound
   symbol: £
@@ -154,7 +198,9 @@ UYI:
   currency: Uruguay Peso en Unidades Indexadas (URUIURUI)
   symbol: 
 BOB:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Boliviano
   symbol: $b
@@ -179,7 +225,9 @@ XOF:
   currency: CFA Franc BCEAO
   symbol: 
 AED:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: UAE Dirham
   symbol: 
@@ -192,7 +240,9 @@ MWK:
   currency: Kwacha
   symbol: 
 CUP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Cuban Peso
   symbol: ₱
@@ -209,7 +259,9 @@ CVE:
   currency: Cape Verde Escudo
   symbol: 
 TZS:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Tanzanian Shilling
   symbol: 
@@ -266,7 +318,9 @@ MGA:
   currency: Malagasy Ariary
   symbol: 
 TOP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Pa’anga
   symbol: 
@@ -275,7 +329,9 @@ MZN:
   currency: Mozambique Metical
   symbol: MT
 LVL:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Latvian Lats
   symbol: Ls
@@ -288,32 +344,43 @@ USS:
   currency: US Dollar (Same day)
   symbol: 
 BWP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Pula
   symbol: P
 HNL:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Lempira
   symbol: L
 EUR:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Euro
   symbol: €
 EGP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Egyptian Pound
   symbol: £
 CHF:
-  format: ! '#''###.##'
+  separators:
+    major: "'"
+    minor: '.'
   minor_unit: 2
   currency: Swiss Franc
-  symbol: CHF
 ILS:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: New Israeli Sheqel
   symbol: ₪
@@ -322,12 +389,16 @@ PYG:
   currency: Guarani
   symbol: Gs
 LBP:
-  format: ! '# ###'
+  separators:
+    major: ' '
+    minor: '.'
   minor_unit: 2
   currency: Lebanese Pound
   symbol: £
 ANG:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Netherlands Antillean Guilder
   symbol: ƒ
@@ -344,7 +415,9 @@ WST:
   currency: Tala
   symbol: 
 NPR:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Nepalese Rupee
   symbol: ₨
@@ -353,12 +426,16 @@ KMF:
   currency: Comoro Franc
   symbol: 
 THB:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Baht
   symbol: ฿
 IRR:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Iranian Rial
   symbol: ﷼
@@ -367,17 +444,22 @@ SRD:
   currency: Surinam Dollar
   symbol: $
 JPY:
-  format: ! '#,###'
+  separators:
+    major: ','
   minor_unit: 0
   currency: Yen
   symbol: ¥
 BRL:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Brazilian Real
   symbol: R$
 UYU:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Peso Uruguayo
   symbol: $U
@@ -386,12 +468,16 @@ MOP:
   currency: Pataca
   symbol: 
 BMD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Bermudian Dollar
   symbol: $
 SZL:
-  format: ! '#, ###.##'
+  separators:
+    major: ', '
+    minor: '.'
   minor_unit: 2
   currency: Lilangeni
   symbol: 
@@ -400,12 +486,16 @@ ETB:
   currency: Ethiopian Birr
   symbol: 
 JOD:
-  format: ! '#,###.###'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 3
   currency: Jordanian Dinar
   symbol: 
 IDR:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Rupiah
   symbol: Rp
@@ -426,22 +516,30 @@ YER:
   currency: Yemeni Rial
   symbol: ﷼
 BAM:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Convertible Mark
   symbol: KM
 AWG:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Aruban Florin
   symbol: ƒ
 NZD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: New Zealand Dollar
   symbol: $
 PEN:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Nuevo Sol
   symbol: S/.
@@ -450,7 +548,9 @@ AOA:
   currency: Kwanza
   symbol: 
 KYD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Cayman Islands Dollar
   symbol: $
@@ -459,12 +559,16 @@ SLL:
   currency: Leone
   symbol: 
 TRY:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Turkish Lira
   symbol: ''
 VEF:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Bolivar Fuerte
   symbol: Bs
@@ -478,7 +582,9 @@ GNF:
   currency: Guinea Franc
   symbol: 
 BSD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Bahamian Dollar
   symbol: $
@@ -487,17 +593,23 @@ DJF:
   currency: Djibouti Franc
   symbol: 
 HUF:
-  format: ! '#.###'
+  separators:
+    major: '.'
+    minor: '.'
   minor_unit: 2
   currency: Forint
   symbol: Ft
 LTL:
-  format: ! '# ###,##'
+  separators:
+    major: ' '
+    minor: ','
   minor_unit: 2
   currency: Lithuanian Litas
   symbol: Lt
 MXN:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Mexican Peso
   symbol: $
@@ -506,7 +618,9 @@ SCR:
   currency: Seychelles Rupee
   symbol: ₨
 SGD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Singapore Dollar
   symbol: $
@@ -523,7 +637,9 @@ TND:
   currency: Tunisian Dinar
   symbol: 
 DOP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Dominican Peso
   symbol: RD$
@@ -540,7 +656,8 @@ SDG:
   currency: Sudanese Pound
   symbol: 
 VUV:
-  format: ! '#,###'
+  separators:
+    major: ','
   minor_unit: 0
   currency: Vatu
   symbol: 
@@ -553,7 +670,8 @@ LRD:
   currency: Liberian Dollar
   symbol: $
 KRW:
-  format: ! '#,###'
+  separators:
+    major: ','
   minor_unit: 0
   currency: Won
   symbol: ₩
@@ -562,17 +680,23 @@ MMK:
   currency: Kyat
   symbol: 
 MUR:
-  format: ! '#,###'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Mauritius Rupee
   symbol: ₨
 PHP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Philippine Peso
   symbol: ₱
 ZAR:
-  format: ! '# ###.##'
+  separators:
+    major: ' '
+    minor: '.'
   minor_unit: 2
   currency: Rand
   symbol: R
@@ -581,7 +705,9 @@ KGS:
   currency: Som
   symbol: лв
 GBP:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Pound Sterling
   symbol: £
@@ -598,12 +724,15 @@ TMT:
   currency: Turkmenistan New Manat
   symbol: 
 UAH:
-  format: ! '# ###,##'
+  separators:
+    major: ' '
+    minor: ','
   minor_unit: 2
   currency: Hryvnia
   symbol: ₴
 VND:
-  format: ! '#.###'
+  separators:
+    major: '.'
   minor_unit: 0
   currency: Dong
   symbol: ₫
@@ -616,7 +745,9 @@ BOV:
   currency: Mvdol
   symbol: 
 HRK:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Croatian Kuna
   symbol: kn
@@ -625,7 +756,9 @@ TTD:
   currency: Trinidad and Tobago Dollar
   symbol: TT$
 BHD:
-  format: ! '#,###.###'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 3
   currency: Bahraini Dinar
   symbol: 
@@ -638,22 +771,30 @@ RWF:
   currency: Rwanda Franc
   symbol: 
 MKD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Denar
   symbol: ден
 AUD:
-  format: ! '# ###.##'
+  separators:
+    major: ' '
+    minor: '.'
   minor_unit: 2
   currency: Australian Dollar
   symbol: $
 CRC:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Costa Rican Colon
   symbol: ₡
 PKR:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Pakistan Rupee
   symbol: ₨
@@ -666,7 +807,9 @@ UZS:
   currency: Uzbekistan Sum
   symbol: лв
 CZK:
-  format: ! '#.###,##'
+  separators:
+    major: '.'
+    minor: ','
   minor_unit: 2
   currency: Czech Koruna
   symbol: Kč
@@ -675,7 +818,9 @@ AZN:
   currency: Azerbaijanian Manat
   symbol: ман
 BDT:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Taka
   symbol: 
@@ -692,7 +837,9 @@ MXV:
   currency: Mexican Unidad de Inversion (UDI)
   symbol: 
 CUC:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Peso Convertible
   symbol: 
@@ -713,17 +860,23 @@ CHW:
   currency: WIR Franc
   symbol: 
 CAD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Canadian Dollar
   symbol: $
 JMD:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Jamaican Dollar
   symbol: J$
 BND:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: Brunei Dollar
   symbol: $
@@ -732,7 +885,9 @@ ALL:
   currency: Lek
   symbol: Lek
 SVC:
-  format: ! '#,###.##'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 2
   currency: El Salvador Colon
   symbol: $
@@ -745,7 +900,9 @@ GHS:
   currency: Ghana Cedi
   symbol: 
 KWD:
-  format: ! '#,###.###'
+  separators:
+    major: ','
+    minor: '.'
   minor_unit: 3
   currency: Kuwaiti Dinar
   symbol: 

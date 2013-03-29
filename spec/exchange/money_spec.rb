@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'spec_helper'
 
 describe "Exchange::Money" do
@@ -499,6 +500,14 @@ describe "Exchange::Money" do
       Exchange::Money.new(23.2, :tnd).to_s(:amount).should == "23.200"
       Exchange::Money.new(23.4, :sar).to_s(:amount).should == "23.40"
       Exchange::Money.new(23.0, :clp).to_s(:amount).should == "23"
+    end
+    it "should render the currency with a symbol according to ISO 4217 Definitions" do
+      Exchange::Money.new(23.232524, :tnd).to_s(:symbol).should == "TND 23.233"
+      Exchange::Money.new(23.23252423, :sar).to_s(:symbol).should == "﷼23.23"
+      Exchange::Money.new(23.23252423, :clp).to_s(:symbol).should == "$23"
+      Exchange::Money.new(23.2, :tnd).to_s(:symbol).should == "TND 23.200"
+      Exchange::Money.new(23.4, :sar).to_s(:symbol).should == "﷼23.40"
+      Exchange::Money.new(23.0, :clp).to_s(:symbol).should == "$23"
     end
   end
   describe "methods via method missing" do

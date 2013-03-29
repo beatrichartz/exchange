@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   
   # Allows to access properties of an object as currencies

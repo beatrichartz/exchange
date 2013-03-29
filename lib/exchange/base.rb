@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   
   # The current version of the exchange gem

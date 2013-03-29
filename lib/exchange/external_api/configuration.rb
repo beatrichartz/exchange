@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   module ExternalAPI
     # @author Beat Richartz

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   module ExternalAPI
     # The Open Exchange Rates API class, handling communication with the Open Source Currency bot API

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'singleton'
 require 'forwardable'
 require 'yaml'
@@ -104,9 +105,22 @@ module Exchange
     #   Exchange::ISO.stringif(34.34, :omr, :amount_only => true) #=> "34.340"
     #
     def stringify(amount, currency, opts={})
-      format      = "%.#{definitions[currency][:minor_unit]}f"
-      pre         = [opts[:amount_only] && '', opts[:symbol] && (definitions[currency][:symbol] || currency.to_s.upcase), currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
-      "#{pre}#{format % amount}"
+      definition    = definitions[currency]
+      separators    = definition[:separators] || {}
+      format        = "%.#{definition[:minor_unit]}f"
+      string        = format % amount
+      major, minor  = string.split('.')
+      
+      if separators[:major]
+        major.reverse!
+        major.gsub!(/(\d{3})(?=.)/) { $1 + separators[:major] }
+        major.reverse!
+      end
+      
+      string      = minor ? major + (separators[:minor] || '.') + minor : major
+      pre         = [opts[:amount_only] && '', opts[:symbol] && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
+      
+      "#{pre}#{string}"
     end
     
     # Use this to round a currency amount. This allows us to round exactly to the number of minors the currency has in the 
@@ -148,12 +162,7 @@ module Exchange
       new_hsh = Hash.new
       
       hsh.each_pair do |k,v| 
-        if v.is_a?(Hash)
-          v.keys.each do |key|
-            v[key.to_sym] = v.delete(key)
-          end
-        end
-        
+        v = symbolize_keys v if v.is_a?(Hash)        
         new_hsh[k.downcase.to_sym] = v
       end
       

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   
   # The external API module. Every class Handling an API has to be placed here and inherit from base. It has to call an api and define
