@@ -112,7 +112,8 @@ module Exchange
         #
         def install_operation op
           define_method op do |*precision|
-            Exchange::Money.new(ISO.send(op, self.value, self.currency, precision.first), currency, :at => time, :from => self)
+            psych = precision.first == :psych
+            Exchange::Money.new(ISO.send(op, self.value, self.currency, psych ? nil : precision.first, {:psych => psych}), currency, :at => time, :from => self)
           end
         end
       

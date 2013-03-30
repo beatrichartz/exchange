@@ -751,6 +751,35 @@ describe "Exchange::ISO" do
       subject.round(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.23")
       subject.round(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("23")
     end
+    it "should round psychologically if asked" do
+      subject.round(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true}).should == BigDecimal.new("22.999")
+      subject.round(BigDecimal.new("23.232524"), :sar, nil, {:psych => true}).should == BigDecimal.new("22.99")
+      subject.round(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("19")
+    end
+  end
+  describe "self.ceil" do
+    it "should ceil a currency according to ISO 4217 Definitions" do
+      subject.ceil(BigDecimal.new("23.232524"), :tnd).should == BigDecimal.new("23.233")
+      subject.ceil(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.24")
+      subject.ceil(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("24")
+    end
+    it "should ceil psychologically if asked" do
+      subject.ceil(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true}).should == BigDecimal.new("23.999")
+      subject.ceil(BigDecimal.new("23.232524"), :sar, nil, {:psych => true}).should == BigDecimal.new("23.99")
+      subject.ceil(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("29")
+    end
+  end
+  describe "self.floor" do
+    it "should floor a currency according to ISO 4217 Definitions" do
+      subject.floor(BigDecimal.new("23.232524"), :tnd).should == BigDecimal.new("23.232")
+      subject.floor(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.23")
+      subject.floor(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("23")
+    end
+    it "should floor psychologically if asked" do
+      subject.floor(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true}).should == BigDecimal.new("22.999")
+      subject.floor(BigDecimal.new("23.232524"), :sar, nil, {:psych => true}).should == BigDecimal.new("22.99")
+      subject.floor(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("19")
+    end
   end
   describe "self.stringify" do
     it "should stringify a currency according to ISO 4217 Definitions" do
