@@ -28,6 +28,7 @@
             <li><a href="#installation">Installation</a></li>
             <li><a href="#basics">Basics</a></li>
             <li><a href="#conversion">Conversion</a></li>
+            <li><a href="#formatting">Formatting</a></li>
             <li><a href="#rounding">Rounding</a></li>
             <li><a href="#arithmetics">Arithmetics</a></li>
             <li><a href="#comparison">Comparing and Sorting</a></li>
@@ -50,7 +51,7 @@
       </div>
       <div class="two_third" id="content">
         <section id="about">
-          <p>Exchange is a library helping you to deal with money in your ruby application. It features an intuitive DSL, measures to prevent floating point errors, currency conversion, typecasting and other niceties. It's goal is to make your life easier by dealing with money in decimal format with the precision of your choice and relieving you of most of the pitfalls involved in money handling.</p>
+          <p>Exchange is a library helping you to deal with money in your ruby application. It features an intuitive DSL, measures to prevent floating point errors, currency conversion, typecasting, formatting options and more. It's goal is to make your life easier by dealing with money in decimal format with the precision of your choice and relieving you of most of the pitfalls involved in money handling.</p>
         </section>
         <section id="installation">
           <h3>Installation</h3>
@@ -82,6 +83,17 @@ currency.to(:jpy)
 currency.to(:omr)</pre>
           <p>Exchange keeps a the instance the currency was converted from for information purposes</p>
           <pre class="brush: ruby">1.in(:usd).to(:eur).from == 1.in(:usd) #=> true</pre>
+        </section>
+        <section id="formatting">
+          <h3>Formatting</h3>
+          <p>Normal formatting via to_s includes the ISO4217-compatible currency code</p>
+          <pre class="brush: ruby">1.in(:usd).to_s #=> "USD 1.00"</pre>
+          <p>Specify the symbol format will print out the currency with a symbol. If no symbol is associated with a currency, the fallback used is the normally formatted string with the ISO4217-compatible currency code</p>
+          <pre class="brush: ruby">1.2.in(:eur).to_s(:symbol) #=> "€1.40"</pre>
+          <p>Specifying the amount format will print out the formatted amount only</p>
+          <pre class="brush: ruby">1440.4.in(:usd).to_s(:amount) #=> "1,440.40"</pre>
+          <p>As seen above, exchange takes care of the right format for the separators</p>
+          <pre class="brush: ruby">155_000_000.in(:usd).to_s #=> "USD 155,000,000.00"</pre>
         </section>
         <section id="rounding">
           <h3>Rounding</h3>
