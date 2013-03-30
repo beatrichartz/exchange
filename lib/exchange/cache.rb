@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'exchange/cache/configuration'
 require 'exchange/cache/base'
 require 'exchange/cache/memcached'

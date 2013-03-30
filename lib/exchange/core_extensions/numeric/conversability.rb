@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   
   # The conversability module which will get included in Fixnum and Float, giving them the in currency instantiate methods

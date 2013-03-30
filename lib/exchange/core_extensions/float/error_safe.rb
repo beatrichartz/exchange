@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module Exchange
   
   # Make Floating Points forget about their incapabilities when dealing with money

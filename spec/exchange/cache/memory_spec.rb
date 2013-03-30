@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'spec_helper'
 
 describe "Exchange::Cache::Memory" do
@@ -37,7 +38,8 @@ describe "Exchange::Cache::Memory" do
     end
     it "should unset all expired instance variables" do
       subject.send(:clean!)
-      subject.instance_variables.reject{|i| i.to_s == "@helper" }.map{|i| subject.instance_variable_get(i) }.compact.sort_by(&:to_s).should == %W(Valid1 Valid2 Valid3 Valid4).sort
+      ivars = subject.instance_variables.reject{|i| i.to_s == "@helper" }.map{|i| subject.instance_variable_get(i) }.compact.sort_by(&:to_s)
+      ivars.select{|i| i.is_a?(String) }.should be_eql(%W(Valid1 Valid2 Valid3 Valid4))
     end
   end
   describe "cached" do

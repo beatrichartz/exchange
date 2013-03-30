@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'singleton'
 require 'forwardable'
 
@@ -10,7 +11,7 @@ module Exchange
     attr_accessor :subclass
     
     def_delegators :instance, :subclass, :subclass=, :set
-     
+    
     def subclass_with_constantize
       self.subclass = parent_module.const_get camelize(self.subclass_without_constantize) unless !self.subclass_without_constantize || self.subclass_without_constantize.is_a?(Class)
       subclass_without_constantize

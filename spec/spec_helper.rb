@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
@@ -12,6 +13,7 @@ rescue Bundler::BundlerError => e
 end
 
 require 'exchange'
+require 'dalli'
 
 module HelperMethods
   def fixture(name)

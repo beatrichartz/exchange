@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # Top Level Module of the the gem.
 # @author Beat Richartz
 # @version 0.9
@@ -88,8 +89,16 @@ module Exchange
       if api_supports_currency?(other)
         opts = { :at => time, :from => self }.merge(options)
         Money.new(api.new.convert(value, currency, other, opts), other, opts)
+      elsif fallback!
+        to other, options
       else
         raise_no_rate_error(other)
+      end
+    rescue ExternalAPI::APIError
+      if fallback!
+        to other, options
+      else
+        raise
       end
     end
     alias :in :to
@@ -296,17 +305,33 @@ module Exchange
     #   Exchange::Money.new(45, :jpy).to_s #=> "JPY 45"
     # @example Convert a currency with a three decimal minor to a string
     #   Exchange::Money.new(34.34, :omr).to_s #=> "OMR 34.340"
-    # @example Convert a currency to a string without the currency
-    #   Exchange::ISO.stringif(34.34, :omr).to_s(:iso) #=> "34.340"
+    # @example Convert a currency with a three decimal minor to a string with a currency symbol
+    #   Exchange::Money.new(34.34, :usd).to_s(:symbol) #=> "$34.34"
+    # @example Convert a currency with a three decimal minor to a string with just the amount
+    #   Exchange::Money.new(34.34, :omr).to_s(:amount) #=> "34.340"
     #
     def to_s format=:currency
-      [
-        format == :currency && ISO.stringify(value, currency),
-        format == :amount && ISO.stringify(value, currency, :amount_only => true)
-      ].detect{|l| l.is_a?(String) }
+      ISO.stringify(value, currency, :format => format)
     end
     
     private
+    
+      # Fallback to the next api defined in the api fallbacks. Changes the api for the given instance
+      # @return [Boolean] true if the fallback was successful, false if not
+      # @since 1.0
+      # @version 1.0
+      #
+      def fallback!
+        fallback = Exchange.configuration.api.fallback
+        new_api  = fallback.index(api) ? fallback[fallback.index(api) + 1] : fallback.first
+        
+        if new_api
+          @api = new_api
+          return true
+        end
+        
+        return false
+      end
     
       # determine if another given object is an instance of Exchange::Money
       # @param [Object] other The object to be tested against
@@ -363,7 +388,7 @@ module Exchange
       # @version 0.7.2
       #
       def raise_no_rate_error other
-        raise NoRateError.new("Cannot convert to #{other} because the defined api does not provide a rate")
+        raise NoRateError.new("Cannot convert to #{other} because the defined api nor the fallbacks provide a rate")
       end
   
   end
