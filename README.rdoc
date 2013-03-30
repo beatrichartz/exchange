@@ -28,6 +28,12 @@ Conversion of currencies does not get any easier
 or better for historic dates
   1.in(:eur).to(:usd, :at => Time.now - 84600)
   
+=== Fallbacks for Conversion APIs
+Never worry if an API is shortly unavailable – Exchange provides the possibility to fall back to other conversion API's if the chosen one is currently not available or does not provide a rate for the attempted conversion. Thus it is possible to combine different API's with incomplete currency sets to have a more complete currency set. 
+
+The performance impact of a fallback if a rate is recognizably not provided by an API is minimal, whereas the performance impact on a http connection error can have a bigger impact on performance. 
+
+The default fallback mechanism used calls the ECB API if the Xavier Media API is unavailable. You can set your own fallback chain using the API configuration.
   
 === Precise Calculation
 
@@ -93,9 +99,21 @@ You're hitting the internet only daily to get new rates (hourly updates are avai
 One of the issues with currencies is: You never know the format they should be in. With Exchange, you can just use the currencies
 to_s method, which takes care of the right format for you. You can either have a string with the currency code in front, or just the amount in the right format
 
-  49.567.in(:usd).to_s           #=> "USD 49.57"
-  45.in(:jpy).to_s               #=> "JPY 45"
-  34.34.in(:omr).to_s            #=> "OMR 34.340"
+Normal formatting via to_s includes the ISO4217-compatible currency code
+
+  1.in(:usd).to_s #=> "USD 1.00"
+
+Specify the symbol format will print out the currency with a symbol. If no symbol is associated with a currency, the fallback used is the normally formatted string with the ISO4217-compatible currency code
+
+  1.2.in(:eur).to_s(:symbol) #=> "€1.40"
+
+Specifying the amount format will print out the formatted amount only
+
+  1440.4.in(:usd).to_s(:amount) #=> "1,440.40"
+
+As seen above, exchange takes care of the right format for the separators
+
+  155_000_000.in(:usd).to_s #=> "USD 155,000,000.00"
 
 === Use three great APIs or your own
 
@@ -197,7 +215,15 @@ Convert one currency to another and round, ceil or floor it, it still retains cu
   10.34.in(:usd).to(:nok).ceil(0)                      #=> #<Exchange::Money @value=45 @currency=:nok>
   5.34.in(:usd).to(:eur).floor(0)                      #=> #<Exchange::Money @value=4 @currency=:eur>
   5.34.in(:usd).to(:eur).floor.from                    #=> #<Exchange::Money @value=5.34 @currency=:usd>
-  
+
+=== Psychological Pricing
+
+You can apply psychological pricing by passing the psych argument to the rounding operation
+
+  10.345.in(:usd).round(:psych)                       #=> 9.99
+  9.999.in(:eur).floor(:psych)                        #=> 8.99
+  10.345.in(:omr).ceil(:psych)                        #=> 10.999
+  76.in(:jpy).floor(:psych)                           #=> 69
   
 === Retain Information
 
