@@ -17,7 +17,7 @@ Then require it
   require 'exchange'
   
 === Production Ready
-Exchange is production-ready. It is in use on {rightclearing.com}[http://rightclearing.com], a music licensing service worth noticing. If you use this gem in production, {drop a note}[beat.richartz@gmail.com] so your app can be listed here.
+Exchange is production-ready. It is in use on {rightclearing.com}[http://rightclearing.com], a music licensing service worth noticing. If you use this gem in production, {drop a note}[mailto:beat.richartz@gmail.com] so your app can be listed here.
 
 == Features
 
