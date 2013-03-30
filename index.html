@@ -28,6 +28,7 @@
             <li><a href="#installation">Installation</a></li>
             <li><a href="#basics">Basics</a></li>
             <li><a href="#conversion">Conversion</a></li>
+            <li><a href="#fallbacks">Fallbacks</a></li>
             <li><a href="#formatting">Formatting</a></li>
             <li><a href="#rounding">Rounding</a></li>
             <li><a href="#arithmetics">Arithmetics</a></li>
@@ -84,6 +85,10 @@ currency.to(:omr)</pre>
           <p>Exchange keeps a the instance the currency was converted from for information purposes</p>
           <pre class="brush: ruby">1.in(:usd).to(:eur).from == 1.in(:usd) #=> true</pre>
         </section>
+        <section id="fallbacks">
+          <h3>Fallbacks</h3>
+          <p>Never worry if an API is shortly unavailable – Exchange provides the possibility to fall back to other conversion API's if the chosen one is currently not available or does not provide a rate for the attempted conversion. Thus it is possible to combine different API's with incomplete currency sets to have a more complete currency set. <br/><br/>The performance impact of a fallback if a rate is recognizably not provided by an API is minimal, whereas the performance impact on a http connection error can have a bigger impact on performance. <br/><br/>The default fallback mechanism used calls the ECB API if the Xavier Media API is unavailable. You can set your own fallback chain using the API configuration.</p>
+        </section>
         <section id="formatting">
           <h3>Formatting</h3>
           <p>Normal formatting via to_s includes the ISO4217-compatible currency code</p>
@@ -102,6 +107,11 @@ currency.to(:omr)</pre>
 9.999.in(:eur).floor #=> 9.99
 10.345.in(:usd).round(0) #=> 10
 9.999.in(:eur).floor(1) #=> 9.9</pre>
+          <p>You can apply <a href="https://en.wikipedia.org/wiki/Psychological_pricing" target="_blank">psychological rounding</a> by passing the psych argument to the rounding operation</p>
+          <pre class="brush: ruby">10.345.in(:usd).round(:psych) #=> 9.99
+9.999.in(:eur).floor(:psych) #=> 8.99
+10.345.in(:omr).ceil(:psych) #=> 10.999
+76.in(:jpy).floor(:psych) #=> 69</pre>
         </section>
         <section id="arithmetics">
           <h3>Arithmetics</h3>
@@ -174,8 +184,9 @@ a.price == 3.in(:usd).to(:eur) #=> true
           <ul>
             <li><a href="http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057" target="_blank">Xaviermedia (XML API)</a></li>
             <li><a href="http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html" target="_blank">European Central Bank</a></li>
-            <li><a href="http://openexchangerates.org/" target="_blank">Open Exchange Rates API (There is a free plan provided)</a></li>
+            <li><a href="http://openexchangerates.org/" target="_blank">Open Exchange Rates API (There is a free plan provided)</a></li>            
           </ul>
+          <p>There is also a :random option for development use. It will put out random exchange rates. This can be useful if you are not connected to the internet.</p>
           <p>To connect to a custom / private API, writing a small class is needed: <a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI" target="_blank">How to connect to a custom / private API using Exchange</a></p>
         </section>
         <section id="cache">
@@ -220,6 +231,10 @@ api: { # Takes the conversion api configuration as a hash, the options are:
     # Some services like Open Exchange Rates require an App Id for requests
     # This is where to put it
   protocol: :http # The protocol to use for the requests
+  fallback: :ecb
+    # Fallback APIs to use if the requested api in :subclass is not available or does not provide any rate for the given conversion
+    # takes an underscored symbol which is constantized or an array of underscored symbols
+    # on first use: :your_api -> [Exchange::ExternalAPI::YourApi]
 }
 implicit_conversions: true
   # If set to false, operations involving multiple currencies will
