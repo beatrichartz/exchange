@@ -16,8 +16,8 @@ Just install it as a gem
 Then require it
   require 'exchange'
   
-=== Deprecations in 0.10.0
-The old gem API (3.eur, 5.usd.to_chf) has been abandoned in favor of the new (1.in(:eur), 5.in(:usd).to(:chf)). This resolves a conflict of the earlier versions with the active support "try" method, which also stands for turkish lira. It also makes dynamic instantiation of currencies easier (in(currency) is better than send(currency), to(currency) much better than send(:"to_#{currency}")) Version 0.9.0 still supports the old API, so if you don't have the time to change now, just continue to use the old version and change later. There are no other changes than the api and no bugfixes from 0.9.0 to 0.10.0.
+=== Production Ready
+Exchange is production-ready. It is in use on {rightclearing.com}[http://rightclearing.com], a music licensing service worth noticing. If you use this gem in production, {drop a note}[beat.richartz@gmail.com] so your app can be listed here.
 
 == Features
 
