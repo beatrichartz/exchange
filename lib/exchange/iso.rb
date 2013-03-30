@@ -93,7 +93,7 @@ module Exchange
     # @param [BigDecimal, Fixed, Float] amount The amount of currency you want to stringify
     # @param [String, Symbol] currency The currency you want to stringify
     # @param [Hash] opts The options for formatting
-    # @option opts [Boolean] :amount_only Whether you want to have the currency in the string or not
+    # @option opts [Boolean] :format The format to put the string out in: :amount for only the amount, :symbol for a string with a currency symbol
     # @return [String] The formatted string
     # @example Convert a currency to a string
     #   Exchange::ISO.stringify(49.567, :usd) #=> "USD 49.57"
@@ -118,7 +118,7 @@ module Exchange
       end
       
       string      = minor ? major + (separators[:minor] || '.') + minor : major
-      pre         = [opts[:amount_only] && '', opts[:symbol] && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
+      pre         = [opts[:format] == :amount && '', opts[:format] == :symbol && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
       
       "#{pre}#{string}"
     end

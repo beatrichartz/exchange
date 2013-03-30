@@ -763,27 +763,27 @@ describe "Exchange::ISO" do
     end
     context "amount only" do
       it "should not render the currency" do
-        subject.stringify(BigDecimal.new("23.232524"), :tnd, :amount_only => true).should == "23.233"
-        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :amount_only => true).should == "223'423'432'343.23"
-        subject.stringify(BigDecimal.new("23.232524"), :clp, :amount_only => true).should == "23"
-        subject.stringify(BigDecimal.new("23.2"), :tnd, :amount_only => true).should == "23.200"
-        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :amount_only => true).should == "25,645,645,663.40"
-        subject.stringify(BigDecimal.new("23.0"), :clp, :amount_only => true).should == "23"
+        subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :amount).should == "23.233"
+        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :amount).should == "223'423'432'343.23"
+        subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :amount).should == "23"
+        subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :amount).should == "23.200"
+        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :amount).should == "25,645,645,663.40"
+        subject.stringify(BigDecimal.new("23.0"), :clp, :format => :amount).should == "23"
       end
     end
     context "symbol" do
       context "with a symbol present" do
         it "should render a symbol for the currency" do
-          subject.stringify(BigDecimal.new("23.232524"), :usd, :symbol => true).should == "$23.23"
-          subject.stringify(BigDecimal.new("23.232524"), :irr, :symbol => true).should == "﷼23.23"
-          subject.stringify(BigDecimal.new("345543453453.232524"), :gbp, :symbol => true).should == "£345,543,453,453.23"
-          subject.stringify(BigDecimal.new("23.232524"), :eur, :symbol => true).should == "€23.23"
+          subject.stringify(BigDecimal.new("23.232524"), :usd, :format => :symbol).should == "$23.23"
+          subject.stringify(BigDecimal.new("23.232524"), :irr, :format => :symbol).should == "﷼23.23"
+          subject.stringify(BigDecimal.new("345543453453.232524"), :gbp, :format => :symbol).should == "£345,543,453,453.23"
+          subject.stringify(BigDecimal.new("23.232524"), :eur, :format => :symbol).should == "€23.23"
         end
       end
       context "without a symbol present" do
         it "should render the currency abbreviation" do
-          subject.stringify(BigDecimal.new("32741393.232524"), :chf, :symbol => true).should == "CHF 32'741'393.23"
-          subject.stringify(BigDecimal.new("23.232524"), :etb, :symbol => true).should == "ETB 23.23"
+          subject.stringify(BigDecimal.new("32741393.232524"), :chf, :format => :symbol).should == "CHF 32'741'393.23"
+          subject.stringify(BigDecimal.new("23.232524"), :etb, :format => :symbol).should == "ETB 23.23"
         end
       end
     end
