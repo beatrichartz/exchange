@@ -29,7 +29,8 @@ describe "Exchange::Configuration" do
     Exchange.configuration = Exchange::Configuration.new {|c|
       c.api = {
         :subclass => :xavier_media,
-        :retries => 60
+        :retries => 60,
+        :fallback => :open_exchange_rates
       }
       c.cache = {
         :subclass => :redis
@@ -37,6 +38,7 @@ describe "Exchange::Configuration" do
     }
     Exchange.configuration.api.subclass.should == Exchange::ExternalAPI::XavierMedia
     Exchange.configuration.api.retries.should == 60
+    Exchange.configuration.api.fallback.should == [Exchange::ExternalAPI::OpenExchangeRates]
     Exchange.configuration.cache.subclass.should == Exchange::Cache::Redis
   end
   it "should allow to be set directly" do
@@ -67,6 +69,7 @@ describe "Exchange::Configuration" do
       subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
       subject.api.retries.should == 5
       subject.api.app_id.should be_nil
+      subject.api.fallback.should == [Exchange::ExternalAPI::Ecb]
       subject.cache.subclass.should == Exchange::Cache::Memory
       subject.cache.host.should be_nil
       subject.cache.port.should be_nil

@@ -68,7 +68,7 @@ module Exchange
     end
     
     # The configuration defaults
-    # @version 0.6
+    # @version 1.0
     # @since 0.6
     #
     DEFAULTS = { 
@@ -77,7 +77,7 @@ module Exchange
                     :retries => 5,
                     :protocol => :http,
                     :app_id => nil,
-                    :raise => true
+                    :fallback => ExternalAPI::Ecb
                   },
                   :cache => {
                     :subclass => Cache::Memory,
@@ -145,8 +145,9 @@ module Exchange
     # @since 0.6
     # @version 0.6
     # @param [Hash] The hash to set the configuration to
-    # @option [Symbol] :subclass The API subclass to use as a underscored symbol (will be camelized and constantized)
+    # @option [Symbol] :subclass The API subclass to use as a underscored symbol (will be camelized and constantized). Options available are :open_exchange_rates, :xavier_media, :ecb and :random (Random Rates for development use). You can build your own api subclass by following instructions under external_api/base.rb
     # @option [Integer] :retries The amount of retries on connection failure
+    # @option [Array,Symbol,Class] :fallback An array of fallbacks to be tried in the event when the standard API lookup fails or the standard API does not support the given currency 
     # @example set the api to be ecb with a maximum of 8 retries on connection failure
     #   configuration.api = { :subclass => :ecb, :retries => 8 }
     #
@@ -156,7 +157,7 @@ module Exchange
     # @since 0.6
     # @version 0.6
     # @param [Hash] The hash to set the configuration to
-    # @option [Symbol] :subclass The Cache subclass to use as a underscored symbol (will be camelized and constantized)
+    # @option [Symbol] :subclass The Cache subclass to use as a underscored symbol (will be camelized and constantized). Options available are :memcached (via Dalli), :redis, :rails and :memory (default). You can build your own cache subclass by following instructions under cache/base.rb
     # @option [String] :host The cache connection host
     # @option [Integer] :port The cache connection port
     # @option [Symbol] :expire The expiration period for the cache, can be :daily or :hourly, defaults to daily

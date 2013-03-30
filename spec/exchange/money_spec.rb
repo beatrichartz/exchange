@@ -6,7 +6,8 @@ describe "Exchange::Money" do
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new do |c|
       c.api = {
-        :subclass => :open_exchange_rates
+        :subclass => :open_exchange_rates,
+        :fallback => [:xavier_media, :ecb]
       }
       c.cache = {
         :subclass => :no_cache
@@ -56,8 +57,41 @@ describe "Exchange::Money" do
       end
     end
     context "when an api is not reachable" do
-      it "should use the fallback " do
-        
+      context "and a fallback api is" do
+        it "should use the fallback " do
+          URI.should_receive(:parse).with("http://openexchangerates.org/api/latest.json?app_id=").once.and_raise Exchange::ExternalAPI::APIError
+          mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
+          subject.to(:ch).value.round(2).should == 36.36
+          subject.to(:ch).currency.should == :chf
+          subject.to(:ch).should be_kind_of Exchange::Money
+        end
+      end
+      context "and no fallback api is" do
+        it "should raise the api error" do
+          URI.should_receive(:parse).with("http://openexchangerates.org/api/latest.json?app_id=").once.and_raise Exchange::ExternalAPI::APIError
+          URI.should_receive(:parse).with("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml").once.and_raise Exchange::ExternalAPI::APIError
+          URI.should_receive(:parse).with("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml").once.and_raise Exchange::ExternalAPI::APIError
+          lambda { subject.to(:ch) }.should raise_error Exchange::ExternalAPI::APIError
+        end
+      end
+    end
+    context "with a currency not provided by the given api" do
+      context "but provided by a fallback api" do
+        it "should use the fallback" do
+          subject.api::CURRENCIES.stub! :include? => false
+          mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
+          subject.to(:ch).value.round(2).should == 36.36
+          subject.to(:ch).currency.should == :chf
+          subject.to(:ch).should be_kind_of Exchange::Money
+        end
+      end
+      context "but not provided by any fallback api" do
+        it "should raise the no rate error" do
+          Exchange::ExternalAPI::OpenExchangeRates::CURRENCIES.stub! :include? => false
+          Exchange::ExternalAPI::XavierMedia::CURRENCIES.stub! :include? => false
+          Exchange::ExternalAPI::Ecb::CURRENCIES.stub! :include? => false
+          lambda { subject.to(:xaf) }.should raise_error Exchange::NoRateError
+        end
       end
     end
   end
