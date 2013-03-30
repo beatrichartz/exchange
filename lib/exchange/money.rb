@@ -92,6 +92,8 @@ module Exchange
       else
         raise_no_rate_error(other)
       end
+    rescue APIError
+      
     end
     alias :in :to
     

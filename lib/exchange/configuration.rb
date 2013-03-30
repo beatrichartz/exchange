@@ -76,7 +76,8 @@ module Exchange
                     :subclass => ExternalAPI::XavierMedia, 
                     :retries => 5,
                     :protocol => :http,
-                    :app_id => nil
+                    :app_id => nil,
+                    :raise => true
                   },
                   :cache => {
                     :subclass => Cache::Memory,

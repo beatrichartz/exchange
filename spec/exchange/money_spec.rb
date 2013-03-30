@@ -55,6 +55,11 @@ describe "Exchange::Money" do
         subject.to(:ch).should be_kind_of Exchange::Money
       end
     end
+    context "when an api is not reachable" do
+      it "should use the fallback " do
+        
+      end
+    end
   end
   describe "operations" do
     after(:each) do
