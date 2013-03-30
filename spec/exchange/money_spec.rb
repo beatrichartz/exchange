@@ -468,6 +468,11 @@ describe "Exchange::Money" do
           subject.round(2).currency.should == :usd
           subject.round(2).should be_kind_of Exchange::Money
         end
+        it "should allow for psychological rounding" do
+          subject.round(:psych).value.should == 39.99
+          subject.round(:psych).currency.should == :usd
+          subject.round(:psych).should be_kind_of Exchange::Money
+        end
       end
     end
     describe "ceil" do
@@ -494,6 +499,11 @@ describe "Exchange::Money" do
           subject.ceil(2).currency.should == :omr
           subject.ceil(2).should be_kind_of Exchange::Money
         end
+        it "should allow for psychological ceiling" do
+          subject.ceil(:psych).value.should == 40.999
+          subject.ceil(:psych).currency.should == :omr
+          subject.ceil(:psych).should be_kind_of Exchange::Money
+        end
       end
     end
     describe "floor" do
@@ -519,6 +529,11 @@ describe "Exchange::Money" do
           subject.floor(2).value.should == 40.72
           subject.floor(2).currency.should == :jpy
           subject.floor(2).should be_kind_of Exchange::Money
+        end
+        it "should allow for psychological flooring" do
+          subject.floor(:psych).value.should == 39
+          subject.floor(:psych).currency.should == :jpy
+          subject.floor(:psych).should be_kind_of Exchange::Money
         end
       end
     end
