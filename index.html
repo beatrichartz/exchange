@@ -68,9 +68,10 @@
           <pre class="brush: ruby">1.in(:it) #=> same as 1.in(:eur)</pre>
           <p>Convert a currency to another</p>
           <pre class="brush: ruby">1.2.in(:eur).to(:jpy)</pre>
-          <p>to_s converts the currency to a string in an ISO4217-compatible format, complete with the right precision and the ISO standard currency abbreviation. You can also choose to only print the amount with the right precision by passing an argument.</p>
+          <p>to_s converts the currency to a string in ISO4217-compatible format, complete with the right precision and the ISO standard currency abbreviation. You can also choose to only print the amount or to get a string with a currency symbol rather than the abbreviation by passing an argument.</p>
           <pre class="brush: ruby">220.2.in(:jpy).to_s #=> "JPY 220"
-245.934.in(:usd).to_s(:amount) #=> "245.93"</pre>
+245.934.in(:usd).to_s(:amount) #=> "245.93"
+245.934.in(:usd).to_s(:symbol) #=> "$245.93"</pre>
           <p>Apply any method you would apply to a normal instance of numeric. Method missing is routed to the currency value.</p>
           <pre class="brush: ruby">1.2.in(:eur).zero?</pre>
         </section>
@@ -80,7 +81,7 @@
           <pre class="brush: ruby">1.in(:usd).to(:eur)</pre>
           <p>Convert at yesterday's rate</p>
           <pre class="brush: ruby">1.2.in(:eur).to(:jpy, at: Time.now - 86400)</pre>
-          <p>Currencies can be defined with a timestamp which is applied whenever a currency takes place. In the example, the defined currency is always converted using the rates of January 2, 2000</p>
+          <p>Currencies can be defined with a timestamp which is applied whenever a conversion takes place. In the example, the defined currency is always converted using the rates of January 2, 2000</p>
           <pre class="brush: ruby">currency = 1.2.in(:eur, at: Time.gm(2000,1,2))
 currency.to(:jpy)
 currency.to(:omr)</pre>
@@ -89,7 +90,7 @@ currency.to(:omr)</pre>
         </section>
         <section id="fallbacks">
           <h3>Fallbacks</h3>
-          <p>Never worry if an API is shortly unavailable – Exchange provides the possibility to fall back to other conversion API's if the chosen one is currently not available or does not provide a rate for the attempted conversion. Thus it is possible to combine different API's with incomplete currency sets to have a more complete currency set. <br/><br/>The performance impact of a fallback if a rate is recognizably not provided by an API is minimal, whereas the performance impact on a http connection error can have a bigger impact on performance. <br/><br/>The default fallback mechanism used calls the ECB API if the Xavier Media API is unavailable. You can set your own fallback chain using the API configuration.</p>
+          <p>Never worry if an API is shortly unavailable – Exchange provides the possibility to fall back to other conversion API's if one is currently not available or does not provide a rate for the attempted conversion. Thus it is possible to combine different API's with incomplete currency sets to have a more complete currency set. <br/><br/>The performance impact of a fallback if a rate is recognizably not provided by an API is minimal, whereas the performance impact caused by a http connection error is significantly larger. <br/><br/>The default fallback mechanism used calls the ECB API if the Xavier Media API is unavailable. If both are unavailable, an error is raised. You can set your own fallback chain using the API configuration.</p>
         </section>
         <section id="formatting">
           <h3>Formatting</h3>
@@ -134,7 +135,7 @@ currency.to(:omr)</pre>
         </section>
         <section id="safe">
           <h3>Safe operations</h3>
-          <p>Operations with money are safeguarded against most floating point errors through exchange. Upon instantiation of a currency, Exchange always converts the value to a big decimal. Additional Measures are implemented when Exchange::Money instances are used with floats in normal operations. Although BigDecimal operations are a bit slower than Float operations, the Exchange gem performs operations very efficiently. Float Operations not involving money are left untouched.</p>
+          <p>Operations with money are safeguarded against most floating point errors through Exchange. Upon instantiation of a currency, Exchange always converts the value to a big decimal. Additional Measures are implemented when Exchange::Money instances are used with floats in normal operations. Although BigDecimal operations are a bit slower than Float operations, the Exchange gem performs operations very efficiently. Float Operations not involving instances of Exchange::Money are left untouched.</p>
           <p>Floating Point errors in ruby</p>
           <pre class="brush: ruby">(0.29 * 50).round(0) #=> 14
 (1.0e+25 - BigDecimal.new("9999999999999999900000000")) #=> 0</pre>
@@ -178,7 +179,7 @@ a.price #=> 2.in(:eur)</pre>
           <pre class="brush: ruby">a.price = 3.in(:usd)
 a.price == 3.in(:usd).to(:eur) #=> true
           </pre>
-          <p>For more information about how to use the typecasting module, you can always visit the<a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/Typecasting" target="_blank">full documentation</a></p>
+          <p>For more information about how to use the typecasting module, you can always visit the <a href="http://rubydoc.info/github/beatrichartz/exchange/Exchange/Typecasting" target="_blank">full documentation</a></p>
         </section>
         <section id="apis">
           <h3>Conversion Rate APIs</h3>

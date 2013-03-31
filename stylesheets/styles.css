@@ -97,8 +97,12 @@ a {
   text-decoration:none;
 }
 
+#content a {
+  color: #2DA073;
+}
+
 a:hover, a:visited, a:active {
-  color: rgb(127,91,7);
+  color: rgb(147,111,27);
 }
 
 a small {
