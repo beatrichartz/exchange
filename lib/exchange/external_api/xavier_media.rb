@@ -27,7 +27,7 @@ module Exchange
         time       = helper.assure_time(opts[:at], :default => :now)
         api_url    = api_url(time)
         
-        Call.new(api_url, api_opts(opts.merge(:at => time))) do |result|
+        Call.new(api_url, api_opts(opts.merge(:at => time, :api => self.class))) do |result|
           @base                 = extract_base_currency result
           @rates                = extract_rates result
           @timestamp            = extract_timestamp result

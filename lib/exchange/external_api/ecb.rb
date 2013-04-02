@@ -123,7 +123,7 @@ module Exchange
         # @version 0.6
         #
         def call_opts time
-          {:format => :xml, :at => time, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly}
+          {:format => :xml, :at => time, :api => self.class, :cache => :file, :cache_period => time >= Time.now - 90 * 86400 ? :daily : :monthly}
         end
         
     end

@@ -27,7 +27,7 @@ module Exchange
       def update(opts={})
         time = helper.assure_time(opts[:at])
         
-        Call.new(api_url(time), :at => time) do |result|
+        Call.new(api_url(time), :at => time, :api => self.class) do |result|
           @base                 = result['base'].downcase.to_sym
           @rates                = extract_rates(result)
           @timestamp            = result['timestamp'].to_i
