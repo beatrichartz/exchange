@@ -100,10 +100,6 @@ module Exchange
       attr_reader :cache
       
       # @attr_reader
-      # @return [Exchange::API] The api subclass
-      attr_reader :api
-      
-      # @attr_reader
       # @return [Exchange::Helper] The Exchange Helper
       attr_reader :helper
       
@@ -112,7 +108,6 @@ module Exchange
       #
       def initialize *args
         @cache  = Exchange.configuration.cache.subclass
-        @api    = Exchange.configuration.api.subclass
         @helper = Exchange::Helper.instance
         
         super *args
@@ -130,7 +125,7 @@ module Exchange
       #     #=> 1.232231231
       #
       def rate(from, to, opts={})        
-        rate = cache.cached(api, opts.merge(:key_for => [from, to])) do
+        rate = cache.cached(self.class, opts.merge(:key_for => [from, to])) do
           update(opts)
           
           rate_from   = rates[from]
