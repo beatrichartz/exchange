@@ -15,7 +15,7 @@ describe "Exchange::ExternalAPI::Call" do
   describe "initialization" do
     context "with a json api" do
       before(:each) do
-        mock_api('JSON_API', fixture('api_responses/example_json_api.json'), 5)
+        mock_api('JSON_API', fixture('api_responses/example_json_api.json'), 7)
       end
       it "should call the api and yield a block with the result" do
         Exchange::ExternalAPI::Call.new('JSON_API') do |result|
@@ -34,7 +34,7 @@ describe "Exchange::ExternalAPI::Call" do
           end
         end
         it "should raise if the maximum recall size is reached" do
-          @uri_mock.should_receive(:open).at_most(5).times.and_return do
+          @uri_mock.should_receive(:open).at_most(7).times.and_return do
             raise OpenURI::HTTPError.new('404', 'URI')
           end
           lambda { Exchange::ExternalAPI::Call.new('JSON_API') }.should raise_error(Exchange::ExternalAPI::APIError)
@@ -42,7 +42,7 @@ describe "Exchange::ExternalAPI::Call" do
       end
       context "with socket errors" do
         it "should raise an error immediately" do
-          @uri_mock.should_receive(:open).at_most(5).times.and_raise(SocketError)
+          @uri_mock.should_receive(:open).at_most(7).times.and_raise(SocketError)
           lambda { Exchange::ExternalAPI::Call.new('JSON_API') }.should raise_error(Exchange::ExternalAPI::APIError)
         end
       end
@@ -50,7 +50,7 @@ describe "Exchange::ExternalAPI::Call" do
   end
   context "with an xml api" do
     before(:each) do
-      mock_api('XML_API', fixture('api_responses/example_xml_api.xml'), 5)
+      mock_api('XML_API', fixture('api_responses/example_xml_api.xml'), 7)
     end
     it "should call the api and yield a block with the result" do
       Exchange::ExternalAPI::Call.new('XML_API', :format => :xml) do |result|
@@ -69,7 +69,7 @@ describe "Exchange::ExternalAPI::Call" do
         end
       end
       it "should raise if the maximum recall size is reached" do
-        @uri_mock.should_receive(:open).at_most(5).times.and_return do
+        @uri_mock.should_receive(:open).at_most(7).times.and_return do
           raise OpenURI::HTTPError.new('404', 'URI')
         end
         lambda { Exchange::ExternalAPI::Call.new('XML_API') }.should raise_error(Exchange::ExternalAPI::APIError)
