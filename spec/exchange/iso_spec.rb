@@ -802,12 +802,12 @@ describe "Exchange::ISO" do
     end
     context "plain amount" do
       it "should not render the currency or separators" do
-        subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :plain_amount).should == "23.233"
-        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :plain_amount).should == "223423432343.23"
-        subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :plain_amount).should == "23"
-        subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :plain_amount).should == "23.200"
-        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :plain_amount).should == "25645645663.40"
-        subject.stringify(BigDecimal.new("23.0"), :clp, :format => :plain_amount).should == "23"
+        subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :plain).should == "23.233"
+        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :plain).should == "223423432343.23"
+        subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :plain).should == "23"
+        subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :plain).should == "23.200"
+        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :plain).should == "25645645663.40"
+        subject.stringify(BigDecimal.new("23.0"), :clp, :format => :plain).should == "23"
       end
     end
     context "symbol" do

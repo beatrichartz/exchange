@@ -556,12 +556,12 @@ describe "Exchange::Money" do
       Exchange::Money.new(23.0, :clp).to_s(:amount).should == "23"
     end
     it "should render only the currency amount and no separators if the argument amount is passed" do
-      Exchange::Money.new(2323.232524, :tnd).to_s(:plain_amount).should == "2323.233"
-      Exchange::Money.new(2323.23252423, :sar).to_s(:plain_amount).should == "2323.23"
-      Exchange::Money.new(2323.23252423, :clp).to_s(:plain_amount).should == "2323"
-      Exchange::Money.new(23.2, :tnd).to_s(:plain_amount).should == "23.200"
-      Exchange::Money.new(23.4, :sar).to_s(:plain_amount).should == "23.40"
-      Exchange::Money.new(23.0, :clp).to_s(:plain_amount).should == "23"
+      Exchange::Money.new(2323.232524, :tnd).to_s(:plain).should == "2323.233"
+      Exchange::Money.new(2323.23252423, :sar).to_s(:plain).should == "2323.23"
+      Exchange::Money.new(2323.23252423, :clp).to_s(:plain).should == "2323"
+      Exchange::Money.new(23.2, :tnd).to_s(:plain).should == "23.200"
+      Exchange::Money.new(23.4, :sar).to_s(:plain).should == "23.40"
+      Exchange::Money.new(23.0, :clp).to_s(:plain).should == "23"
     end
     it "should render the currency with a symbol according to ISO 4217 Definitions" do
       Exchange::Money.new(23.232524, :tnd).to_s(:symbol).should == "TND 23.233"
