@@ -118,14 +118,14 @@ module Exchange
       string        = format % amount
       major, minor  = string.split('.')
       
-      if separators[:major]
+      if separators[:major] && opts[:format] != :plain_amount
         major.reverse!
         major.gsub!(/(\d{3})(?=.)/) { $1 + separators[:major] }
         major.reverse!
       end
       
-      string      = minor ? major + (separators[:minor] || '.') + minor : major
-      pre         = [opts[:format] == :amount && '', opts[:format] == :symbol && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
+      string      = minor ? major + (opts[:format] == :plain_amount || !separators[:minor] ? '.' : separators[:minor]) + minor : major
+      pre         = [[:amount, :plain_amount].include?(opts[:format]) && '', opts[:format] == :symbol && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
       
       "#{pre}#{string}"
     end
