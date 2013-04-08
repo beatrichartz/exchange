@@ -101,7 +101,7 @@ currency.to(:omr)</pre>
           <p>Specifying the amount format will print out the formatted amount only</p>
           <pre class="brush: ruby">1440.4.in(:usd).to_s(:amount) #=> "1,440.40"</pre>
           <p>Specifying the plain amount format will print out the unformatted amount only, using decimal notation</p>
-          <pre class="brush: ruby">1440.4.in(:usd).to_s(:plain_amount) #=> "1440.40"</pre>
+          <pre class="brush: ruby">1440.4.in(:usd).to_s(:plain) #=> "1440.40"</pre>
           <p>As seen above, exchange takes care of the right format for the separators</p>
           <pre class="brush: ruby">155_000_000.in(:usd).to_s #=> "USD 155,000,000.00"</pre>
         </section>
