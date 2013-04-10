@@ -23,7 +23,7 @@ module Exchange
       
         def install_operation op      
           self.class_eval <<-EOV
-            def #{op}(amount, currency, precision=nil, opts={})
+            def #{op} amount, currency, precision=nil, opts={}
               minor = definitions[currency][:minor_unit]
               money = amount.is_a?(BigDecimal) ? amount : BigDecimal.new(amount.to_s, precision_for(amount, currency))
               if opts[:psych] && minor > 0
