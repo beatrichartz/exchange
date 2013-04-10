@@ -781,6 +781,22 @@ describe "Exchange::ISO" do
       subject.floor(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("19")
     end
   end
+  describe "self.symbol" do
+    context "with a symbol present" do
+      it "should return the symbol" do
+        subject.symbol(:usd).should == '$'
+        subject.symbol(:gbp).should == '£'
+        subject.symbol(:eur).should == '€'
+      end
+    end
+    context "with no symbol present" do
+      it "should return nil" do
+        subject.symbol(:chf).should be_nil
+        subject.symbol(:etb).should be_nil
+        subject.symbol(:tnd).should be_nil
+      end
+    end
+  end
   describe "self.stringify" do
     it "should stringify a currency according to ISO 4217 Definitions" do
       subject.stringify(BigDecimal.new("23234234.232524"), :tnd).should == "TND 23234234.233"
