@@ -117,8 +117,8 @@ module Exchange
       format        = "%.#{definition[:minor_unit]}f"
       string        = format % amount
       major, minor  = string.split('.')
-      
-      major.gsub!(/(?<=\d)(?=(?:\d{3})+\z)/, separators[:major]) if separators[:major] && opts[:format] != :plain
+
+      major.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/) { $1 + separators[:major] } if separators[:major] && opts[:format] != :plain
       
       string      = minor ? major + (opts[:format] == :plain || !separators[:minor] ? '.' : separators[:minor]) + minor : major
       pre         = [[:amount, :plain].include?(opts[:format]) && '', opts[:format] == :symbol && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
