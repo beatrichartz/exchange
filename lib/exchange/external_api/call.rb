@@ -52,7 +52,7 @@ module Exchange
         # @param [Array] retry_with An array of urls to retry the API call with if the call to the original URL should fail. These values will be shifted until a call succeeds or the number of maximum retries is reached
         # @todo install a timeout for slow requests, but respect when loading large files
         #
-        def load_url(url, retries, retry_with)          
+        def load_url url, retries, retry_with          
           begin            
             result = URI.parse(url).open.read
           rescue SocketError

@@ -21,6 +21,6 @@ module Exchange
   # @version 0.10
   # @since 0.10
   #
-  NoCurrencyError   = Class.new(ArgumentError)
+  NoCurrencyError   = Class.new ArgumentError
   
 end

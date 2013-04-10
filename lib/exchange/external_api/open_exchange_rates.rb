@@ -24,7 +24,7 @@ module Exchange
       # @example Update the Open Exchange Rates API to use the file of March 2, 2010
       #   Exchange::ExternalAPI::OpenExchangeRates.new.update(:at => Time.gm(3,2,2010))
       #
-      def update(opts={})
+      def update opts={}
         time = helper.assure_time(opts[:at])
         
         Call.new(api_url(time), :at => time, :api => self.class) do |result|
@@ -52,7 +52,7 @@ module Exchange
         # @since 0.1
         # @version 0.2.6
         #
-        def api_url(time=nil)
+        def api_url time=nil
           today   = Time.now
           [ 
             "#{config.protocol}:/", 

@@ -87,7 +87,7 @@ module Exchange
     #   Exchange::ISO.instantiate("4523", "usd") #=> #<Bigdecimal 4523.00>
     # @note Reinstantiation is not needed in case the amount is already a big decimal. In this case, the maximum precision is already given.
     #
-    def instantiate(amount, currency)
+    def instantiate amount, currency
       if amount.is_a?(BigDecimal)
         amount
       else
@@ -111,7 +111,7 @@ module Exchange
     # @example Convert a currency to a string without the currency
     #   Exchange::ISO.stringif(34.34, :omr, :amount_only => true) #=> "34.340"
     #
-    def stringify(amount, currency, opts={})    
+    def stringify amount, currency, opts={}    
       definition    = definitions[currency]
       separators    = definition[:separators] || {}
       format        = "%.#{definition[:minor_unit]}f"
@@ -130,7 +130,7 @@ module Exchange
     # @param currency The currency to return the symbol for
     # @return [String, NilClass] The symbol or nil
     # 
-    def symbol(currency)      
+    def symbol currency      
       definitions[currency][:symbol]
     end
     

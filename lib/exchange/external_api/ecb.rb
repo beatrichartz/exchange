@@ -32,7 +32,7 @@ module Exchange
       # @since 0.1
       # @version 0.7
       #
-      def update(opts={})
+      def update opts={}
         time          = helper.assure_time(opts[:at], :default => :now)
         times         = map_retry_times time
         
@@ -57,7 +57,7 @@ module Exchange
         # @param [Time] time The exchange rate date for which the URL should be built
         # @return [String] An ECB API URL to get the xml from
         #
-        def api_url(time)
+        def api_url time
           border = Time.now - 90 * 86400
           [ "#{config.protocol}:/", 
             API_URL, 

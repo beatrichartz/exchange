@@ -46,7 +46,7 @@ module Exchange
       # @param [Hash] opts The options for caching
       # @return [String] A string that can be used as instance variable name
       #
-      def instance_variable_name(api, opts)
+      def instance_variable_name api, opts
         conversion_time          = helper.assure_time(opts[:at], :default => :now)
         time                     = Time.now
         expire_hourly            = config.expire == :hourly || nil

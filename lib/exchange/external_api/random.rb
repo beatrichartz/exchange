@@ -20,7 +20,7 @@ module Exchange
       # @example Update the currency bot API to use the file of March 2, 2010
       #   Exchange::ExternalAPI::XavierMedia.new.update(:at => Time.gm(3,2,2010))
       #
-      def update(opts={})
+      def update opts={}
         @base                 = :usd
         @rates                = RANDOM_RATES.call
         @timestamp            =  Time.now.to_i

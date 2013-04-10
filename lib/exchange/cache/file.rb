@@ -50,7 +50,7 @@ module Exchange
       # @example
       #   Exchange::Cache::Base.key(Exchange::ExternalAPI::OpenExchangeRates, :monthly) #=> "Exchange_ExternalAPI_CurrencyBot_monthly_2012_1"
       #
-      def key(api_class, cache_period=:daily)
+      def key api_class, cache_period=:daily
         time      = Time.now
         [api_class.to_s.gsub(/::/, '_'), cache_period, time.year, time.send(cache_period == :monthly ? :month : :yday)].join('_')
       end

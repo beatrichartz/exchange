@@ -124,7 +124,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       #
-      def rate(from, to, opts={})        
+      def rate from, to, opts={}        
         rate = cache.cached(self.class, opts.merge(:key_for => [from, to])) do
           update(opts)
           
@@ -150,7 +150,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.convert(23, :eur, :chf, :at => Time.gm(12,1,2011))
       #     #=> 30.12
       #
-      def convert(amount, from, to, opts={})
+      def convert amount, from, to, opts={}
         amount * rate(from, to, opts)
       end
       
