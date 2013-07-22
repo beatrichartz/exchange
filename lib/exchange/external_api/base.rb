@@ -130,8 +130,10 @@ module Exchange
           
           rate_from   = rates[from]
           rate_to     = rates[to]
-          
-          test_for_rates_and_raise_if_nil rate_from, rate_to, opts[:at]
+
+          unless rate_from && rate_to
+            raise NoRateError.new("No rates where found for #{from} to #{to} #{'at ' + time.to_s if time}")
+          end
           
           rate_to / rate_from
         end
@@ -160,16 +162,6 @@ module Exchange
       #
       def to_hash! array
         Hash[*array]
-      end
-      
-      # Test for a error to be thrown when no rates are present
-      # @param [String] rate_from The rate from which should be converted
-      # @param [String] rate_to The rate to which should be converted
-      # @param [Time] time The time at which should be converted
-      # @raise [NoRateError] An error indicating that there is no rate present when there is no rate present
-      #
-      def test_for_rates_and_raise_if_nil rate_from, rate_to, time=nil
-        raise NoRateError.new("No rates where found for #{rate_from} to #{rate_to} #{'at ' + time.to_s if time}") unless rate_from && rate_to
       end
       
       protected
