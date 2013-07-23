@@ -398,7 +398,7 @@ module Exchange
       # @version 0.7.2
       #
       def raise_no_rate_error other
-        raise NoRateError.new("Cannot convert to #{other} because the defined api nor the fallbacks provide a rate")
+        raise NoRateError.new("Cannot convert #{currency} to #{other} because the defined api nor the fallbacks provide a rate")
       end
   
   end
