@@ -75,7 +75,21 @@ describe "Exchange::Money" do
         end
       end
     end
-    context "with a currency not provided by the given api" do
+    context "with a 'from' currency not provided by the given api" do
+
+      subject { Exchange::Money.new(36.36, :chf) }
+
+      context "but provided by a fallback api" do
+        it "should use the fallback" do
+          subject.api::CURRENCIES = [:usd]
+          mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
+          subject.to(:usd).value.round(2).should == 40.00
+          subject.to(:usd).currency.should == :usd
+          subject.to(:usd).should be_kind_of Exchange::Money
+        end
+      end
+    end
+    context "with a 'to' currency not provided by the given api" do
       context "but provided by a fallback api" do
         it "should use the fallback" do
           subject.api::CURRENCIES.stub! :include? => false
