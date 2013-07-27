@@ -85,8 +85,8 @@ module Exchange
     #
     def to other, options={}
       other = ISO.assert_currency!(other)
-      
-      if api_supports_currency?(other)
+
+      if api_supports_currency?(other) && api_supports_currency?(currency)
         opts = { :at => time, :from => self }.merge(options)
         Money.new(api.new.convert(value, currency, other, opts), other, opts)
       elsif fallback!
@@ -398,7 +398,7 @@ module Exchange
       # @version 0.7.2
       #
       def raise_no_rate_error other
-        raise NoRateError.new("Cannot convert to #{other} because the defined api nor the fallbacks provide a rate")
+        raise NoRateError.new("Cannot convert #{currency} to #{other} because the defined api nor the fallbacks provide a rate")
       end
   
   end
