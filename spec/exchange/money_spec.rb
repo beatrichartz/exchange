@@ -76,12 +76,12 @@ describe "Exchange::Money" do
       end
     end
     context "with a 'from' currency not provided by the given api" do
-
       subject { Exchange::Money.new(36.36, :chf) }
-
       context "but provided by a fallback api" do
         it "should use the fallback" do
-          subject.api::CURRENCIES = [:usd]
+          subject.api::CURRENCIES.should_receive(:include?).with(:usd).and_return true
+          subject.api::CURRENCIES.should_receive(:include?).with(:chf).and_return true
+          URI.should_receive(:parse).with("http://openexchangerates.org/api/latest.json?app_id=").once.and_raise Exchange::ExternalAPI::APIError
           mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
           subject.to(:usd).value.round(2).should == 40.00
           subject.to(:usd).currency.should == :usd
@@ -94,9 +94,9 @@ describe "Exchange::Money" do
         it "should use the fallback" do
           subject.api::CURRENCIES.stub! :include? => false
           mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
-          subject.to(:ch).value.round(2).should == 36.36
-          subject.to(:ch).currency.should == :chf
-          subject.to(:ch).should be_kind_of Exchange::Money
+          subject.to(:chf).value.round(2).should == 36.36
+          subject.to(:chf).currency.should == :chf
+          subject.to(:chf).should be_kind_of Exchange::Money
         end
       end
       context "but not provided by any fallback api" do
