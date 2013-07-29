@@ -2,6 +2,8 @@
 module Exchange
   module Cachify
     
+    # Use cachify as an alias for Marshal dumping
+    #
     def cachify
       Marshal.dump self
     end
@@ -10,6 +12,8 @@ module Exchange
   
   module Decachify
     
+    # Use cachify as an alias for Marshal loading
+    #
     def decachify
       Marshal.load self
     end

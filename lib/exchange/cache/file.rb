@@ -3,9 +3,10 @@ module Exchange
   module Cache
     
     # @author Beat Richartz
-    # A class that allows to store api call results in files. THIS NOT A RECOMMENDED CACHING OPTION!
+    # A class that allows to store api call results in files. 
     # It just may be necessary to cache large files somewhere, this class allows you to do that
-    # 
+    # @note This is not a recommended caching option
+    #
     # @version 0.6
     # @since 0.3
     
@@ -21,6 +22,8 @@ module Exchange
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
       #
       def cached api, opts={}, &block
+        raise_caching_needs_block! unless block_given?
+        
         today = Time.now
         dir   = config.path
         path  = ::File.join(dir, key(api, opts[:cache_period]))

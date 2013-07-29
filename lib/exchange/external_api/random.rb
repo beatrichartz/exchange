@@ -10,7 +10,7 @@ module Exchange
     class Random < Base
       
       CURRENCIES           = Exchange::ISO.currencies
-      RANDOM_RATES         = lambda { Hash[*CURRENCIES.zip(CURRENCIES.size.times.map{|i| rand}).flatten] }
+      RANDOM_RATES         = lambda { Hash[*CURRENCIES.map{|c| [c, rand] }.flatten] }
       
       # Updates the rates with new random ones
       # The call gets cached for a maximum of 24 hours.
