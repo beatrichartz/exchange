@@ -6,7 +6,7 @@ describe "Exchange::Cache::Base" do
   describe "key generation" do
     before(:each) do
       time = Time.gm 2012, 03, 01, 23, 23, 23
-      Time.stub! :now => time
+      Time.stub :now => time
     end
     context "with a daily cache" do
       it "should build a timestamped key with the class given, the yearday and the year" do

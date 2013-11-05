@@ -23,7 +23,7 @@ describe "Exchange::ExternalAPI::OpenExchangeRates" do
     end
     it "should set the timestamp from time.now" do
       time = Time.now
-      time.stub! :now => time
+      time.stub :now => time
       subject.update
       subject.timestamp.should == time.to_i
     end

@@ -7,7 +7,7 @@ describe "Exchange::ErrorSafe" do
   end
   before(:each) do
     @time = Time.gm(2012,8,27)
-    Time.stub! :now => @time
+    Time.stub :now => @time
   end
   after(:all) do
     Exchange.configuration.reset

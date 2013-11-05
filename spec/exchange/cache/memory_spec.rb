@@ -15,7 +15,7 @@ describe "Exchange::Cache::Memory" do
     context "with a class" do
       before(:each) do
         @time = Time.gm(2012,10,10,12)
-        Time.stub! :now => @time
+        Time.stub :now => @time
       end
       it "should yield a valid instance variable name" do
         subject.send(:instance_variable_name, Exchange::ExternalAPI::Ecb, {}).should == '@exchange_externalapi_ecb_2012_284_2012_284'
@@ -25,7 +25,7 @@ describe "Exchange::Cache::Memory" do
   describe "clean_out_cache" do
     before(:each) do
       @time = Time.gm(2012,10,10,12)
-      Time.stub! :now => @time
+      Time.stub :now => @time
       subject.instance_variable_set '@exchange_externalapi_someapi_2011_284_2011_284_chfeur', 'Expired'
       subject.instance_variable_set '@exchange_externalapi_someapi_2010_284_2012_284_chfeur', 'Valid1'
       subject.instance_variable_set '@exchange_externalapi_ecb_2012_283_2011_283', 'Expired'

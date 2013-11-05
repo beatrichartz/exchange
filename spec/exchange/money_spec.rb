@@ -92,7 +92,7 @@ describe "Exchange::Money" do
     context "with a 'to' currency not provided by the given api" do
       context "but provided by a fallback api" do
         it "should use the fallback" do
-          subject.api::CURRENCIES.stub! :include? => false
+          subject.api::CURRENCIES.stub :include? => false
           mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
           subject.to(:chf).value.round(2).should == 36.36
           subject.to(:chf).currency.should == :chf
@@ -101,9 +101,9 @@ describe "Exchange::Money" do
       end
       context "but not provided by any fallback api" do
         it "should raise the no rate error" do
-          Exchange::ExternalAPI::OpenExchangeRates::CURRENCIES.stub! :include? => false
-          Exchange::ExternalAPI::XavierMedia::CURRENCIES.stub! :include? => false
-          Exchange::ExternalAPI::Ecb::CURRENCIES.stub! :include? => false
+          Exchange::ExternalAPI::OpenExchangeRates::CURRENCIES.stub :include? => false
+          Exchange::ExternalAPI::XavierMedia::CURRENCIES.stub :include? => false
+          Exchange::ExternalAPI::Ecb::CURRENCIES.stub :include? => false
           lambda { subject.to(:xaf) }.should raise_error Exchange::NoRateError
         end
       end

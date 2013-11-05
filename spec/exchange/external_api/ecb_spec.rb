@@ -14,7 +14,7 @@ describe "Exchange::ExternalAPI::Ecb" do
   end
   before(:each) do
     time = Time.gm(2012,2,3)
-    Time.stub! :now => time
+    Time.stub :now => time
   end
   describe "updating rates" do
     subject { Exchange::ExternalAPI::Ecb.new }
