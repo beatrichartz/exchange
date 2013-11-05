@@ -737,6 +737,32 @@ describe "Exchange::ISO" do
         end
       end
     end
+    context "given a float with scientific notation" do
+      context "with bigger precision than the definition" do
+        it "should instantiate a big decimal with the given precision" do
+          BigDecimal.should_receive(:new).with("6.0e-05",6).and_return('INSTANCE')
+          subject.instantiate(6.0e-05, :tnd).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("600000.0",8).and_return('INSTANCE')
+          subject.instantiate(6.0e05, :sar).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("1.456e-08",12).and_return('INSTANCE')
+          subject.instantiate(1.456e-08, :omr).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("145600000.0",12).and_return('INSTANCE')
+          subject.instantiate(1.456e08, :omr).should == 'INSTANCE'
+        end
+      end
+      context "with smaller precision than the definition" do
+        it "should instantiate a big decimal with the defined precision" do
+          BigDecimal.should_receive(:new).with("0.6",4).and_return('INSTANCE')
+          subject.instantiate(6.0e-01, :tnd).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("60.0",4).and_return('INSTANCE')
+          subject.instantiate(6.0e01, :sar).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("0.14",4).and_return('INSTANCE')
+          subject.instantiate(1.4e-01, :omr).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("14.56",5).and_return('INSTANCE')
+          subject.instantiate(1.456e01, :omr).should == 'INSTANCE'
+        end
+      end
+    end
     context "given a big decimal" do
       let!(:bigdecimal) { BigDecimal.new("23.23") }
       it "should instantiate a big decimal according to the iso standards" do

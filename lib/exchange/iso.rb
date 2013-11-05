@@ -180,18 +180,34 @@ module Exchange
       new_hsh
     end
     
-    # Interpolates a string with separators every 3 characters
-    # 
-    
     # get a precision for a specified amount and a specified currency
+    #
     # @params [Float, Integer] amount The amount to get the precision for
     # @params [Symbol] currency the currency to get the precision for
     #
     def precision_for amount, currency
       defined_minor_precision                         = definitions[currency][:minor_unit]
-      given_major_precision, given_minor_precision    = amount.to_s.match(/^-?(\d*)\.?(\d*)$/).to_a[1..2].map(&:size)
+      match                                           = amount.to_s.match(/^-?(\d*)\.?(\d*)e?(-?\d+)?$/).to_a[1..3]
+      given_major_precision, given_minor_precision    = precision_from_match *match
       
       given_major_precision + [defined_minor_precision, given_minor_precision].max
+    end
+    
+    # Get the precision from a match with /^-?(\d*)\.?(\d*)e?(-?\d+)?$/
+    #
+    # @params [String] major The major amount of the match as a string
+    # @params [String] minor The minor amount of the match as a string
+    # @params [String] rational The rational of the match as a string
+    # @return [Array] An array containing the major and the minor precision in this order
+    #
+    def precision_from_match major, minor, rational=nil
+      if rational
+        leftover_minor_precision = minor.eql?('0') ? 0 : minor.size
+        rational_precision       = rational.delete('-').to_i
+        [major.size, leftover_minor_precision.send(rational.start_with?('-') ? :+ : :-, rational_precision)]
+      else
+        [major, minor].map(&:size)
+      end
     end
     
   end
