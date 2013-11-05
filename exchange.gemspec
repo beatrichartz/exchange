@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors           = ["Beat Richartz"]
   s.description       = "Simple Money handling for your ruby app – ISO4217-compatible Currency instantiation, conversion, string formatting and more via an intuitive DSL: 1.in(:usd).to(:eur)"
   s.email             = "attr_accessor@gmail.com"
-  s.homepage          = "http://beatrichartz.github.com/exchange"
+  s.homepage          = "http://beatrichartz.github.io/exchange"
   s.licenses          = ["MIT"]
   s.require_paths     = ["lib"]
   s.summary           = "Simple Money handling for your ruby app"
