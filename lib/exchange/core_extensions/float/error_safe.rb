@@ -8,8 +8,8 @@ module Exchange
     # Installs a method chain that overwrites the old error prone meth with the new one
     #
     def self.money_error_preventing_method_chain base, meth
-      base.send :alias_method, :"#{meth}with_errors", meth
-      base.send :alias_method, meth, :"#{meth}without_errors"
+      base.send :alias_method, :"#{meth}_with_errors", meth
+      base.send :alias_method, meth, :"#{meth}_without_errors"
     end
     
     # @!macro prevent_errors_with_exchange_for
@@ -18,11 +18,11 @@ module Exchange
     #   @method $1(other)
     #
     def self.prevent_errors_with_exchange_for base, meth
-      base.send(:define_method, :"#{meth}without_errors", lambda { |other|
+      base.send(:define_method, :"#{meth}_without_errors", lambda { |other|
         if other.is_a?(Exchange::Money)
           BigDecimal.new(self.to_s).send(meth, other.value).to_f
         else
-          send(:"#{meth}with_errors", other)
+          send(:"#{meth}_with_errors", other)
         end
       })
       money_error_preventing_method_chain base, meth

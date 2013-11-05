@@ -86,7 +86,7 @@ module Exchange
     def to other, options={}
       other = ISO.assert_currency!(other)
 
-      if api_supports_currency?(other) && api_supports_currency?(currency)
+      if api_supports_currency?(currency) && api_supports_currency?(other)
         opts = { :at => time, :from => self }.merge(options)
         Money.new(api.new.convert(value, currency, other, opts), other, opts)
       elsif fallback!
