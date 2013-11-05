@@ -23,7 +23,7 @@ module Exchange
       
         def install_operation op      
           self.class_eval <<-EOV
-            def #{op}(amount, currency, precision=nil, opts={})
+            def #{op} amount, currency, precision=nil, opts={}
               minor = definitions[currency][:minor_unit]
               money = amount.is_a?(BigDecimal) ? amount : BigDecimal.new(amount.to_s, precision_for(amount, currency))
               if opts[:psych] && minor > 0
@@ -87,7 +87,7 @@ module Exchange
     #   Exchange::ISO.instantiate("4523", "usd") #=> #<Bigdecimal 4523.00>
     # @note Reinstantiation is not needed in case the amount is already a big decimal. In this case, the maximum precision is already given.
     #
-    def instantiate(amount, currency)
+    def instantiate amount, currency
       if amount.is_a?(BigDecimal)
         amount
       else
@@ -111,23 +111,27 @@ module Exchange
     # @example Convert a currency to a string without the currency
     #   Exchange::ISO.stringif(34.34, :omr, :amount_only => true) #=> "34.340"
     #
-    def stringify(amount, currency, opts={})
+    def stringify amount, currency, opts={}    
       definition    = definitions[currency]
       separators    = definition[:separators] || {}
       format        = "%.#{definition[:minor_unit]}f"
       string        = format % amount
       major, minor  = string.split('.')
+
+      major.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/) { $1 + separators[:major] } if separators[:major] && opts[:format] != :plain
       
-      if separators[:major]
-        major.reverse!
-        major.gsub!(/(\d{3})(?=.)/) { $1 + separators[:major] }
-        major.reverse!
-      end
-      
-      string      = minor ? major + (separators[:minor] || '.') + minor : major
-      pre         = [opts[:format] == :amount && '', opts[:format] == :symbol && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
+      string      = minor ? major + (opts[:format] == :plain || !separators[:minor] ? '.' : separators[:minor]) + minor : major
+      pre         = [[:amount, :plain].include?(opts[:format]) && '', opts[:format] == :symbol && definition[:symbol], currency.to_s.upcase + ' '].detect{|a| a.is_a?(String)}
       
       "#{pre}#{string}"
+    end
+    
+    # Returns the symbol for a given currency. Returns nil if no symbol is present
+    # @param currency The currency to return the symbol for
+    # @return [String, NilClass] The symbol or nil
+    # 
+    def symbol currency      
+      definitions[currency][:symbol]
     end
     
     # Use this to round a currency amount. This allows us to round exactly to the number of minors the currency has in the 
@@ -159,7 +163,7 @@ module Exchange
     
     # Forwards the assure_time method to the instance using singleforwardable
     #
-    def_delegators :instance, :definitions, :instantiate, :stringify, :round, :ceil, :floor, :currencies, :country_map, :defines?, :assert_currency!
+    def_delegators :instance, :definitions, :instantiate, :stringify, :symbol, :round, :ceil, :floor, :currencies, :country_map, :defines?, :assert_currency!
     
     private
     
@@ -177,14 +181,33 @@ module Exchange
     end
     
     # get a precision for a specified amount and a specified currency
+    #
     # @params [Float, Integer] amount The amount to get the precision for
     # @params [Symbol] currency the currency to get the precision for
     #
     def precision_for amount, currency
       defined_minor_precision                         = definitions[currency][:minor_unit]
-      given_major_precision, given_minor_precision    = amount.to_s.match(/^-?(\d*)\.?(\d*)$/).to_a[1..2].map(&:size)
+      match                                           = amount.to_s.match(/^-?(\d*)\.?(\d*)e?(-?\d+)?$/).to_a[1..3]
+      given_major_precision, given_minor_precision    = precision_from_match *match
       
       given_major_precision + [defined_minor_precision, given_minor_precision].max
+    end
+    
+    # Get the precision from a match with /^-?(\d*)\.?(\d*)e?(-?\d+)?$/
+    #
+    # @params [String] major The major amount of the match as a string
+    # @params [String] minor The minor amount of the match as a string
+    # @params [String] rational The rational of the match as a string
+    # @return [Array] An array containing the major and the minor precision in this order
+    #
+    def precision_from_match major, minor, rational=nil
+      if rational
+        leftover_minor_precision = minor.eql?('0') ? 0 : minor.size
+        rational_precision       = rational.delete('-').to_i
+        [major.size, leftover_minor_precision.send(rational.start_with?('-') ? :+ : :-, rational_precision)]
+      else
+        [major, minor].map(&:size)
+      end
     end
     
   end

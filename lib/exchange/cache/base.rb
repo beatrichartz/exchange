@@ -48,7 +48,7 @@ module Exchange
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
       #
       def cached api, opts={}, &block
-        raise CachingWithoutBlockError.new('Caching needs a block') unless block_given?
+        raise_caching_needs_block! unless block_given?
 
         block.call
       end
@@ -63,6 +63,8 @@ module Exchange
       # Generates a key which can handle expiration by itself
       # @param [Exchange::ExternalAPI::Subclass] api The API to store the data for
       # @param [Hash] opts The options for caching
+      # @option opts [Array] :key_for An array of additional key elements
+      # @option opts [Time] :at The timestamp for the key 
       # @return [String] A string that can be used as cache key
       # @example
       #   Exchange::Cache::Base.key(Exchange::ExternalAPI::OpenExchangeRates, Time.gm(2012,1,1)) #=> "Exchange_ExternalAPI_CurrencyBot_2012_1"
@@ -91,6 +93,12 @@ module Exchange
       def helper
         @helper ||= Exchange::Helper
       end
+      
+      # Raise a caching needs a block error
+      #
+      def raise_caching_needs_block!
+        raise CachingWithoutBlockError.new('Caching needs a block')
+      end
         
     end
     
@@ -98,6 +106,6 @@ module Exchange
     # @since 0.1
     # @version 0.1
     #
-    CachingWithoutBlockError = Class.new(ArgumentError)
+    CachingWithoutBlockError = Class.new ArgumentError
   end
 end

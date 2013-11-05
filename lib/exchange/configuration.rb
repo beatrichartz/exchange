@@ -74,7 +74,7 @@ module Exchange
     DEFAULTS = { 
                   :api => {
                     :subclass => ExternalAPI::XavierMedia, 
-                    :retries => 5,
+                    :retries => 7,
                     :protocol => :http,
                     :app_id => nil,
                     :fallback => ExternalAPI::Ecb

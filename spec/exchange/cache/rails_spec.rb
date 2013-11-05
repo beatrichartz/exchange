@@ -18,7 +18,7 @@ describe "Exchange::Cache::Rails" do
     Exchange.configuration.reset
   end
   describe "client" do
-    let(:client) { mock('rails_cache') }
+    let(:client) { double('rails_cache') }
     it "should set up a client on the specified host and port for the cache" do
       ::Rails.should_receive(:cache).and_return(client)
       subject.client.should == client
@@ -29,7 +29,7 @@ describe "Exchange::Cache::Rails" do
       lambda { subject.cached('API_CLASS') }.should raise_error(Exchange::Cache::CachingWithoutBlockError)
     end
     context "when a result is returned" do
-      let(:client) { mock('rails_cache') }
+      let(:client) { double('rails_cache') }
       context "with a daily cache" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', {}).and_return('KEY')
@@ -56,7 +56,7 @@ describe "Exchange::Cache::Rails" do
       end
     end
     context "when no result is returned" do
-      let(:client) { mock('rails_cache') }
+      let(:client) { double('rails_cache') }
       before(:each) do
         subject.should_receive(:key).with('API_CLASS', {}).at_most(3).times.and_return('KEY')
         ::Rails.should_receive(:cache).twice.and_return(client)

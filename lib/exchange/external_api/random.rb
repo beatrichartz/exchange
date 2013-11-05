@@ -10,7 +10,7 @@ module Exchange
     class Random < Base
       
       CURRENCIES           = Exchange::ISO.currencies
-      RANDOM_RATES         = lambda { Hash[*CURRENCIES.zip(CURRENCIES.size.times.map{|i| rand}).flatten] }
+      RANDOM_RATES         = lambda { Hash[*CURRENCIES.map{|c| [c, rand] }.flatten] }
       
       # Updates the rates with new random ones
       # The call gets cached for a maximum of 24 hours.
@@ -20,7 +20,7 @@ module Exchange
       # @example Update the currency bot API to use the file of March 2, 2010
       #   Exchange::ExternalAPI::XavierMedia.new.update(:at => Time.gm(3,2,2010))
       #
-      def update(opts={})
+      def update opts={}
         @base                 = :usd
         @rates                = RANDOM_RATES.call
         @timestamp            =  Time.now.to_i

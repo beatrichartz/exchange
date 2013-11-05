@@ -14,6 +14,8 @@ module Exchange
     #   end
     class Redis < Base
       
+      # delegate the client and wiping the client to the instance
+      #
       def_delegators :instance, :client, :wipe_client!
       
       # instantiates a redis client and memoizes it in a class variable.
@@ -41,7 +43,7 @@ module Exchange
       # @yield [] This method takes a mandatory block with an arity of 0 and calls it if no cached result is available
       # @raise [CachingWithoutBlockError] an Argument Error when no mandatory block has been given
       #
-      def cached api, opts={}, &block          
+      def cached api, opts={}, &block         
         if result = client.get(key(api, opts))
           result = opts[:plain] ? result : result.decachify
         else

@@ -100,10 +100,6 @@ module Exchange
       attr_reader :cache
       
       # @attr_reader
-      # @return [Exchange::API] The api subclass
-      attr_reader :api
-      
-      # @attr_reader
       # @return [Exchange::Helper] The Exchange Helper
       attr_reader :helper
       
@@ -112,7 +108,6 @@ module Exchange
       #
       def initialize *args
         @cache  = Exchange.configuration.cache.subclass
-        @api    = Exchange.configuration.api.subclass
         @helper = Exchange::Helper.instance
         
         super *args
@@ -129,8 +124,8 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.rate(:usd, :eur, :at => Time.gm(3,23,2009))
       #     #=> 1.232231231
       #
-      def rate(from, to, opts={})        
-        rate = cache.cached(api, opts.merge(:key_for => [from, to])) do
+      def rate from, to, opts={}        
+        rate = cache.cached(self.class, opts.merge(:key_for => [from, to])) do
           update(opts)
           
           rate_from   = rates[from]
@@ -155,7 +150,7 @@ module Exchange
       #   Exchange::ExternalAPI::Base.new.convert(23, :eur, :chf, :at => Time.gm(12,1,2011))
       #     #=> 30.12
       #
-      def convert(amount, from, to, opts={})
+      def convert amount, from, to, opts={}
         amount * rate(from, to, opts)
       end
       

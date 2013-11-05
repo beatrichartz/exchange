@@ -18,7 +18,7 @@ module Exchange
     # @param [Hash] opts Options for assertion
     # @option opts [Symbol] :default a method that can be sent to Time if the argument is nil (:now for example)
     #
-    def assure_time(arg=nil, opts={})
+    def assure_time arg=nil, opts={}
       if arg
         arg.kind_of?(Time) ? arg : Time.gm(*arg.split('-'))
       elsif opts[:default]

@@ -14,7 +14,9 @@ module Exchange
     #   end
     #
     class Memcached < Base
-        
+      
+      # delegate client and wiping the client to the instance
+      #
       def_delegators :instance, :client, :wipe_client!
         
       # instantiates a memcached client and memoizes it in a class variable.

@@ -737,6 +737,32 @@ describe "Exchange::ISO" do
         end
       end
     end
+    context "given a float with scientific notation" do
+      context "with bigger precision than the definition" do
+        it "should instantiate a big decimal with the given precision" do
+          BigDecimal.should_receive(:new).with("6.0e-05",6).and_return('INSTANCE')
+          subject.instantiate(6.0e-05, :tnd).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("600000.0",8).and_return('INSTANCE')
+          subject.instantiate(6.0e05, :sar).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("1.456e-08",12).and_return('INSTANCE')
+          subject.instantiate(1.456e-08, :omr).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("145600000.0",12).and_return('INSTANCE')
+          subject.instantiate(1.456e08, :omr).should == 'INSTANCE'
+        end
+      end
+      context "with smaller precision than the definition" do
+        it "should instantiate a big decimal with the defined precision" do
+          BigDecimal.should_receive(:new).with("0.6",4).and_return('INSTANCE')
+          subject.instantiate(6.0e-01, :tnd).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("60.0",4).and_return('INSTANCE')
+          subject.instantiate(6.0e01, :sar).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("0.14",4).and_return('INSTANCE')
+          subject.instantiate(1.4e-01, :omr).should == 'INSTANCE'
+          BigDecimal.should_receive(:new).with("14.56",5).and_return('INSTANCE')
+          subject.instantiate(1.456e01, :omr).should == 'INSTANCE'
+        end
+      end
+    end
     context "given a big decimal" do
       let!(:bigdecimal) { BigDecimal.new("23.23") }
       it "should instantiate a big decimal according to the iso standards" do
@@ -781,6 +807,22 @@ describe "Exchange::ISO" do
       subject.floor(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("19")
     end
   end
+  describe "self.symbol" do
+    context "with a symbol present" do
+      it "should return the symbol" do
+        subject.symbol(:usd).should == '$'
+        subject.symbol(:gbp).should == '£'
+        subject.symbol(:eur).should == '€'
+      end
+    end
+    context "with no symbol present" do
+      it "should return nil" do
+        subject.symbol(:chf).should be_nil
+        subject.symbol(:etb).should be_nil
+        subject.symbol(:tnd).should be_nil
+      end
+    end
+  end
   describe "self.stringify" do
     it "should stringify a currency according to ISO 4217 Definitions" do
       subject.stringify(BigDecimal.new("23234234.232524"), :tnd).should == "TND 23234234.233"
@@ -798,6 +840,16 @@ describe "Exchange::ISO" do
         subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :amount).should == "23.200"
         subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :amount).should == "25,645,645,663.40"
         subject.stringify(BigDecimal.new("23.0"), :clp, :format => :amount).should == "23"
+      end
+    end
+    context "plain amount" do
+      it "should not render the currency or separators" do
+        subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :plain).should == "23.233"
+        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :plain).should == "223423432343.23"
+        subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :plain).should == "23"
+        subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :plain).should == "23.200"
+        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :plain).should == "25645645663.40"
+        subject.stringify(BigDecimal.new("23.0"), :clp, :format => :plain).should == "23"
       end
     end
     context "symbol" do

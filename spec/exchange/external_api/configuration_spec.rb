@@ -59,7 +59,7 @@ describe "Exchange::ExternalAPI::Configuration" do
     it "should restore the defaults" do
       subject.reset
       subject.subclass.should == Exchange::ExternalAPI::XavierMedia
-      subject.retries.should == 5
+      subject.retries.should == 7
       subject.app_id.should be_nil
       subject.fallback.should == [Exchange::ExternalAPI::Ecb]
     end

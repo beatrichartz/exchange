@@ -85,8 +85,8 @@ module Exchange
     #
     def to other, options={}
       other = ISO.assert_currency!(other)
-      
-      if api_supports_currency?(other)
+
+      if api_supports_currency?(currency) && api_supports_currency?(other)
         opts = { :at => time, :from => self }.merge(options)
         Money.new(api.new.convert(value, currency, other, opts), other, opts)
       elsif fallback!
@@ -111,9 +111,12 @@ module Exchange
         # @!macro [attach] install_operation
         #
         def install_operation op
-          define_method op do |*precision|
-            psych = precision.first == :psych
-            Exchange::Money.new(ISO.send(op, self.value, self.currency, psych ? nil : precision.first, {:psych => psych}), currency, :at => time, :from => self)
+          define_method op do |*arguments|
+            psych       = arguments.first == :psych
+            precision   = psych ? nil : arguments.first
+            val         = ISO.send(op, self.value, self.currency, precision, {:psych => psych})
+            
+            Exchange::Money.new(val, currency, :at => time, :from => self)
           end
         end
       
@@ -309,11 +312,17 @@ module Exchange
     # @example Convert a currency with a three decimal minor to a string with a currency symbol
     #   Exchange::Money.new(34.34, :usd).to_s(:symbol) #=> "$34.34"
     # @example Convert a currency with a three decimal minor to a string with just the amount
-    #   Exchange::Money.new(34.34, :omr).to_s(:amount) #=> "34.340"
+    #   Exchange::Money.new(3423.34, :usd).to_s(:amount) #=> "3,423.34"
+    # @example Convert a currency with just the plain amount using decimal notation
+    #   Exchange::Money.new(3423.34, :omr).to_s(:plain) #=> "3423.340"
     #
     def to_s format=:currency
       ISO.stringify(value, currency, :format => format)
     end
+    
+    # Returns the symbol for the given currency
+    # @since 1.0
+    # @version 0.1
     
     private
     
@@ -340,7 +349,7 @@ module Exchange
       # @since 0.6
       # @version 0.6
       #
-      def is_currency? other
+      def is_money? other
         other.is_a?(Exchange::Money)
       end
       
@@ -351,7 +360,7 @@ module Exchange
       # @version 0.6
       #
       def is_same_currency? other
-        is_currency?(other) && other.currency == currency
+        is_money?(other) && other.currency == currency
       end
       
       # determine if another given object is an instance of Exchange::Money and has another currency
@@ -361,7 +370,7 @@ module Exchange
       # @version 0.6
       #
       def is_other_currency? other
-        is_currency?(other) && other.currency != currency
+        is_money?(other) && other.currency != currency
       end
       
       # determine wether the chosen api supports converting the given currency
@@ -379,7 +388,7 @@ module Exchange
       # @version 0.6
       #
       def test_for_currency_mix_error other
-        raise ImplicitConversionError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.implicit_conversions && other.is_a?(Money) && other.currency != currency
+        raise ImplicitConversionError.new("You\'re trying to mix up #{currency} with #{other.currency}. You denied mixing currencies in the configuration, allow it or convert the currencies before mixing") if !Exchange.configuration.implicit_conversions && is_other_currency?(other)
       end
       
       # Helper method to raise a no rate error for a given currency if no rate is given
@@ -389,13 +398,13 @@ module Exchange
       # @version 0.7.2
       #
       def raise_no_rate_error other
-        raise NoRateError.new("Cannot convert to #{other} because the defined api nor the fallbacks provide a rate")
+        raise NoRateError.new("Cannot convert #{currency} to #{other} because the defined api nor the fallbacks provide a rate")
       end
   
   end
   
   # The error that will get thrown when implicit conversions take place and are not allowed
   #
-  ImplicitConversionError = Class.new(StandardError)
+  ImplicitConversionError = Class.new StandardError
   
 end

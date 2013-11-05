@@ -4,7 +4,7 @@ require 'spec_helper'
 describe "Exchange::Configuration" do
   let(:subject) { Exchange::Configuration.new }
   it "should have a standard configuration" do
-    subject.api.retries.should == 5
+    subject.api.retries.should == 7
     subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
     subject.cache.subclass.should == Exchange::Cache::Memory
     subject.cache.host.should be_nil
@@ -67,7 +67,7 @@ describe "Exchange::Configuration" do
     it "should restore the defaults" do
       subject.reset
       subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
-      subject.api.retries.should == 5
+      subject.api.retries.should == 7
       subject.api.app_id.should be_nil
       subject.api.fallback.should == [Exchange::ExternalAPI::Ecb]
       subject.cache.subclass.should == Exchange::Cache::Memory

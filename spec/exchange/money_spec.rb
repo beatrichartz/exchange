@@ -75,14 +75,28 @@ describe "Exchange::Money" do
         end
       end
     end
-    context "with a currency not provided by the given api" do
+    context "with a 'from' currency not provided by the given api" do
+      subject { Exchange::Money.new(36.36, :chf) }
+      context "but provided by a fallback api" do
+        it "should use the fallback" do
+          subject.api::CURRENCIES.should_receive(:include?).with(:usd).and_return true
+          subject.api::CURRENCIES.should_receive(:include?).with(:chf).and_return true
+          URI.should_receive(:parse).with("http://openexchangerates.org/api/latest.json?app_id=").once.and_raise Exchange::ExternalAPI::APIError
+          mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
+          subject.to(:usd).value.round(2).should == 40.00
+          subject.to(:usd).currency.should == :usd
+          subject.to(:usd).should be_kind_of Exchange::Money
+        end
+      end
+    end
+    context "with a 'to' currency not provided by the given api" do
       context "but provided by a fallback api" do
         it "should use the fallback" do
           subject.api::CURRENCIES.stub! :include? => false
           mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
-          subject.to(:ch).value.round(2).should == 36.36
-          subject.to(:ch).currency.should == :chf
-          subject.to(:ch).should be_kind_of Exchange::Money
+          subject.to(:chf).value.round(2).should == 36.36
+          subject.to(:chf).currency.should == :chf
+          subject.to(:chf).should be_kind_of Exchange::Money
         end
       end
       context "but not provided by any fallback api" do
@@ -554,6 +568,14 @@ describe "Exchange::Money" do
       Exchange::Money.new(23.2, :tnd).to_s(:amount).should == "23.200"
       Exchange::Money.new(23.4, :sar).to_s(:amount).should == "23.40"
       Exchange::Money.new(23.0, :clp).to_s(:amount).should == "23"
+    end
+    it "should render only the currency amount and no separators if the argument amount is passed" do
+      Exchange::Money.new(2323.232524, :tnd).to_s(:plain).should == "2323.233"
+      Exchange::Money.new(2323.23252423, :sar).to_s(:plain).should == "2323.23"
+      Exchange::Money.new(2323.23252423, :clp).to_s(:plain).should == "2323"
+      Exchange::Money.new(23.2, :tnd).to_s(:plain).should == "23.200"
+      Exchange::Money.new(23.4, :sar).to_s(:plain).should == "23.40"
+      Exchange::Money.new(23.0, :clp).to_s(:plain).should == "23"
     end
     it "should render the currency with a symbol according to ISO 4217 Definitions" do
       Exchange::Money.new(23.232524, :tnd).to_s(:symbol).should == "TND 23.233"

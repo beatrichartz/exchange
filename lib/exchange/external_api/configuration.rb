@@ -13,6 +13,8 @@ module Exchange
       
       def_delegators :instance, :retries, :retries=, :app_id, :app_id=, :protocol, :protocol=, :fallback, :fallback=
       
+      # Constantize fallback apis on the fly
+      #
       def fallback_with_constantize
         self.fallback = Array(fallback_without_constantize).map do |fb|
           unless !fb || fb.is_a?(Class)
@@ -27,10 +29,16 @@ module Exchange
       alias_method :fallback_without_constantize, :fallback
       alias_method :fallback, :fallback_with_constantize
       
+      # The configuration parent module
+      # @return [Class] ExternalAPI, always
+      #
       def parent_module
         ExternalAPI
       end
       
+      # The configuration key
+      # @return [Symbol] :api, always
+      #
       def key
         :api
       end
