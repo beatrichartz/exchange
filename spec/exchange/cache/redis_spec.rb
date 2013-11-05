@@ -17,7 +17,7 @@ describe "Exchange::Cache::Redis" do
     Exchange.configuration.reset
   end
   describe "client" do
-    let(:client) { mock('redis') }
+    let(:client) { double('redis') }
     after(:each) do
       subject.instance_variable_set "@client", nil
     end
@@ -27,7 +27,7 @@ describe "Exchange::Cache::Redis" do
     end
   end
   describe "cached" do
-    let(:client) { mock('redis', :get => nil) }
+    let(:client) { double('redis', :get => nil) }
     before(:each) do
       ::Redis.should_receive(:new).with(:host => 'HOST', :port => 'PORT').and_return(client)
     end

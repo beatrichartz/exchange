@@ -15,7 +15,7 @@ describe "Exchange::CacheDalli::Client" do
     Exchange.configuration.reset
   end
   describe "client" do
-    let(:client) { mock('memcached') }
+    let(:client) { double('memcached') }
     before(:each) do
       Exchange::GemLoader.new('dalli').try_load
     end
@@ -28,7 +28,7 @@ describe "Exchange::CacheDalli::Client" do
     end
   end
   describe "wipe_client!" do
-    let(:client) { mock('memcached') }
+    let(:client) { double('memcached') }
     
     it "should set the client to nil" do
       Dalli::Client.should_receive(:new).with("HOST:PORT").and_return(client)
@@ -38,7 +38,7 @@ describe "Exchange::CacheDalli::Client" do
     end
   end
   describe "cached" do
-    let(:client) { mock('memcached', :get => '') }
+    let(:client) { double('memcached', :get => '') }
     before(:each) do
       Dalli::Client.should_receive(:new).with("HOST:PORT").and_return(client)
     end
@@ -69,7 +69,7 @@ describe "Exchange::CacheDalli::Client" do
       end
     end
     context "when no cached result exists" do
-      let(:client) { mock('memcached') }
+      let(:client) { double('memcached') }
       context "when returning nil" do
         before(:each) do
           subject.should_receive(:key).with('API_CLASS', {}).twice.and_return('KEY')

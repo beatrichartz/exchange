@@ -27,7 +27,7 @@ describe "Exchange::ExternalAPI::Call" do
           @count = 0
           @uri_mock.should_receive(:open).at_most(3).times.and_return do
             @count += 1
-            @count == 3 ? mock('opened', :read => fixture('api_responses/example_json_api.json')) : raise(OpenURI::HTTPError.new('404', 'URI'))
+            @count == 3 ? double('opened', :read => fixture('api_responses/example_json_api.json')) : raise(OpenURI::HTTPError.new('404', 'URI'))
           end
           Exchange::ExternalAPI::Call.new('JSON_API') do |result|
             result.should == JSON.load(fixture('api_responses/example_json_api.json'))
@@ -62,7 +62,7 @@ describe "Exchange::ExternalAPI::Call" do
         @count = 0
         @uri_mock.should_receive(:open).at_most(3).times.and_return do
           @count += 1
-          @count == 3 ? mock('opened', :read => fixture('api_responses/example_xml_api.xml')) : raise(OpenURI::HTTPError.new('404', 'URI'))
+          @count == 3 ? double('opened', :read => fixture('api_responses/example_xml_api.xml')) : raise(OpenURI::HTTPError.new('404', 'URI'))
         end
         Exchange::ExternalAPI::Call.new('XML_API', :format => :xml) do |result|
           result.to_s.should == Nokogiri::XML.parse(fixture('api_responses/example_xml_api.xml').sub("\n", '')).to_s
