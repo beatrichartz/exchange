@@ -8,7 +8,7 @@ You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whate
 
 == Installation
 === Bundler / Rails
-Add it to your Gemfile  
+Add it to your Gemfile
   gem "exchange", ">= 1.1.0"
 === Manually
 Just install it as a gem
@@ -29,9 +29,9 @@ or better for historic dates
   1.in(:eur).to(:usd, :at => Time.now - 84600)
   
 === Fallbacks for Conversion APIs
-Never worry if an API is shortly unavailable – Exchange provides the possibility to fall back to other conversion API's if the chosen one is currently not available or does not provide a rate for the attempted conversion. Thus it is possible to combine different API's with incomplete currency sets to have a more complete currency set. 
+Never worry if an API is shortly unavailable – Exchange provides the possibility to fall back to other conversion API's if the chosen one is currently not available or does not provide a rate for the attempted conversion. Thus it is possible to combine different API's with incomplete currency sets to have a more complete currency set.
 
-The performance impact of a fallback if a rate is recognizably not provided by an API is minimal, whereas the performance impact on a http connection error can have a bigger impact on performance. 
+The performance impact of a fallback if a rate is recognizably not provided by an API is minimal, whereas the performance impact on a http connection error can have a bigger impact on performance.
 
 The default fallback mechanism used calls the ECB API if the Xavier Media API is unavailable. You can set your own fallback chain using the API configuration.
   
@@ -110,6 +110,10 @@ Specify the symbol format will print out the currency with a symbol. If no symbo
 Specifying the amount format will print out the formatted amount only
 
   1440.4.in(:usd).to_s(:amount) #=> "1,440.40"
+  
+Specifying the plain format will print out the amount formatted with just a dot separator
+ 
+  1440.4.in(:usd).to_s(:plain) #=> "1440.40"
 
 As seen above, exchange takes care of the right format for the separators
 
@@ -117,24 +121,24 @@ As seen above, exchange takes care of the right format for the separators
 
 === Use three great APIs or your own
 
-Three open APIs are already included: 
+Three open APIs are already included:
 
 - {Xaviermedia}[http://www.xavierforum.com/viewtopic.php?f=5&t=10979&sid=671a685edbfa5dbec219fbc6793d5057]
 - {European Central Bank}[http://www.ecb.int/stats/exchange/eurofxref/html/index.en.html]
 - {Open Exchange Rates}[http://openexchangerates.org/] (Look for the free plan at the bottom of the page)
 
-but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it. 
+but if you have another API you like to use, it becomes as easy as writing one Class and two methods to use it.
 {Example of a custom API Extension}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/ExternalAPI]
 
 === Use great caches or your own great cache
 
-Use one of three available caching solutions: 
+Use one of three available caching solutions:
 
 - Memcached via the Dalli gem
 - Redis via the redis gem
 - Rails cache (This gem does however not depend on rails)
 
-But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it. 
+But, same here, if you don't like any of these or want to use your own caching solution, it is as easy as writing one Class and two methods to use it.
 {Example of a custom cache extension}[http://rubydoc.info/github/beatrichartz/exchange/Exchange/Cache]
 
 == Basic Operations
@@ -172,7 +176,7 @@ Compare Currencies, they will convert implicitly
   2.in(:nok) < 2.in(:sek)                                 #=> false (2.in(:sek) get converted to nok and compared)
   5.in(:eur) == 4.34.in(:chf)                             #=> true
   50.in(:eur) == 4.34.in(:chf)                            #=> false
-  50.in(:eur).to(:sek) == 50.in(:eur)                       #=> true
+  50.in(:eur).to(:sek) == 50.in(:eur)                     #=> true
   50.in(:eur, :at => '2011-1-1') == 50.in(:sek)           #=> false
 
 Sort multiple currencies at once
@@ -265,18 +269,18 @@ If you want to maintain control over when a currency is converted, turn implicit
   Exchange.configuration.implicit_conversions = false
   1.in(:usd) + 1.in(:eur)                                 #=> raises ImplicitConversionDenied
 
-=== Caching Options  
+=== Caching Options
 
 In Key/Value stores, exchange will cache the API files with a key starting with 'exchange_'
 
-Use Memory to cache the result (default). 
+Use Memory to cache the result (default).
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
       :subclass => :memory
     }
   end
 
-Use Memcached to cache the result. 
+Use Memcached to cache the result.
   Exchange.configuration = Exchange::Configuration.new do |c|
     c.cache = {
       :subclass => :memcached,
@@ -332,44 +336,51 @@ Use https as request protocol of your api requests:
 Easily connect to your custom API by writing an ExternalAPI Class, or use your own caching solution to cache. Please note that only open source APIs can be accepted as contributions to this gem. Private / Premium APIs have to be written as your own.
   module Exchange
     module ExternalAPI
-      class MyCustom < Base
+
+      # Inherit from Json to write for a json api, and the json gem is automatically loaded
+      # Inherit from XML to write for an xml api, and nokogiri is automatically loaded
+      #
+      class MyCustom < Json
+
         # Define here which currencies your API can handle
-        CURRENCIES = %W(usd chf)
-        
-        # Every instance of ExternalAPI Class has to have an update function which gets 
-        # the rates from the API
+        #
+        CURRENCIES = %W(usd chf).map(&:to_sym)
+
+        # Every instance of ExternalAPI Class has to have an update function which
+        # gets the rates from the API
         #
         def update(opts={})
+
           # assure that you will get a Time object for the historical dates
           #
-          time = assure_time(opts[:at]) 
+          time = helper.assure_time(opts[:at])
 
-          # Call your API (shown here with a helper function that builds your API URL). 
+          # Call your API (shown here with a helper function that builds your API URL).
           # Like this, your calls will get cached.
           #
           Call.new(api_url(time), :at => time) do |result|
 
-            # Assign the currency conversion base.
-            # Attention, this is readonly, self.base= won't work
-            #
-            @base                 = result['base']
+          # Assign the currency conversion base.
+          # Attention, this is readonly, self.base= won't work
+          #
+          @base                 = result['base']
 
-            # assign the rates, this has to be a hash with the following format: 
-            # {'USD' => 1.23242, 'CHF' => 1.34323}. 
-            #
-            # Attention, this is readonly, self.rates= won't work
-            #
-            @rates                = result['rates']
+          # assign the rates, this has to be a hash with the following format:
+          # {'USD' => 1.23242, 'CHF' => 1.34323}.
+          #
+          # Attention, this is readonly, self.rates= won't work
+          #
+          @rates                = result['rates']
 
-            # Timestamp the api call result. This may come in handy to assure you have 
-            # the right result. 
-            #
-            # Attention, this is readonly, self.timestamp= won't work
-            #
-            @timestamp            = result['timestamp'].to_i
-          end
+          # Timestamp the api call result. This may come in handy to assure you have
+          # the right result.
+          #
+          # Attention, this is readonly, self.timestamp= won't work
+          #
+          @timestamp            = result['timestamp'].to_i
+
         end
-        
+
         private
 
           def api_url(time)
@@ -384,6 +395,8 @@ Now, you can configure your API in the configuration. The Symbol will get camelc
 
   Exchange::Configuration.api.subclass = :my_custom
 
+# Have fun, and don't forget to write tests.
+
 Have fun, and don't forget to write tests.
 
 === Your own Cache
@@ -396,7 +409,7 @@ Write your own caching module to use the gem with your own custom caching soluti
       # to the instance
       #
       def cached api, opts={}, &block
-        # generate the storage with key(api, opts[:at]) and you will get a 
+        # generate the storage with key(api, opts[:at]) and you will get a
         # unique key to store in your cache
         #
         # Your code goes here
