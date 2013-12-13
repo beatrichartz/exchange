@@ -52,7 +52,7 @@ module Exchange
     def initialize value, currency_arg=nil, opts={}, &block
       currency_arg      = ISO.assert_currency!(currency_arg) if currency_arg
       
-      @from             = opts[:from]
+      @from             = opts[:from] if Exchange.configuration.trace
       @api              = Exchange.configuration.api.subclass
       
       yield(self) if block_given?
@@ -85,9 +85,11 @@ module Exchange
     #
     def to other, options={}
       other = ISO.assert_currency!(other)
+      
+      return self if other == currency && (!options[:at] || options[:at] == time)
 
       if api_supports_currency?(currency) && api_supports_currency?(other)
-        opts = { :at => time, :from => self }.merge(options)
+        opts = { :at => time, :from => [value, currency, time] }.merge(options)
         Money.new(api.new.convert(value, currency, other, opts), other, opts)
       elsif fallback!
         to other, options
@@ -103,6 +105,18 @@ module Exchange
     end
     alias :in :to
     
+    # Revert a conversion, raise an error if information is missing
+    # @since 1.2
+    # @version 0.1
+    # @return [Exchange::Money] An instance of Exchange::Money with the unconverted value and currency
+    # @raise [Exchange::ImpossibleReversionError] An error indicating that no information for reversion is present
+    #
+    def revert!
+      raise ImpossibleReversionError.new("Can not revert currency to a previous state because information is missing") unless from
+      
+      Exchange::Money.new(from[0], from[1], :at => from[2])
+    end
+    
     class << self
       
       private
@@ -116,7 +130,7 @@ module Exchange
             precision   = psych ? nil : arguments.first
             val         = ISO.send(op, self.value, self.currency, precision, {:psych => psych})
             
-            Exchange::Money.new(val, currency, :at => time, :from => self)
+            Exchange::Money.new(val, currency, :at => time, :from => [value, currency, time])
           end
         end
       
@@ -129,7 +143,7 @@ module Exchange
             def #{op}(other)
               test_for_currency_mix_error(other)
               new_value = value #{op} (other.kind_of?(Money) ? other.to(self.currency, :at => other.time).value : BigDecimal.new(other.to_s))
-              Exchange::Money.new(new_value, currency, :at => time, :from => self)
+              Exchange::Money.new(new_value, currency, :at => time, :from => [value, currency, time])
             end
           EOV
         end
@@ -248,6 +262,52 @@ module Exchange
     #
     base_operation '/'
     
+    # Calculate the modulo of a value
+    # @param [Integer, Float, Exchange::Money] other The value to be calculated the modulo of. If an Exchange::Money, it is converted to the instance's currency and divided by the converted value.
+    # @return [Exchange::Money] The currency with the modulo calculation value
+    # @raise [ImplicitConversionError] If the configuration does not allow mixed operations, this method will raise an error if two different currencies are used in the operation
+    # @example Configuration disallows mixed operations
+    #   Exchange.configuration.implicit_conversions = false
+    #   Exchange::Money.new(20,:nok) % Exchange::Money.new(20,:sek)
+    #     #=> #<ImplicitConversionError "You tried to mix currencies">
+    # @example Configuration allows mixed operations (default)
+    #   Exchange::Money.new(20,:nok) % Exchange::Money.new(20,:sek)
+    #     #=> #<Exchange::Money @value=1.56 @currency=:nok>
+    # @since 0.1
+    # @version 0.7
+    #
+    base_operation '%'
+    
+    # Used to handle operations when arguments order is reversed
+    # @param [Anything] other The value coercing
+    # @return [Array] an array containing self and other
+    #
+    # @example
+    #   2 * Exchange::Money.new(13, :eur) #=> #<Exchange::Money @value=26 @currency=:eur>
+    def coerce(other)
+      [self, other]
+    end
+    
+    # Split an amount of a currency into parts without losing fractions
+    # @param [Integer] The number of parts to split into
+    # @return [Array] Array of rounded instances of Exchange::Money.
+    # @example Split a dollar by three
+    #   Exchange::Money.new(1, :usd).split(3).map &:to_s #=> ["USD 0.33", "USD 0.33", "USD 0.34"]
+    #
+    def split(number)
+      parts             = number.times.map { Money.new(value / BigDecimal.new(number.to_s), currency, :at => time).round }
+      smallest_fraction = BigDecimal.new(BigDecimal.new("1.0") / (10 ** ISO.minor(currency)))
+      times             = (self - parts.reduce(:+)) / smallest_fraction
+      negative          = times != times.abs
+      
+      times.abs.to_i.times do |i|
+        index = negative ? -i-1 : i
+        parts[index] = parts[index].send(negative ? :- : :+, smallest_fraction)
+      end
+      
+      parts
+    end
+    
     # Compare a currency with another currency or another value. If the other is not an instance of Exchange::Money, the value 
     # of the currency is compared
     # @param [Whatever you want to throw at it] other The counterpart to compare
@@ -297,11 +357,10 @@ module Exchange
       end
     end
     
-    # Converts the currency to a string in ISO 4217 standardized format, either with or without the currency. This leaves you
-    # with no worries how to display the currency.
+    # Converts the currency to a string in ISO 4217 standardized format, either with or without the currency. 
     # @since 0.3
     # @version 0.3
-    # @param [Symbol] format :currency (default) if you want a string with currency, :amount if you want just the amount.
+    # @param [Symbol] format :currency (default) if you want a string with currency, :amount if you want just the amount, :plain if you want the unformatted amount
     # @return [String] The formatted string
     # @example Convert a currency to a string
     #   Exchange::Money.new(49.567, :usd).to_s #=> "USD 49.57"
@@ -320,9 +379,68 @@ module Exchange
       ISO.stringify(value, currency, :format => format)
     end
     
-    # Returns the symbol for the given currency
-    # @since 1.0
+    # Converts the currency to a string in ISO 4217 standardized format with html wrappers, either with or without the currency.
+    # @since 1.2
     # @version 0.1
+    # @param [Symbol] format :currency (default) if you want two span elements (one with currency, the other with the amount), :amount if you want just a span with the amount, :plain if you want the unformatted amount within a span
+    # @param [Hash] options
+    # @option [Symbol] :tag The HTML tag to use, defaults to span
+    # @option [Symbol] :wrap A html tag to wrap the currency element(s) in
+    # @option [Symbol] :amount The amount formatter to use (if it differs from the default)
+    # @return [String] The HTML formatted string
+    # @example Convert a currency to a html formatted string with currency
+    #   Exchange::Money.new(49.567, :usd).to_html #=> '<span class="currency usd">USD</span><span class="amount usd">49.57</span>'
+    # @example Convert a currency to a HTML formatted string with a symbol span and an amount span
+    #   Exchange::Money.new(34.34, :usd).to_html(:symbol) #=> '<span class="currency usd symbol">$</span><span class="amount usd">34.34</span>'
+    # @example Convert a currency to a HTML formatted string with an empty icon span with icon and usd class and an amount span
+    #   Exchange::Money.new(34.34, :usd).to_html(:icon) #=> '<span class="currency usd icon"></span><span class="amount usd">34.34</span>'
+    # @example Convert a currency to a HTML formatted string with an empty icon span with icon and usd class and an amount span formatted to plain format
+    #   Exchange::Money.new(3434.34, :usd).to_html(:icon, amount: :plain) #=> '<span class="currency usd icon"></span><span class="amount plain usd">3434.34</span>'
+    # @example Convert a currency to a HTML formatted string with div tags instead of span
+    #   Exchange::Money.new(3434.34, :usd).to_html(:icon, tag: :div) #=> '<div class="currency usd icon"></div><div class="amount usd">3434.34</div>'
+    # @example Convert a currency to a HTML formatted list
+    #   Exchange::Money.new(3434.34, :usd).to_html(:icon, tag: :li, wrap: :ul) #=> '<ul class="currency usd"><li class="currency usd icon"></li><li class="amount usd">3434.34</li></ul>'
+    #
+    def to_html *args
+      options       = args.last.is_a?(Hash) ? args.pop : {}
+      format        = args.shift || :currency
+      amount_format = options[:amount] || format == :plain ? :plain : :amount
+      tag           = options[:tag] || 'span'
+      wrap          = options[:wrap]
+      
+      result        = ''
+      result        += "<#{wrap} class=\"currency #{currency}\">" if wrap
+      result        += "<#{tag} class=\"#{[:currency, format].uniq.join(' ')} #{currency}\">" if [:symbol, :icon, :currency].include?(format)
+      result        += (symbol || iso_code) if format == :symbol
+      result        += iso_code if format == :currency
+      result        += "</#{tag}>" if [:symbol, :icon, :currency].include?(format)
+      result        += "<#{tag} class=\"#{[:amount, amount_format].uniq.join(' ')} #{currency}\">#{to_s(amount_format)}</#{tag}>"
+      result        += "</#{wrap}>" if wrap
+      
+      result
+    end
+    
+    # Returns the symbol for the given currency
+    # @since 1.2
+    # @version 0.1
+    # @return [String] The currency symbol, if there is any
+    # @example Get the symbol for USD
+    #   Exchange::Money.new(12.12, :usd).symbol #=> '$'
+    #
+    def symbol
+      ISO.symbol(currency)
+    end
+    
+    # Returns the ISO Code for the given currency
+    # @since 1.2
+    # @version 0.1
+    # @return [String] The currency ISO 4217 code
+    # @example Get the ISO Code for EUR
+    #   Exchange::Money.new(13.13, :eur).iso_code #=> 'EUR'
+    #
+    def iso_code
+      currency.to_s.upcase
+    end
     
     private
     
@@ -406,5 +524,9 @@ module Exchange
   # The error that will get thrown when implicit conversions take place and are not allowed
   #
   ImplicitConversionError = Class.new StandardError
+  
+  # The error that will get thrown when a reversion is impossible
+  #
+  ImpossibleReversionError = Class.new StandardError
   
 end

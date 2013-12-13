@@ -213,12 +213,12 @@ You can also pass the precision you wish for as an argument, round, ceil, floor 
 
   3.1234.in(:eur).round(0)                           #=> #<Exchange::Money @value=3 @currency=:eur>
 
-Convert one currency to another and round, ceil or floor it, it still retains currency information of the actual and previous currency
+Convert one currency to another and round, ceil or floor it. Exchange retains the currency code of the currency before the operation.
 
   1.34.in(:usd).to(:eur).round(0)                      #=> #<Exchange::Money @value=1 @currency=:eur>
   10.34.in(:usd).to(:nok).ceil(0)                      #=> #<Exchange::Money @value=45 @currency=:nok>
   5.34.in(:usd).to(:eur).floor(0)                      #=> #<Exchange::Money @value=4 @currency=:eur>
-  5.34.in(:usd).to(:eur).floor.from                    #=> #<Exchange::Money @value=5.34 @currency=:usd>
+  5.34.in(:usd).to(:eur).floor.from                    #=> :usd
 
 === Psychological Pricing
 
@@ -231,12 +231,13 @@ You can apply psychological pricing by passing the psych argument to the roundin
   
 === Retain Information
 
-Access the original currency and its value after conversion, even over multiple steps
+Access the original currency name after conversion and go back
 
   converted = 2.in(:eur).to(:usd)                      #=> #<Exchange::Money @value=2.12 @currency=:usd>
-  converted.from                                       #=> #<Exchange::Money @value=2 @currency=:eur>
+  converted.from                                       #=> :eur
   converted2 = converted.to(:nok)                      #=> #<Exchange::Money @value=22.12 @currency=:nok>
-  converted2.from                                      #=> #<Exchange::Money @value=2.12 @currency=:usd>
+  converted2.from                                      #=> :usd
+  converted2.revert                                    #=> #<Exchange::Money @value=2.12 @currency=:usd>
 
 == Configuration
 
@@ -264,6 +265,7 @@ The options available are
     :protocol (default :http)                 The protocol to use with the request
     
   :implicit_conversions (default true)      If set to false, Operations with with different currencies raise errors.
+  :trace (default false)         If set to true, each currency will have a 'from' attribute set with its «predecessor», meaning the currency it was before a conversion or mathematical operation, which is great for debugging when and how a currency was changed.
 
 If you want to maintain control over when a currency is converted, turn implicit conversions off
   Exchange.configuration.implicit_conversions = false

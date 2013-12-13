@@ -772,7 +772,7 @@ describe "Exchange::ISO" do
     end
   end
   describe "self.round" do
-    it "should round a currency according to ISO 4217 Definitions" do
+    it "should round a currency according to ISO 4217 Definitions" do      
       subject.round(BigDecimal.new("23.232524"), :tnd).should == BigDecimal.new("23.233")
       subject.round(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.23")
       subject.round(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("23")
@@ -821,6 +821,13 @@ describe "Exchange::ISO" do
         subject.symbol(:etb).should be_nil
         subject.symbol(:tnd).should be_nil
       end
+    end
+  end
+  describe "self.minor" do
+    it "should return the minor unit" do
+      subject.minor(:usd).should == 2
+      subject.minor(:omr).should == 3
+      subject.minor(:jpy).should == 0
     end
   end
   describe "self.stringify" do

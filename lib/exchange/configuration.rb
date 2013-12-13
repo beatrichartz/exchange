@@ -71,9 +71,9 @@ module Exchange
     # @version 1.0
     # @since 0.6
     #
-    DEFAULTS = { 
+    DEFAULTS = {
                   :api => {
-                    :subclass => ExternalAPI::XavierMedia, 
+                    :subclass => ExternalAPI::XavierMedia,
                     :retries => 7,
                     :protocol => :http,
                     :app_id => nil,
@@ -86,7 +86,8 @@ module Exchange
                     :host => nil,
                     :port => nil
                   },
-                  :implicit_conversions => true
+                  :implicit_conversions => true,
+                  :trace => true
                 }
     
     # Initialize a new configuration. Takes a hash and/or a block. Lets you easily set the configuration the way you want it to be
@@ -118,6 +119,7 @@ module Exchange
       api.reset
       cache.reset
       self.implicit_conversions = DEFAULTS[:implicit_conversions]
+      self.trace = DEFAULTS[:trace]
     end
     
     # Getter for the implicit Conversions configuration. If set to true, implicit conversions will not raise errors
@@ -139,6 +141,25 @@ module Exchange
     #
     def implicit_conversions= data
       @config[:implicit_conversions] = data
+    end
+    
+    # Getter for the trace operations configuration. If set to true, currencies will trace their conversion path
+    # @since 1.2
+    # @version 0.1
+    # @return [Boolean] True if currencies should trace operations
+    #
+    def trace
+      @config[:trace]
+    end
+    
+    # Setter for the trace operations configuration. If set to true, currencies will trace their conversion path
+    # @since 1.2
+    # @version 0.1
+    # @param [Boolean] data The configuration to set
+    # @return [Boolean] The configuration set
+    #
+    def trace= data
+      @config[:trace] = data
     end
         
     # Setter for the api configuration.

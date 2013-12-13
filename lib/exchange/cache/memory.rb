@@ -24,7 +24,7 @@ module Exchange
       def cached api, opts={}, &block
         ivar_name = instance_variable_name(api, opts)
 
-        result = instance_variable_get(ivar_name) 
+        result = instance_variable_get(ivar_name)
         
         unless result && !result.to_s.empty?
           result = super
@@ -56,8 +56,8 @@ module Exchange
           conversion_time.year.to_s,
           conversion_time.yday.to_s,
           expire_hourly && conversion_time.hour.to_s,
-          time.year.to_s, 
-          time.yday.to_s, 
+          time.year.to_s,
+          time.yday.to_s,
           expire_hourly && time.hour.to_s,
           opts[:key_for] && opts[:key_for].join('_')
         ].compact.join('_')

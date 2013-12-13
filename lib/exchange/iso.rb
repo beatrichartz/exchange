@@ -21,13 +21,13 @@ module Exchange
         # @private
         # @macro [attach] install_operations
       
-        def install_operation op      
+        def install_operation op
           self.class_eval <<-EOV
             def #{op} amount, currency, precision=nil, opts={}
-              minor = definitions[currency][:minor_unit]
+              minor = minor(currency)
               money = amount.is_a?(BigDecimal) ? amount : BigDecimal.new(amount.to_s, precision_for(amount, currency))
               if opts[:psych] && minor > 0
-                money.#{op}(0) - BigDecimal.new((1.0/(10**minor)).to_s)
+                money.#{op}(0) - BigDecimal.new((BigDecimal.new("1.0")/(10**minor)).to_s)
               elsif opts[:psych]
                 (((money.#{op}(0) / BigDecimal.new("10.0")).#{op}(0)) - BigDecimal.new("0.1")) * BigDecimal.new("10")
               else
@@ -105,16 +105,16 @@ module Exchange
     # @example Convert a currency to a string
     #   Exchange::ISO.stringify(49.567, :usd) #=> "USD 49.57"
     # @example Convert a currency without minor to a string
-    #   Exchange::ISO.stringif(45, :jpy) #=> "JPY 45"
+    #   Exchange::ISO.stringify(45, :jpy) #=> "JPY 45"
     # @example Convert a currency with a three decimal minor to a string
-    #   Exchange::ISO.stringif(34.34, :omr) #=> "OMR 34.340"
+    #   Exchange::ISO.stringify(34.34, :omr) #=> "OMR 34.340"
     # @example Convert a currency to a string without the currency
-    #   Exchange::ISO.stringif(34.34, :omr, :amount_only => true) #=> "34.340"
+    #   Exchange::ISO.stringify(34.34, :omr, :format => :amount) #=> "34.340"
     #
-    def stringify amount, currency, opts={}    
+    def stringify amount, currency, opts={}
       definition    = definitions[currency]
       separators    = definition[:separators] || {}
-      format        = "%.#{definition[:minor_unit]}f"
+      format        = "%.#{minor(currency)}f"
       string        = format % amount
       major, minor  = string.split('.')
 
@@ -127,11 +127,19 @@ module Exchange
     end
     
     # Returns the symbol for a given currency. Returns nil if no symbol is present
-    # @param currency The currency to return the symbol for
+    # @param [Symbol] currency The currency to return the symbol for
     # @return [String, NilClass] The symbol or nil
     # 
-    def symbol currency      
+    def symbol currency
       definitions[currency][:symbol]
+    end
+    
+    # Returns the minor unit for a given currency. Returns nil if no minor unit is present
+    # @param [Symbol] currency The currency to return the minor unit for
+    # @return [Integer] The minor
+    #
+    def minor currency
+      definitions[currency][:minor_unit]
     end
     
     # Use this to round a currency amount. This allows us to round exactly to the number of minors the currency has in the 
@@ -163,7 +171,7 @@ module Exchange
     
     # Forwards the assure_time method to the instance using singleforwardable
     #
-    def_delegators :instance, :definitions, :instantiate, :stringify, :symbol, :round, :ceil, :floor, :currencies, :country_map, :defines?, :assert_currency!
+    def_delegators :instance, :definitions, :instantiate, :stringify, :symbol, :minor, :round, :ceil, :floor, :currencies, :country_map, :defines?, :assert_currency!
     
     private
     
@@ -172,8 +180,8 @@ module Exchange
     def symbolize_keys hsh
       new_hsh = Hash.new
       
-      hsh.each_pair do |k,v| 
-        v = symbolize_keys v if v.is_a?(Hash)        
+      hsh.each_pair do |k,v|
+        v = symbolize_keys v if v.is_a?(Hash)
         new_hsh[k.downcase.to_sym] = v
       end
       
@@ -186,7 +194,7 @@ module Exchange
     # @params [Symbol] currency the currency to get the precision for
     #
     def precision_for amount, currency
-      defined_minor_precision                         = definitions[currency][:minor_unit]
+      defined_minor_precision                         = minor(currency)
       match                                           = amount.to_s.match(/^-?(\d*)\.?(\d*)e?(-?\d+)?$/).to_a[1..3]
       given_major_precision, given_minor_precision    = precision_from_match *match
       

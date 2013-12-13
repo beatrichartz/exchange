@@ -12,7 +12,7 @@ describe "Exchange::Configuration" do
     subject.cache.expire.should == :daily
   end
   it "should respond to all configuration getters and setters" do
-    [:api, :implicit_conversions, :cache].each do |k|
+    [:api, :implicit_conversions, :trace, :cache].each do |k|
       subject.should be_respond_to(k)
       subject.should be_respond_to(:"#{k}=")
     end
@@ -63,6 +63,7 @@ describe "Exchange::Configuration" do
         :path => 'PATH'
       }
       c.implicit_conversions = false
+      c.trace = true
     }
     it "should restore the defaults" do
       subject.reset
@@ -75,6 +76,7 @@ describe "Exchange::Configuration" do
       subject.cache.port.should be_nil
       subject.cache.path.should be_nil
       subject.implicit_conversions.should be_true
+      subject.trace.should be_true
     end
   end
   after(:all) do

@@ -1,278 +1,2104 @@
 ---
 NIO:
-  minor_unit: 2
-  currency: Cordoba Oro
-  symbol: C$
+  subunits:
+    -
+      exponential: 2
+      name: 
+        latin: 
+          string: centavo
+          html: centavo
+        unicode: 
+          string: centavo
+          html: centavo
+  origin: Nicaraguan
+  name: 
+    latin: 
+      string: córdoba
+      html: 'c&oacute;rdoba'
+    unicode: 
+      string: córdoba
+      html: 'c&#243;rdoba'
+  wiki: en.wikipedia.org/wiki/Nicaraguan_c%C3%B3rdoba
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+  symbols: 
+    latin: 
+      -
+        string: C$
+        html: 'C&dollar;'
+    unicode:
+      -
+        string: C$
+        html: 'C&#36;'
 LAK:
-  minor_unit: 2
-  currency: Kip
-  symbol: ₭
+  subunits:
+    -
+      exponential: 2
+      name: 
+        latin: 
+          string: att
+          html: att
+        unicode: 
+          string: ອັດ
+          html: "&#3757;&#3761;&#3732;"
+        lao: 
+          string: ອັດ
+          html: "&#3757;&#3761;&#3732;"
+  origin: Lao
+  name: 
+    latin: 
+      string: kip
+      html: kip
+    unicode: 
+      string: ກີບ
+      html: "&#3713;&#3765;&#3738;"
+    lao:
+      string: ກີບ
+      html: "&#3713;&#3765;&#3738;"
+  wiki: en.wikipedia.org/wiki/Lao_kip
+  denominations:
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+    - 20000
+    - 50000
+    - 100000
+  symbols: 
+    unicode:
+      -
+        string: ₭
+        html: '&#8365;'
+        id: 8365
+      -
+        string: ₭N
+        html: '&#8365;N'
 SAR:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Saudi Riyal
-  symbol: ﷼
+  subunits:
+    -
+      exponential: 2
+      name: 
+        latin: 
+          string: halala
+          html: halala
+        unicode: 
+          string: هللة‎
+          html: "&#1607;&#1604;&#1604;&#1577;&#8206;"
+        arabic:
+          string: هللة‎
+          html: "&#1607;&#1604;&#1604;&#1577;&#8206;"
+  origin: Saudi
+  name: 
+    latin: 
+      string: riyal
+      html: riyal
+    unicode: 
+      string: ريال‎
+      html: "&#1585;&#1610;&#1575;&#1604;&#8206;&#8206;"
+    arabic: 
+      string: ريال‎
+      html: "&#1585;&#1610;&#1575;&#1604;&#8206;&#8206;"
+  wiki: en.wikipedia.org/wiki/Saudi_Riyal
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+  symbols:
+    latin:
+      -
+        string: SR
+        html: 'SR'
+    unicode: 
+      -
+        string: ﷼
+        html: '&#65020'
+    arabic: 
+      -
+        string: ر.س
+        html: "&#1585;.&#1587;&#8206;&#8206;"
 NOK:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: Norwegian Krone
-  symbol: kr
+  subunits:
+    -
+      exponential: 2
+      name: 
+        latin: 
+          string: øre
+          html: "&oslash;re"
+        unicode: 
+          string: øre
+          html: "&#248;re"
+  origin: Norwegian
+  name: 
+    latin: 
+      string: krone
+      html: krone
+    unicode: 
+      string: krone
+      html: krone
+  wiki: en.wikipedia.org/wiki/Norwegian_Krone
+  denominations:
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  symbols: 
+    latin: 
+      -
+        string: kr
+        html: kr
+    unicode: 
+      -
+        string: kr
+        html: kr
 USD:
   separators:
     major: ','
     minor: '.'
+  subunits:
+    -
+      name: 
+        latin: 
+          string: cent
+          html: cent
+        unicode: 
+          string: cent
+          html: cent
+      exponential: 2
+      symbols:
+        latin:
+          -
+            string: ¢
+            html: '&cent;'
+        unicode: 
+          -
+            string: ¢
+            html: '&#162;'
+            id: 162
+    -
+      name: 
+        latin: dime
+        unicode: dime
+      exponential: 1
+    -
+      name: 
+        latin: 
+          string: mill
+          html: mill
+        unicode: 
+          string: mill
+          html: mill
+      exponential: 3
+      symbols:
+        unicode:
+          -
+            string: ₥
+            html: '&#8357;'
+            id: 8357
+  origin: US
+  name: 
+    unicode: 
+      string: dollar
+      name: dollar
+  wiki: en.wikipedia.org/wiki/US_dollar
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols: 
+    latin: 
+      -
+        string: $
+        html: '&dollar;'
+    unicode: 
+      -
+        string: $
+        html: '&#36;'
+        id: 36
+USN:
   minor_unit: 2
-  currency: US Dollar
-  symbol: $
+  currency: US Dollar (Next day)
+  symbol: 
 RUB:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: Russian Ruble
-  symbol: руб
+  subunits: 
+    -
+      name: 
+        latin: 
+          string: kopeyka
+          html: kopeyka
+        unicode: 
+          string: копейка
+          html: "&#1082;&#1086;&#1087;&#1077;&#1081;&#1082;&#1072;"
+      exponential: 2
+      symbols:
+        latin:
+          -
+            string: kop.
+            html: kop.
+          -
+            string: k.
+            html: k.
+        unicode:
+          -
+            string: коп.
+            html: "&#1082;&#1086;&#1087;."
+          -
+            string: к.
+            html: "&#1082;."
+  origin: Russian
+  name: 
+    latin: 
+      string: ruble
+      html: ruble
+    unicode: 
+      string: рубль
+      html: "&#1088;&#1091;&#1073;&#1083;&#1100;"
+  wiki: en.wikipedia.org/wiki/Russian_Ruble
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 50
+    - 100
+    - 500
+    - 1000
+    - 5000
+  symbols:
+    latin:
+      -
+        string: p.
+        html: p.
+    unicode:
+      -
+        string: руб.
+        html: "&#1088;&#1091;&#1073;."
+      -
+        string: р.
+        html: p.
 XCD:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: East Caribbean Dollar
-  symbol: $
+  subunits: 
+    -
+      name: 
+        latin: cents
+        unicode: cents
+      exponential: 2
+  origin: East Caribbean
+  name: 
+    unicode: dollar
+    latin: dollar
+  wiki: en.wikipedia.org/wiki/East_Caribbean_Dollar
+  denominations:
+    - 0.01
+    - 0.02
+    - 0.05
+    - 0.1
+    - 0.25
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols: 
+    latin:
+      -
+        string: $
+        html: "&dollar;"
+    unicode:
+      -
+        string: $
+        html: "&#36;"
+        id: 36
+        
 OMR:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 3
-  currency: Rial Omani
-  symbol: ﷼
+  subunits: 
+    -
+      exponential: 3
+      name: 
+        latin:
+          string: baisa
+          html: baisa
+        unicode:
+          string: بيسة
+          html: "&#1576;&#1610;&#1587;&#1577;&#8206;"
+        arabic: 
+          string: بيسة
+          html: "&#1576;&#1610;&#1587;&#1577;&#8206;"
+  origin: Omani
+  name: 
+    latin: 
+      string: rial
+      name: rial
+    unicode:
+      string: ريال‎
+      html: "&#1585;&#1610;&#1575;&#1604;&#8206;"
+    arabic: 
+      string: ريال‎
+      html: "&#1585;&#1610;&#1575;&#1604;&#8206;"
+  wiki: en.wikipedia.org/wiki/Rial_Omani
+  denominations:
+    - 0.005
+    - 0.01
+    - 0.025
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+  symbols:
+    unicode: 
+      -
+        string: ر.ع.
+        html: "&#1585;.&#1593;."
+    arabic: 
+      -
+        string: ر.ع.
+        html: "&#1585;.&#1593;."
 AMD:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Armenian Dram
-  symbol: 
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: luma
+          html: luma
+        unicode: 
+          string: լումա
+          html: "&#1388;&#1400;&#1410;&#1396;&#1377;"
+  origin: Armenian
+  name:
+    latin:
+      string: dram
+      html: dram
+    unicode: 
+      string: Դրամ
+      html: "&#1332;&#1408;&#1377;&#1396;"
+  wiki: en.wikipedia.org/wiki/Armenian_Dram
+  denominations:
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 5000
+    - 10000
+    - 20000
+    - 50000
+    - 100000
+  symbols:
+    -
+      unicode:
+        string: Դ
+        html: "&#1423;"
 CDF:
-  minor_unit: 2
-  currency: Congolese Franc
-  symbol: 
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: centime
+          html: centime
+        unicode:
+          string: centime
+          html: centime
+  origin: Congolese
+  name: 
+    latin:
+      string: franc
+      html: franc
+    unicode:
+      string: franc
+      html: franc
+  wiki: en.wikipedia.org/wiki/Congolese_franc
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 5000
+    - 10000
+    - 20000
+  symbols:
+    -
+      latin:
+        string: FC
+        html: FC
+      unicode:
+        string: FC
+        html: FC 
 KPW:
-  minor_unit: 2
-  currency: North Korean Won
-  symbol: ₩
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: jeon
+          html: jeon
+        unicode:
+          string: chŏn
+          html: "ch&#335;n"
+        korean:
+          string: 전/錢
+          html: "&#51204;/&#37666;"
+  origin: North Korean
+  name: 
+    latin: 
+      string: won
+      html: won
+    unicode:
+      string: wŏn
+      html: "w&#335;n"
+    korean:
+      string: 원
+      html: "&#50896;"
+  wiki: en.wikipedia.org/wiki/North_Korean_Won
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    - 5000
+  symbols:
+    -
+      unicode: 
+        string: ₩
+        html: "&#8361;"
 CNY:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Yuan Renminbi
-  symbol: ¥
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin: 
+          string: fēn
+          html: "f&emacr;n"
+        unicode:
+          string: 分
+          html: "&#3713;&#20998;"
+        chinese:
+          string: 分
+          html: "&#3713;&#20998;"
+    -
+      exponential: 1
+      name:
+        latin: 
+          string: jiǎo
+          html: "ji&acaron;o"
+        unicode:
+          string: jiǎo
+          html: "ji&#462;o"
+        chinese:
+          string: 角
+          html: "&#35282;"
+  origin: Chinese
+  name:
+    latin: 
+      string: yuán
+      html: "yu&aacute;n"
+    unicode:
+      string: 元
+      html: "&#20803;"
+    chinese:
+      string: 元
+      html: "&#20803;"
+  wiki: en.wikipedia.org/wiki/Yuan_Renminbi
+  denominations:
+    - 0.01
+    - 0.02
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols: 
+    -
+      unicode:
+        string: ¥
+        html: "&#165;"
+        id: 165
 KES:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Kenyan Shilling
-  symbol: 
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: cent
+          html: cent
+        unicode:
+          string: cent
+          html: cent
+  origin: Kenyan
+  name:
+    latin:
+      string: Shilling
+      html: Shilling
+    unicode:
+      string: Shilling
+      html: Shilling
+  wiki: en.wikipedia.org/wiki/Kenyan_Shilling
+  denominations:
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 40
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  symbols:
+    -
+      latin:
+        string: KSh
+        html: KSh
+      unicode:
+        string: KSh
+        html: KSh
 KHR:
-  minor_unit: 2
-  currency: Riel
-  symbol: ៛
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: sen
+          html: sen
+        unicode:
+          string: សេន
+          html: "&#6047;&#6081;&#6035;"
+        khmer:
+          string: សេន
+          html: "&#6047;&#6081;&#6035;"
+    -
+      exponential: 1
+      name:
+        latin:
+          string: kak
+          html: kak
+        unicode:
+          string: កាក់
+          html: "&#6016;&#6070;&#6016;&#6091;"
+        khmer:
+          string: កាក់
+          html: "&#6016;&#6070;&#6016;&#6091;"
+  origin: Cambodian
+  name:
+    latin: 
+      string: riel
+      html: riel
+    unicode:
+      string: រៀល
+      html: "&#6042;&#6080;&#6043;"
+    khmer:
+      string: រៀល
+      html: "&#6042;&#6080;&#6043;"
+  wiki: en.wikipedia.org/wiki/Cambodian_riel
+  denominations:
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+    - 20000
+    - 50000
+    - 100000
+  symbols: 
+    -
+      unicode:
+        string: ៛
+        html: "&#6107;"
+        id: 6107
 PLN:
   separators:
     major: ' '
     minor: ','
-  minor_unit: 2
-  currency: Zloty
-  symbol: zł
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: grosz
+          html: grosz
+        unicode:
+          string: grosz
+          html: grosz
+      symbols:
+        -
+          latin:
+            string: gr
+            html: gr
+          unicode:
+            string: gr
+            html: gr
+  origin: Polnish
+  name:
+    latin:
+      string: zloty
+      html: zloty
+    unicode:
+      string: zloty
+      html: zloty
+  wiki: en.wikipedia.org/wiki/Zloty
+  denominations:
+    - 0.01
+    - 0.02
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+  symbols: 
+    -
+      latin:
+        string: zł
+        html: "z&lstrok;"
+      unicode:
+        string: zł
+        html: "&#6016;z&#322;"
+        
 MVR:
-  minor_unit: 2
-  currency: Rufiyaa
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: laari
+          html: laari
+        unicode:
+          string: laari
+          html: laari
+  origin: Maledivian
+  name: 
+    latin:
+      string: rufiyaa
+      html: rufiyaa
+    unicode:
+      string: ދިވެހި ރުފިޔާ
+      html: "&#1931;&#1960;&#1928;&#1964;&#1920;&#1960; &#1923;&#1962;&#1930;&#1960;&#1940;&#1959;"
+    dhivehi:
+      string: ދިވެހި ރުފިޔާ
+      html: "&#1931;&#1960;&#1928;&#1964;&#1920;&#1960; &#1923;&#1962;&#1930;&#1960;&#1940;&#1959;"
+  wiki: en.wikipedia.org/wiki/Rufiyaa
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 500
+  symbols:
+    -
+      latin:
+        string: Rf
+        html: Rf
+      unicode:
+        string: Rf
+        html: Rf
+    -
+      latin:
+        string: MRf
+        html: MRf
+      unicode:
+        string: MRf
+        html: MRf
+    -
+      latin:
+        string: MVR
+        html: MVR
+      unicode:
+        string: MVR
+        html: MVR
+    -
+      unicode:
+        string: .ރ
+        html: ".&#1923;"
+      dhivehi:
+        string: .ރ
+        html: ".&#1923;"
+    
 GTQ:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Quetzal
-  symbol: Q
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: centavo
+          html: centavo
+        unicode:
+          string: centavo
+          html: centavo
+  origin: Guatemalan
+  name:
+    latin:
+      string: quetzal
+      html: quetzal
+    unicode:
+      string: quetzal
+      html: quetzal
+  wiki: en.wikipedia.org/wiki/Guatemalan_quetzal
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+  symbols: 
+    -
+      latin:
+        string: Q
+        html: Q
+      unicode:
+        string: Q
+        html: Q
 CLP:
   separators:
     major: '.'
-  minor_unit: 0
-  currency: Chilean Peso
-  symbol: $
+  subunits: false
+  origin: Chilean 
+  name:
+    latin:
+      string: peso
+      html: peso
+    unicode:
+      string: peso
+      html: peso
+  wiki: en.wikipedia.org/wiki/Chilean_Peso
+  denominations:
+    - 1
+    - 5
+    - 10
+    - 50
+    - 100
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+    - 20000
+  symbols: 
+    -
+      latin: 
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
 INR:
   separators:
     major: ','
     minor: '.'
   format: ! '#,##,###.##'
-  minor_unit: 2
-  currency: Indian Rupee
-  symbol: ''
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: paisa
+          html: paisa
+        unicode:
+          string: paisa
+          html: paisa
+      symbols:
+        -
+          latin:
+            string: p
+            html: p
+          unicode:
+            string: p
+            html: p
+  origin: Indian
+  name:
+    latin: 
+      string: rupee
+      html: rupee
+    unicode:
+      string: रुपया
+      html: "&#2352;&#2369;&#2346;&#2351;&#2366;"
+    hindi:
+      string: रुपया
+      html: "&#2352;&#2369;&#2346;&#2351;&#2366;"
+  wiki: en.wikipedia.org/wiki/Indian_Rupee
+  denominations:
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 500
+    - 1000
+  symbols:
+    -
+      unicode:
+        string: ₹
+        html: "&#8377;"
+        id: 8377
 BZD:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Belize Dollar
-  symbol: BZ$
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: cent
+          html: cent
+        unicode:
+          string: cent
+          html: cent
+  origin: Belize
+  name:
+    latin:
+      string: Belize Dollar
+      html: Belize Dollar
+    unicode:
+      string: Belize Dollar
+      html: Belize Dollar
+  wiki: en.wikipedia.org/wiki/Belize_Dollar
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbol: 
+    -
+      latin:
+        string: BZ$
+        html: "BZ&dollar;"
+      unicode:
+        string: BZ$
+        html: "BZ&#36;"
+    -
+      latin:
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
 MYR:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Malaysian Ringgit
-  symbol: RM
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: sen
+          html: sen
+        unicode:
+          string: sen
+          html: sen
+    -
+      exponential: 1
+      name:
+        latin:
+          string: kupang
+          html: kupang
+        unicode:
+          string: kupang
+          html: kupang
+  origin: Malaysian
+  name:
+    latin:
+      string: ringgit
+      html: ringgit
+    unicode:
+      string: ringgit
+      html: ringgit
+  wiki: en.wikipedia.org/wiki/Malaysian_Ringgit
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols:
+    -
+      latin:
+        string: RM
+        html: RM
+      unicode:
+        string: RM
+        html: RM
+    -
+      latin:
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
 HKD:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Hong Kong Dollar
-  symbol: $
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: sin
+          html: sin
+        unicode:
+          string: 仙
+          html: "&#20185;"
+        cantonese:
+          string: 仙
+          html: "&#20185;"
+    -
+      exponential: 1
+      name:
+        latin:
+          string: hou
+          html: hou
+        unicode:
+          string: 毫
+          html: "&#27627;"
+        cantonese:
+          string: 毫
+          html: "&#27627;"
+  origin: Hong Kong
+  name: 
+    latin: 
+      string: Hong Kong Dollar
+      html: Hong Kong Dollar
+    unicode:
+      string: 元
+      html: "&#20803;"
+      id: 20803
+    cantonese:
+      string: 元
+      html: "&#20803;"
+      id: 20803
+  wiki: en.wikipedia.org/wiki/Hong_Kong_Dollar
+  denominations:
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 500
+    - 1000
+  symbols:
+    -
+      latin:
+        string: HK$
+        html: "HK&dollar;"
+      unicode:
+        string: HK$
+        html: "HK&#36;"
+    -
+      latin:
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
 COP:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: Colombian Peso
-  symbol: $
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: centavo
+          html: centavo
+        unicode:
+          string: centavo
+          html: centavo
+  origin: Colombian
+  name: 
+    latin: 
+      string: peso
+      html: peso
+    unicode: 
+      string: peso
+      html: peso
+  wiki: en.wikipedia.org/wiki/Colombian_Peso
+  denominations:
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+    - 20000
+    - 50000
+  symbols:
+    -
+      latin:
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
+    -
+      latin:
+        string: COL$
+        html: "COL&dollar;"
+      unicode:
+        string: COL$
+        html: "COL&#36;"
 DKK:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: Danish Krone
-  symbol: kr
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin: 
+          string: øre
+          html: "&oslash;re"
+        unicode:
+          string: øre
+          html: "&#248;re"
+  origin: Danish 
+  name:
+    latin:
+      string: krone
+      html: krone
+    unicode:
+      string: krone
+      html: krone
+  wiki: en.wikipedia.org/wiki/Danish_Krone
+  denominations:
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  symbols: 
+    -
+      latin:
+        string: kr.
+        html: kr.
+      unicode:
+        string: kr.
+        html: kr.
+    -
+      latin:
+        string: ",-"
+        html: ",-"
+      unicode:
+        string: ",-"
+        html: ",-"
 SEK:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: Swedish Krona
-  symbol: kr
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: öre
+          html: "&ouml;re"
+        unicode:
+          string: öre
+          html: "&#246;re"
+  origin: Swedish
+  name:
+    latin:
+      string: krona
+      html: krona
+    unicode:
+      string: krona
+      html: krona
+  wiki: en.wikipedia.org/wiki/Swedish_Krona
+  denominations:
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  symbols: 
+    -
+      latin:
+        string: kr
+        html: kr
+      unicode:
+        string: kr
+        html: kr
+    -
+      latin:
+        string: ":-"
+        html: ":-"
+      unicode:
+        string: ":-"
+        html: ":-"
+        
 BYR:
-  minor_unit: 0
-  currency: Belarussian Ruble
-  symbol: p.
+  subunits: false
+  origin: Belarussian
+  name:
+    latin: 
+      string: ruble
+      html: ruble
+    unicode:
+      string: рубель
+      html: "&#1088;&#1091;&#1073;&#1077;&#1083;&#1100;"
+    kyrillic:
+      string: рубель
+      html: "&#1088;&#1091;&#1073;&#1077;&#1083;&#1100;"
+  wiki: en.wikipedia.org/wiki/Belarussian_Ruble
+  denominations:
+    - 50
+    - 100
+    - 500
+    - 1000
+    - 5000
+    - 10000
+    - 20000
+    - 50000
+    - 100000
+    - 200000
+  symbols:
+    -
+      latin:
+        string: Br
+        html: Br
+      unicode:
+        string: Br
+        html: Br
 LYD:
-  minor_unit: 3
-  currency: Libyan Dinar
+  subunits: 
+    -
+      exponential: 3
+      name:
+        latin:
+          string: dirham
+          html: dirham
+        unicode:
+          string: درهم
+          html: "&#1583;&#1585;&#1607;&#1605;"
+        arabic:
+          string: درهم
+          html: "&#1583;&#1585;&#1607;&#1605;"
+  origin: Libyan
+  name: 
+    latin:
+      string: dinar
+      html: dinar
+    unicode:
+      string: دينار
+      html: "&#1583;&#1610;&#1606;&#1575;&#1585;"
+    arabic:
+      string: دينار
+      html: "&#1583;&#1610;&#1606;&#1575;&#1585;"
+  wiki: en.wikipedia.org/wiki/Libyan_Dinar
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
   symbol: 
+    -
+      latin:
+        string: LD
+        html: LD
+      unicode:
+        string: LD
+        html: LD
+    -
+      unicode:
+        string: ل.د
+        html: "&#1604;.&#1583;"
 RON:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: New Romanian Leu
-  symbol: lei
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: ban
+          html: ban
+        unicode:
+          string: ban
+          html: ban
+  origin: Romanian
+  name:
+    latin:
+      string: leu
+      html: leu
+    unicode:
+      string: leu
+      html: leu
+  wiki: en.wikipedia.org/wiki/Romanian_leu
+  denominations:
+    - 0.01
+    - 0.05
+    - 0.1
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 50
+    - 100
+    - 200
+    - 500
+  symbol: 
+    -
+      latin: 
+        string: lei
+        html: lei
+      unicode:
+        string: lei
+        html: lei
+          
 DZD:
-  minor_unit: 2
-  currency: Algerian Dinar
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: santeem
+          html: santeem
+        unicode:
+          string: سنتيم
+          html: "&#1587;&#1606;&#1578;&#1610;&#1605;&#8206;"
+        arabic:
+          string: سنتيم
+          html: "&#1587;&#1606;&#1578;&#1610;&#1605;&#8206;"
+  origin: Algerian 
+  name:
+    latin: 
+      string: dinar
+      html: dinar
+    unicode:
+      string: دينار‎
+      html: "&#1583;&#1610;&#1606;&#1575;&#1585;&#8206;"
+    arabic:
+      string: دينار‎
+      html: "&#1583;&#1610;&#1606;&#1575;&#1585;&#8206;"
+  wiki: en.wikipedia.org/wiki/Algerian_Dinar
+  denominations:
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+  symbols:
+    -
+      unicode:
+        string: دج
+        html: "&#1583;&#1580;&#8206;"
+    -
+      latin:
+        string: DA
+        html: DA
+      unicode:
+        string: DA
+        html: DA
 BIF:
-  minor_unit: 0
-  currency: Burundi Franc
-  symbol: 
+  subunits: false
+  origin: Burundi
+  name:
+    latin:
+      string: franc
+      html: franc
+    unicode:
+      string: franc
+      html: franc
+  wiki: en.wikipedia.org/wiki/Burundi_Franc
+  denominations:
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+  symbols:
+    -
+      latin:
+        string: FBu
+        html: FBu
+      unicode:
+        string: FBu
+        html: FBu
 ARS:
   separators:
     major: '.'
     minor: ','
-  minor_unit: 2
-  currency: Argentine Peso
-  symbol: $
+  subunits:
+    -
+      exponential: 2
+      name:
+        latin:
+          string: centavo
+          html: centavo
+        unicode:
+          string: centavo
+          html: centavo
+  origin: Argentine 
+  name:
+    latin:
+      string: peso
+      html: peso
+    unicode:
+      string: peso
+      html: peso
+  wiki: en.wikipedia.org/wiki/Argentine_Peso
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.25
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols: 
+    -
+      latin: 
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
 GIP:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Gibraltar Pound
-  symbol: £
-UYI:
-  minor_unit: 0
-  currency: Uruguay Peso en Unidades Indexadas (URUIURUI)
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: pence
+          html: pence
+        unicode:
+          string: pence
+          html: pence
+      symbols:
+        -
+          latin:
+            string: p
+            html: p
+          unicode:
+            string: p
+            html: p
+  origin: Gibraltar
+  name:
+    latin:
+      string: pound
+      html: pound
+    unicode:
+      string: pound
+      html: pound
+  wiki: en.wikipedia.org/wiki/Gibraltar_Pound
+  symbols: 
+    -
+      latin:
+        string: £
+        html: &pound;
+      unicode:
+        string: £
+        html: "&#163;"
+        id: 163
 BOB:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Boliviano
-  symbol: $b
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: centavo
+          html: centavo
+        unicode:
+          string: centavo
+          html: centavo
+      symbols:
+        -
+          latin:
+            string: Cvs.
+            html: Cvs.
+          unicode:
+            string: Cvs.
+            html: Cvs.
+  origin: Bolivian
+  name: 
+    latin:
+      string: boliviano
+      html: boliviano
+    unicode:
+      string: boliviano
+      html: boliviano
+  wiki: en.wikipedia.org/wiki/Boliviano
+  denominations:
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+  symbols: 
+    -
+      latin:
+        string: Bs
+        html: Bs
+      unicode:
+        string: Bs
+        html: Bs
+    -
+      latin:
+        string: Bs.
+        html: Bs.
+      unicode:
+        string: Bs.
+        html: Bs.
 SSP:
-  minor_unit: 2
-  currency: South Sudanese Pound
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: piaster
+          html: piaster
+        unicode:
+          string: piaster
+          html: piaster
+  origin: South Sudanese
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.25
+    - 1
+    - 5
+    - 10
+    - 25
+    - 50
+    - 100
+  name:
+    latin: 
+      string: pound
+      html: pound
+    unicode:
+      string: pound
+      html: pound
+  wiki: en.wikipedia.org/wiki/South_Sudanese_Pound
+  symbols: false
 NGN:
-  minor_unit: 2
-  currency: Naira
-  symbol: ₦
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: kobo
+          html: kobo
+        unicode:
+          string: kobo
+          html: kobo
+  origin: Nigerian
+  wiki: en.wikipedia.org/wiki/Nigerian_Naira
+  denominations:
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  name:
+    latin:
+      string: naira
+      html: naira
+    unicode:
+      string: naira
+      html: naira
+  symbols: 
+    -
+      unicode:
+        string: ₦
+        html: "&#8358;"
+        id: 8358
 PGK:
-  minor_unit: 2
-  currency: Kina
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin:
+          string: toea
+          html: toea
+        unicode:
+          string: toea
+          html: toea
+  origin: Papa New Guinean
+  name:
+    latin:
+      string: kina
+      html: kina
+    unicode:
+      string: kina
+      html: kina
+  wiki: en.wikipedia.org/wiki/Kina_(currency)
+  denominations:
+    - 0.05
+    - 0.1
+    - 0.2
+    - 0.5
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols:
+    -
+      latin:
+        string: K
+        html: K
+      unicode:
+        string: K
+        html: K
 STD:
-  minor_unit: 2
-  currency: Dobra
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin: 
+          string: cêntimo
+          html: "c&ecirc;ntimo"
+        unicode:
+          string: cêntimo
+          html: "c&#234;ntimo"
+  origin: São Tomé and Príncipe
+  name: 
+    latin:
+      string: dobra
+      html: dobra
+    unicode:
+      string: dobra
+      html: dobra
+  wiki: en.wikipedia.org/wiki/S%C3%A3o_Tom%C3%A9_and_Pr%C3%ADncipe_dobra
+  denominations:
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+    - 20000
+    - 50000
+    - 100000
+  symbols:
+    -
+      latin:
+        string: Db
+        html: Db
+      unicode:
+        string: Db
+        html: Db
 XOF:
-  minor_unit: 0
-  currency: CFA Franc BCEAO
-  symbol: 
+  subunits: false
+  origin: West African
+  pegging:
+    with: EUR
+    at: "655.957"
+  name: 
+    official: CFA Franc BCEAO
+    colloquial: franc
+  wiki: en.wikipedia.org/wiki/CFA_Franc_BCEAO
+  denominations:
+    - 1
+    - 5
+    - 10
+    - 25
+    - 50
+    - 100
+    - 200
+    - 250
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+  symbols:
+    - CFA
 AED:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: UAE Dirham
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name:
+        latin: fils
+        arabic:
+          string: فلس
+          html: "&#1601;&#1604;&#1587;"
+  pegging:
+    with: USD
+    at: "3.6725"
+  origin: United Arab Emirates
+  name: 
+    latin: dirham
+    arabic:
+      string: درهم‎
+      html: "&#1583;&#1585;&#1607;&#1605;&#8206;"
+  wiki: en.wikipedia.org/wiki/UAE_Dirham
+  denominations:
+    - 0.25
+    - 0.5
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  symbols:
+    -
+      unicode:
+        string: د.إ
+        html: "&#1583;.&#1573;&#8206;"
+      arabic:
+        string: د.إ
+        html: "&#1583;.&#1573;&#8206;"
 ERN:
-  minor_unit: 2
-  currency: Nakfa
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name: cent
+  origin: Eritrean
+  name: nakfa
+  wiki: en.wikipedia.org/wiki/Eritrean_nakfa
+  pegging:
+    with: USD
+    at: 10
+  denominations:
+    - "0.01"
+    - "0.05"
+    - "0.1"
+    - "0.25"
+    - "0.5"
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols:
+    -
+      latin: Nfk
+      unicode:
+        string: ናቕፋ
+        html: "&#4755;&#4693;&#4939;&#8206;"
+      ethiopic:
+        string: ናቕፋ
+        html: "&#4755;&#4693;&#4939;&#8206;"
 MWK:
-  minor_unit: 2
-  currency: Kwacha
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name: 
+        singular: tambala
+        plural: tambala
+  origin: Malawian
+  name: 
+    singular: kwacha
+    plural: kwacha
+  wiki: en.wikipedia.org/wiki/Malawian_kwacha
+  denominations:
+    - "0.01"
+    - "0.02"
+    - "0.05"
+    - "0.1"
+    - "0.2"
+    - "0.5"
+    - 1
+    - 2
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+  symbols:
+    - MK 
 CUP:
   separators:
     major: ','
     minor: '.'
-  minor_unit: 2
-  currency: Cuban Peso
-  symbol: ₱
-USN:
-  minor_unit: 2
-  currency: US Dollar (Next day)
-  symbol: 
+  subunits:
+    -
+      exponential: 2
+      name: centavo
+      symbols:
+        -
+          latin: 
+            string: "¢"
+            html: "&cent;"
+        -
+          latin: c
+  origin: Cuban
+  name: peso
+  wiki: en.wikipedia.org/wiki/Cuban_peso
+  denominations:
+    - "0.01"
+    - "0.05"
+    - "0.2"
+    - 1
+    - 3
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  symbols:
+    -
+      latin:
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
+    -
+      latin:
+        string: $MN
+        html: "&dollar;MN"
 GMD:
-  minor_unit: 2
-  currency: Dalasi
-  symbol: 
+  subunits: 
+    -
+      exponential: 2
+      name: butut
+  origin: Gambian
+  name: dalasi
+  wiki: en.wikipedia.org/wiki/Dalasi
+  denominations:
+    - "0.01"
+    - "0.05"
+    - "0.1"
+    - "0.25"
+    - "0.5"
+    - 1
+    - 5
+    - 10
+    - 25
+    - 50
+    - 100
+  symbol: D 
 CVE:
-  minor_unit: 2
-  currency: Cape Verde Escudo
-  symbol: 
+  separators:
+    minor: '$'
+  minor_unit:
+    -
+      exponential: 2
+      name: centavo
+  pegging:
+    with: EUR
+    at: "110.265"
+  origin: Cape Verdean
+  name: escudo
+  wiki: en.wikipedia.org/wiki/Cape_Verde_Escudo
+  denominations:
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    - 2500
+    - 5000
+  symbols:
+    -
+      latin:
+        string: $
+        html: "&dollar;"
+      unicode:
+        string: $
+        html: "&#36;"
+        id: 36
+    -
+      latin: Esc
+     
 TZS:
   separators:
     major: ','
-    minor: '.'
-  minor_unit: 2
-  currency: Tanzanian Shilling
-  symbol: 
-COU:
-  minor_unit: 2
-  currency: Unidad de Valor Real
-  symbol: 
+    minor: '/'
+  subunits: 
+    -
+      exponential: 2
+      name: 
+        singular: senti
+        plural: senti
+      symbols:
+        - "=/"
+        - "-/"
+  origin: Tanzanian
+  name:
+    singular: shillingi
+    plural: shillingi
+  wiki: en.wikipedia.org/wiki/Tanzanian_Shilling
+  denominations:
+    - 50
+    - 100
+    - 200
+    - 500
+    - 1000
+    - 2000
+    - 5000
+    - 10000
+  symbol:
+    -
+      latin: "/="
+      condition: :subunit_zero?
+      trailing: true
+    -
+      latin: "/-"
+      condition: :subunit_zero?
+      trailing: true
 BTN:
-  minor_unit: 2
-  currency: Ngultrum
-  symbol: 
+  subunits:
+    -
+      exponential: 2
+      name: 
+        singular: chhertum
+        plural: chhertum
+      symbols:
+        - Ch.
+  origin: Bhutanese
+  name:
+    latin: 
+      singular: ngultrum
+      plural: ngultrum
+    dzongkha:
+      string: དངུལ་ཀྲམ
+      html: "&#3921;&#3908;&#3956;&#3939;&#3851;&#3904;&#4018;&#3928"
+  wiki: en.wikipedia.org/wiki/Ngultrum
+  denominations:
+    - "0.05"
+    - "0.1"
+    - "0.2"
+    - "0.25"
+    - "0.5"
+    - 1
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+    - 500
+    - 1000
+  symbols:
+    -
+      latin: Nu.
+      trailing_whitespace: false
 ZWL:
   minor_unit: 2
   currency: Zimbabwe Dollar
@@ -546,7 +2372,7 @@ PEN:
 AOA:
   minor_unit: 2
   currency: Kwanza
-  symbol: 
+  symbol: Kz
 KYD:
   separators:
     major: ','
@@ -761,7 +2587,7 @@ BHD:
     minor: '.'
   minor_unit: 3
   currency: Bahraini Dinar
-  symbol: 
+  symbol: ب.د
 CLF:
   minor_unit: 0
   currency: Unidades de fomento
@@ -823,7 +2649,7 @@ BDT:
     minor: '.'
   minor_unit: 2
   currency: Taka
-  symbol: 
+  symbol: ৳
 NAD:
   minor_unit: 2
   currency: Namibia Dollar
@@ -905,4 +2731,12 @@ KWD:
     minor: '.'
   minor_unit: 3
   currency: Kuwaiti Dinar
+  symbol: 
+UYI:
+  minor_unit: 0
+  currency: Uruguay Peso en Unidades Indexadas (URUIURUI)
+  symbol: 
+COU:
+  minor_unit: 2
+  currency: Unidad de Valor Real
   symbol: 

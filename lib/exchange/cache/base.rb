@@ -72,9 +72,9 @@ module Exchange
       def key api, opts={}
         time          = helper.assure_time(opts[:at], :default => :now)
         ['exchange',
-          api.to_s, 
-          time.year.to_s, 
-          time.yday.to_s, 
+          api.to_s,
+          time.year.to_s,
+          time.yday.to_s,
           config.expire == :hourly ? time.hour.to_s : nil,
           *(opts[:key_for] || [])
         ].compact.join('_')

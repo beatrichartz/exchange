@@ -109,6 +109,19 @@ describe "Exchange::Money" do
       end
     end
   end
+  describe "revert!" do
+    context "with information needed to revert" do
+      it "should revert to the old values" do
+        mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 3)
+        subject.to(:chf).revert!.should == subject
+      end
+    end
+    context "with no information" do
+      it "should throw a custom error" do
+        lambda { subject.revert! }.should raise_error(Exchange::ImpossibleReversionError, "Can not revert currency to a previous state because information is missing")
+      end
+    end
+  end
   describe "operations" do
     after(:each) do
       Exchange.configuration.implicit_conversions = true
@@ -258,9 +271,6 @@ describe "Exchange::Money" do
           (subject * 0.29).round(0).value.should == 15
         end
       end
-      it "should not fall for float rounding errors" do
-        (subject * 40.5)
-      end
       it "should be able to multiply by another currency value" do
         mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
         Exchange.configuration.implicit_conversions = true
@@ -313,6 +323,38 @@ describe "Exchange::Money" do
         end
       end
     end
+    describe "% other" do
+      after(:each) do
+        Exchange.configuration.implicit_conversions = true
+      end
+      it "should be able to multiply by an integer" do
+        (subject % 40).value.should == 0
+      end
+      context "with a float" do
+        subject { Exchange::Money.new(50, :usd) }
+        it "should be able to multiply a float" do
+          (subject % 40.5).value.should == 9.5
+        end
+        it "should not fall for rounding errors" do
+          (subject % 0.29).round(2).value.should == 0.12
+        end
+      end
+      it "should be able to multiply by another currency value" do
+        mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
+        Exchange.configuration.implicit_conversions = true
+        (subject % Exchange::Money.new(10, :chf)).value.round(1).should == 7.1
+        (subject % Exchange::Money.new(23.3, :eur)).currency.should == :usd
+      end
+      it "should raise when currencies get mixed and the configuration does not allow it" do
+        Exchange.configuration.implicit_conversions = false
+        lambda { subject % Exchange::Money.new(30, :chf) }.should raise_error(Exchange::ImplicitConversionError)
+      end
+      it "should not raise when currencies get mixed and the configuration does not allow if the other currency is the same" do
+        Exchange.configuration.implicit_conversions = false
+        mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
+        lambda { subject % Exchange::Money.new(30, :usd) }.should_not raise_error
+      end
+    end
     describe "/ other" do
       after(:each) do
         Exchange.configuration.implicit_conversions = true
@@ -329,7 +371,6 @@ describe "Exchange::Money" do
           (subject / 12.0).round(2).value.should == 152.49
         end
       end
-
       it "should not modify the base value" do
         (subject / 40).value.should == 1
         subject.value.should == 40.0
@@ -388,6 +429,18 @@ describe "Exchange::Money" do
           mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 2)
           lambda { @instantiated /= Exchange::Money.new(30, :usd) }.should_not raise_error
           Exchange.configuration.implicit_conversions = true
+        end
+      end
+      describe "split" do
+        it "should split a currency evenly without losing fractional amounts" do
+          mock_api("http://openexchangerates.org/api/latest.json?app_id=", fixture('api_responses/example_json_api.json'), 200)
+          
+          Exchange::Money.new(1, :chf).split(3).should == [Exchange::Money.new(0.34, :chf), Exchange::Money.new(0.33, :chf), Exchange::Money.new(0.33, :chf)]
+          Exchange::Money.new(1.001, :omr).split(3).should == [Exchange::Money.new(0.334, :omr), Exchange::Money.new(0.334, :omr), Exchange::Money.new(0.333, :omr)]
+          Exchange::Money.new(100, :jpy).split(3).should == [Exchange::Money.new(34, :jpy), Exchange::Money.new(33, :jpy), Exchange::Money.new(33, :jpy)]
+          Exchange::Money.new(3, :usd).split(4).should == 4.times.map { Exchange::Money.new(0.75, :usd) }
+          Exchange::Money.new(1, :usd).split(6).should == 4.times.map { Exchange::Money.new(0.17, :usd) } + 2.times.map { Exchange::Money.new(0.16, :usd) }
+          Exchange::Money.new(0.998, :omr).split(13).should == 10.times.map { Exchange::Money.new(0.077, :omr) } + 3.times.map { Exchange::Money.new(0.076, :omr) }
         end
       end
     end
@@ -584,6 +637,92 @@ describe "Exchange::Money" do
       Exchange::Money.new(23.2, :tnd).to_s(:symbol).should == "TND 23.200"
       Exchange::Money.new(23.4, :sar).to_s(:symbol).should == "﷼23.40"
       Exchange::Money.new(23.0, :clp).to_s(:symbol).should == "$23"
+    end
+  end
+  describe "to_html" do
+    it "should render the currency into HTML according to ISO 4217 Definitions" do
+      Exchange::Money.new(23.232524, :tnd).to_html.should == '<span class="currency tnd">TND</span><span class="amount tnd">23.233</span>'
+      Exchange::Money.new(23.23252423, :sar).to_html.should == '<span class="currency sar">SAR</span><span class="amount sar">23.23</span>'
+      Exchange::Money.new(23.23252423, :clp).to_html.should == '<span class="currency clp">CLP</span><span class="amount clp">23</span>'
+      Exchange::Money.new(23.2, :tnd).to_html.should == '<span class="currency tnd">TND</span><span class="amount tnd">23.200</span>'
+      Exchange::Money.new(23.4, :sar).to_html.should == '<span class="currency sar">SAR</span><span class="amount sar">23.40</span>'
+      Exchange::Money.new(23.0, :clp).to_html.should == '<span class="currency clp">CLP</span><span class="amount clp">23</span>'
+    end
+    it "should render only the currency amount if the argument amount is passed" do
+      Exchange::Money.new(23.232524, :tnd).to_html(:amount).should == '<span class="amount tnd">23.233</span>'
+      Exchange::Money.new(23.23252423, :sar).to_html(:amount).should == '<span class="amount sar">23.23</span>'
+      Exchange::Money.new(23.23252423, :clp).to_html(:amount).should == '<span class="amount clp">23</span>'
+      Exchange::Money.new(23.2, :tnd).to_html(:amount).should == '<span class="amount tnd">23.200</span>'
+      Exchange::Money.new(23.4, :sar).to_html(:amount).should == '<span class="amount sar">23.40</span>'
+      Exchange::Money.new(23.0, :clp).to_html(:amount).should == '<span class="amount clp">23</span>'
+    end
+    it "should render only the currency amount and no separators if the argument amount is passed" do
+      Exchange::Money.new(2323.232524, :tnd).to_html(:plain).should == '<span class="amount plain tnd">2323.233</span>'
+      Exchange::Money.new(2323.23252423, :sar).to_html(:plain).should == '<span class="amount plain sar">2323.23</span>'
+      Exchange::Money.new(2323.23252423, :clp).to_html(:plain).should == '<span class="amount plain clp">2323</span>'
+      Exchange::Money.new(23.2, :tnd).to_html(:plain).should == '<span class="amount plain tnd">23.200</span>'
+      Exchange::Money.new(23.4, :sar).to_html(:plain).should == '<span class="amount plain sar">23.40</span>'
+      Exchange::Money.new(23.0, :clp).to_html(:plain).should == '<span class="amount plain clp">23</span>'
+    end
+    it "should render the currency with a symbol according to ISO 4217 Definitions" do
+      Exchange::Money.new(23.232524, :tnd).to_html(:symbol).should == '<span class="currency symbol tnd">TND</span><span class="amount tnd">23.233</span>'
+      Exchange::Money.new(23.23252423, :sar).to_html(:symbol).should == '<span class="currency symbol sar">﷼</span><span class="amount sar">23.23</span>'
+      Exchange::Money.new(23.23252423, :clp).to_html(:symbol).should == '<span class="currency symbol clp">$</span><span class="amount clp">23</span>'
+      Exchange::Money.new(23.2, :tnd).to_html(:symbol).should == '<span class="currency symbol tnd">TND</span><span class="amount tnd">23.200</span>'
+      Exchange::Money.new(23.4, :sar).to_html(:symbol).should == '<span class="currency symbol sar">﷼</span><span class="amount sar">23.40</span>'
+      Exchange::Money.new(23.0, :clp).to_html(:symbol).should == '<span class="currency symbol clp">$</span><span class="amount clp">23</span>'
+    end
+    it "should render only the currency amount and no separators if symbol format is passed and the argument option is plain" do
+      Exchange::Money.new(2323.232524, :tnd).to_html(:symbol, :amount => :plain).should == '<span class="currency symbol tnd">TND</span><span class="amount plain tnd">2323.233</span>'
+      Exchange::Money.new(2323.23252423, :sar).to_html(:symbol, :amount => :plain).should == '<span class="currency symbol sar">﷼</span><span class="amount plain sar">2323.23</span>'
+      Exchange::Money.new(2323.23252423, :clp).to_html(:symbol, :amount => :plain).should == '<span class="currency symbol clp">$</span><span class="amount plain clp">2323</span>'
+      Exchange::Money.new(23.2, :tnd).to_html(:symbol, :amount => :plain).should == '<span class="currency symbol tnd">TND</span><span class="amount plain tnd">23.200</span>'
+      Exchange::Money.new(23.4, :sar).to_html(:symbol, :amount => :plain).should == '<span class="currency symbol sar">﷼</span><span class="amount plain sar">23.40</span>'
+      Exchange::Money.new(23.0, :clp).to_html(:symbol, :amount => :plain).should == '<span class="currency symbol clp">$</span><span class="amount plain clp">23</span>'
+    end
+    it "should render an empty tag with the icon class if the icon format is used" do
+      Exchange::Money.new(2323.232524, :tnd).to_html(:icon, :amount => :plain).should == '<span class="currency icon tnd"></span><span class="amount plain tnd">2323.233</span>'
+      Exchange::Money.new(2323.23252423, :sar).to_html(:icon, :amount => :plain).should == '<span class="currency icon sar"></span><span class="amount plain sar">2323.23</span>'
+      Exchange::Money.new(2323.23252423, :clp).to_html(:icon, :amount => :plain).should == '<span class="currency icon clp"></span><span class="amount plain clp">2323</span>'
+      Exchange::Money.new(23.2, :tnd).to_html(:icon, :amount => :plain).should == '<span class="currency icon tnd"></span><span class="amount plain tnd">23.200</span>'
+      Exchange::Money.new(23.4, :sar).to_html(:icon, :amount => :plain).should == '<span class="currency icon sar"></span><span class="amount plain sar">23.40</span>'
+      Exchange::Money.new(23.0, :clp).to_html(:icon, :amount => :plain).should == '<span class="currency icon clp"></span><span class="amount plain clp">23</span>'
+    end
+    it "should render div tags if the tag type is optioned to div" do
+      Exchange::Money.new(2323.232524, :tnd).to_html(:plain, :tag => :div).should == '<div class="amount plain tnd">2323.233</div>'
+      Exchange::Money.new(2323.23252423, :sar).to_html(:plain, :tag => :div).should == '<div class="amount plain sar">2323.23</div>'
+      Exchange::Money.new(2323.23252423, :clp).to_html(:plain, :tag => :div).should == '<div class="amount plain clp">2323</div>'
+      Exchange::Money.new(23.2, :tnd).to_html(:plain, :tag => :div).should == '<div class="amount plain tnd">23.200</div>'
+      Exchange::Money.new(23.4, :sar).to_html(:plain, :tag => :div).should == '<div class="amount plain sar">23.40</div>'
+      Exchange::Money.new(23.0, :clp).to_html(:plain, :tag => :div).should == '<div class="amount plain clp">23</div>'
+    end
+    it "should wrap the two currency tags if a wrapping tag is defined in options" do
+      Exchange::Money.new(2323.232524, :tnd).to_html(:tag => :li, :wrap => :ol).should == '<ol class="currency tnd"><li class="currency tnd">TND</li><li class="amount tnd">2323.233</li></ol>'
+      Exchange::Money.new(2323.23252423, :sar).to_html(:tag => :li, :wrap => :ol).should == '<ol class="currency sar"><li class="currency sar">SAR</li><li class="amount sar">2,323.23</li></ol>'
+      Exchange::Money.new(2323.23252423, :clp).to_html(:tag => :li, :wrap => :ol).should == '<ol class="currency clp"><li class="currency clp">CLP</li><li class="amount clp">2.323</li></ol>'
+      Exchange::Money.new(23.2, :tnd).to_html(:tag => :li, :wrap => :ol).should == '<ol class="currency tnd"><li class="currency tnd">TND</li><li class="amount tnd">23.200</li></ol>'
+      Exchange::Money.new(23.4, :sar).to_html(:tag => :li, :wrap => :ol).should == '<ol class="currency sar"><li class="currency sar">SAR</li><li class="amount sar">23.40</li></ol>'
+      Exchange::Money.new(23.0, :clp).to_html(:tag => :li, :wrap => :ol).should == '<ol class="currency clp"><li class="currency clp">CLP</li><li class="amount clp">23</li></ol>'
+    end
+  end
+  describe "symbol" do
+    context "with a symbol" do
+      it "should return the currency symbol" do
+        Exchange::Money.new(3.5, :gbp).symbol.should == '£'
+        Exchange::Money.new(3.5, :eur).symbol.should == '€'
+      end
+    end
+    context "without a symbol" do
+      it "should return nil" do
+        Exchange::Money.new(3.5, :chf).symbol.should be_nil
+        Exchange::Money.new(3.5, :xaf).symbol.should be_nil
+      end
+    end
+  end
+  describe "iso_code" do
+    it "should return the currency ISO 4217 code as an uppercase string" do
+      Exchange::Money.new(3.5, :chf).iso_code.should == 'CHF'
+      Exchange::Money.new(3.5, :omr).iso_code.should == 'OMR'
     end
   end
   describe "methods via method missing" do

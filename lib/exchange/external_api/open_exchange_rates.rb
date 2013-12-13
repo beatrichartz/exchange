@@ -54,9 +54,9 @@ module Exchange
         #
         def api_url time=nil
           today   = Time.now
-          [ 
-            "#{config.protocol}:/", 
-            API_URL, 
+          [
+            "#{config.protocol}:/",
+            API_URL,
             time && (time.year != today.year || time.yday != today.yday) ? "historical/#{time.strftime("%Y-%m-%d")}.json" : "latest.json"
           ].join('/') + "?app_id=#{config.app_id}"
         end

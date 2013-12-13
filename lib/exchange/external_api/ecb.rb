@@ -59,8 +59,8 @@ module Exchange
         #
         def api_url time
           border = Time.now - 90 * 86400
-          [ "#{config.protocol}:/", 
-            API_URL, 
+          [ "#{config.protocol}:/",
+            API_URL,
             border <= time ? 'eurofxref-hist-90d.xml' : 'eurofxref-hist.xml'
           ].join('/')
         end
@@ -84,7 +84,7 @@ module Exchange
         # @version 0.7
         #
         def extract_rates parsed
-          rate_array = parsed.map { |c| 
+          rate_array = parsed.map { |c|
             map_to_currency_or_rate c
           }.compact.flatten
           
@@ -102,7 +102,7 @@ module Exchange
             values.map { |v|
               val = v.value
               val.match(/\d+/) ? BigDecimal.new(val) : val.downcase.to_sym
-            }.sort_by(&:to_s).reverse 
+            }.sort_by(&:to_s).reverse
           end
         end
         

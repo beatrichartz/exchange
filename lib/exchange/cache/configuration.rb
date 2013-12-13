@@ -26,7 +26,7 @@ module Exchange
               send(:"#{setter}_without_client_wipe=", data)
             end
             alias_method :"#{setter}_without_client_wipe=", :"#{setter}="
-            alias_method :"#{setter}=", :"#{setter}_with_client_wipe="             
+            alias_method :"#{setter}=", :"#{setter}_with_client_wipe="
           end
           
         end

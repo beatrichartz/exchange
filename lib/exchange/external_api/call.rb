@@ -31,7 +31,7 @@ module Exchange
       #   result = Exchange::ExternalAPI::Call.new('http://yourapiurl.com', :format => :xml)
       #   # Do something with that result
       #
-      def initialize url, options={}, &block        
+      def initialize url, options={}, &block
         Exchange::GemLoader.new(options[:format] == :xml ? 'nokogiri' : 'json').try_load
                 
         result = cache_config.subclass.cached(options[:api] || config.subclass, options) do
@@ -52,7 +52,7 @@ module Exchange
         # @param [Array] retry_with An array of urls to retry the API call with if the call to the original URL should fail. These values will be shifted until a call succeeds or the number of maximum retries is reached
         # @todo install a timeout for slow requests, but respect when loading large files
         #
-        def load_url url, retries, retry_with          
+        def load_url url, retries, retry_with
           begin            
             result = URI.parse(url).open.read
           rescue SocketError
@@ -66,7 +66,7 @@ module Exchange
               raise APIError.new("API #{url} was not reachable and returned #{e.message}. May be you requested a historic rate not provided")
             end
           end
-          result          
+          result
         end
       
     end
