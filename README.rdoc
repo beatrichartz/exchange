@@ -6,8 +6,8 @@ You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whate
 
 {<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />}[http://flattr.com/thing/1096528/]
 
-== Caution! Do not use with ruby 2.1.0-p0
-Ruby 2.1.0-p0 has {a confirmed bug in BigDecimal causing it to return wrong results for BigDecimal division.}[https://www.ruby-forum.com/topic/4419577] You'll see in the travis test results that several specs are failing for this gem with 2.1.0-p0. All 2.0 versions work fine though.
+== Caution! Do not use with MRI 2.1.0-p0
+MRI 2.1.0-p0 has {a confirmed bug in BigDecimal causing it to return wrong results for BigDecimal division.}[https://www.ruby-forum.com/topic/4419577] You'll see in the travis test results that several specs are failing for this gem with MRI 2.1.0-p0. All 2.0 versions work fine though.
 
 == Installation
 === Bundler / Rails
