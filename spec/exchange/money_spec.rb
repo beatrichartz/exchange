@@ -120,6 +120,15 @@ describe "Exchange::Money" do
       it "should be able to add a float" do
         (subject + 40.5).value.should == 80.5
       end
+      context "with a big decimal" do
+        subject { Exchange::Money.new(0.82, :omr) }
+        it "should be able to add a big decimal below zero" do
+          (subject + BigDecimal.new("0.45454545")).value.round(8).should == BigDecimal.new("0.127454545E1")
+        end
+        it "should be able to add a big decimal above zero" do
+          (subject + BigDecimal.new("12.455")).round(2).value.should == BigDecimal.new("0.1328E2")
+        end
+      end
       it "should not modify the base value" do
         (subject + 40.5).value.should == 80.5
         subject.value.should == 40.0
@@ -185,6 +194,15 @@ describe "Exchange::Money" do
       end
       it "should be able to subtract a float" do
         (subject - 40.5).value.should == -0.5
+      end
+      context "with a big decimal" do
+        subject { Exchange::Money.new(1829.82, :omr) }
+        it "should be able to subtract a big decimal below zero" do
+          (subject - BigDecimal.new("0.45454545")).value.round(8).should == BigDecimal.new("0.182936545455E4")
+        end
+        it "should be able to subtract a big decimal above zero" do
+          (subject - BigDecimal.new("12.455")).round(2).value.should == BigDecimal.new("0.181737E4")
+        end
       end
       it "should not modify the base value" do
         (subject - 40).value.should == 0
@@ -258,6 +276,15 @@ describe "Exchange::Money" do
           (subject * 0.29).round(0).value.should == 15
         end
       end
+      context "with a big decimal" do
+        subject { Exchange::Money.new(1829.82, :omr) }
+        it "should be able to multiply by a big decimal below zero" do
+          (subject * BigDecimal.new("0.45454545")).value.round(8).should == BigDecimal.new("0.83173635532E3")
+        end
+        it "should be able to multiply by a big decimal above zero" do
+          (subject * BigDecimal.new("12.455")).round(2).value.should == BigDecimal.new("0.2279041E5")
+        end
+      end
       it "should not fall for float rounding errors" do
         (subject * 40.5)
       end
@@ -329,7 +356,15 @@ describe "Exchange::Money" do
           (subject / 12.0).round(2).value.should == 152.49
         end
       end
-
+      context "with a big decimal" do
+        subject { Exchange::Money.new(1829.82, :omr) }
+        it "should be able to divide by a big decimal below zero" do
+          (subject / BigDecimal.new("0.45454545")).value.round(8).should == BigDecimal.new("0.402560404026E4")
+        end
+        it "should be able to divide by a big decimal above zero" do
+          (subject / BigDecimal.new("12.455")).round(2).value.should == BigDecimal.new("0.14691E3")
+        end
+      end
       it "should not modify the base value" do
         (subject / 40).value.should == 1
         subject.value.should == 40.0

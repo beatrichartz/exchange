@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe "Exchange::ErrorSafe" do
+  let(:is_mri_21) { (RUBY_VERSION == '2.1.0' && RUBY_ENGINE == 'ruby') }
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :no_cache } }
   end
@@ -35,7 +36,11 @@ describe "Exchange::ErrorSafe" do
         (1.0e+25 + BigDecimal.new("9999999999999999900000000").in(:usd)).round.to_f.should == 2.0e+25
       end
       it "should not touch other operations" do
-        (1.0e+25 + BigDecimal.new("9999999999999999900000000")).round.should == 20000000000000001811939328
+        if is_mri_21
+          (1.0e+25 + BigDecimal.new("9999999999999999900000000")).round.should == BigDecimal.new("0.199999999999999999E26")
+        else
+          (1.0e+25 + BigDecimal.new("9999999999999999900000000")).round.should == 20000000000000001811939328
+        end
       end
     end
     describe "-" do
@@ -43,7 +48,11 @@ describe "Exchange::ErrorSafe" do
         (1.0e+25 - BigDecimal.new("9999999999999999900000000").in(:usd)).round.should == 100000000
       end
       it "should not touch other operations" do
-        (1.0e+25 - BigDecimal.new("9999999999999999900000000")).should == 0
+        if is_mri_21
+          (1.0e+25 - BigDecimal.new("9999999999999999900000000")).should == BigDecimal.new("0.1E9")
+        else
+          (1.0e+25 - BigDecimal.new("9999999999999999900000000")).should == 0
+        end
       end
     end
   end
