@@ -12,7 +12,7 @@ MRI 2.1.0-p0 has {a confirmed bug in BigDecimal causing it to return wrong resul
 == Installation
 === Bundler / Rails
 Add it to your Gemfile
-  gem "exchange", ">= 1.1.0"
+  gem "exchange", "~> 1.2.0"
 === Manually
 Just install it as a gem
   gem install exchange
