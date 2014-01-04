@@ -340,10 +340,7 @@ hr {
 
 footer {
   width:270px;
-  float:left;
-  position:fixed;
-  bottom: 0px;
-  padding: 3%;
+  padding: 3% 0;
 }
 
 #banner{
