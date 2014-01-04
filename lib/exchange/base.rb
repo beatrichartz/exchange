@@ -1,9 +1,14 @@
 # -*- encoding : utf-8 -*-
 module Exchange
   
+  # constant for broken big decimal division in MRI 2.1.0
+  # https://www.ruby-forum.com/topic/4419577
+  #
+  BROKEN_BIG_DECIMAL_DIVISION = (RUBY_VERSION == '2.1.0' && RUBY_ENGINE == 'ruby')
+  
   # The current version of the exchange gem
   #
-  VERSION = '1.1.1'
+  VERSION = '1.2.0'.freeze
   
   # The root installation path of the gem
   # @version 0.5

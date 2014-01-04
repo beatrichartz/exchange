@@ -1,4 +1,4 @@
-= exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png?branch=master" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://gemnasium.com/beatrichartz/exchange.png" alt="Dependency Status" />}[https://gemnasium.com/beatrichartz/exchange] {<img src="https://codeclimate.com/github/beatrichartz/exchange.png" />}[https://codeclimate.com/github/beatrichartz/exchange]
+= exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png?branch=master" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://gemnasium.com/beatrichartz/exchange.png" alt="Dependency Status" />}[https://gemnasium.com/beatrichartz/exchange] {<img src="https://codeclimate.com/github/beatrichartz/exchange.png" />}[https://codeclimate.com/github/beatrichartz/exchange] {<img src="https://d2weczhvl823v0.cloudfront.net/beatrichartz/exchange/trend.png"/>}[https://bitdeli.com/free]
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. {It is tested against}[http://travis-ci.org/beatrichartz/exchange]: ruby 2.0, 1.9, ree and rubinius (1.9 and 2.0 mode). Exchange will in future versions take advantage of 2.1 features like refinements, be sure to check this page for updates!
 
@@ -6,10 +6,13 @@ You can use it with just plain ruby projects, in Rails 2 and 3, Sinatra or whate
 
 {<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />}[http://flattr.com/thing/1096528/]
 
+=== Note when using with MRI 2.1.0-p0
+MRI 2.1.0-p0 has {a confirmed bug in BigDecimal causing it to return wrong results for BigDecimal division when the rvalue is lower than 1}[https://www.ruby-forum.com/topic/4419577]. Exchange includes a patch for this, and all tests are running for MRI 2.1.0.
+
 == Installation
 === Bundler / Rails
 Add it to your Gemfile
-  gem "exchange", ">= 1.1.0"
+  gem "exchange", "~> 1.2.0"
 === Manually
 Just install it as a gem
   gem install exchange
