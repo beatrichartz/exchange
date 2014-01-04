@@ -18,10 +18,10 @@ Gem::Specification.new do |s|
   s.test_files        = `git ls-files -- spec/*`.split("\n")
   s.require_paths     = ["lib"]
   
-  s.add_dependency             "nokogiri", "~> 1.6", ">= 1.0.0"
-  s.add_development_dependency "json", "~> 1.8", ">= 1.0.0"
-  s.add_development_dependency "yard", "~> 0.8", ">= 0.7.4"
-  s.add_development_dependency "bundler", "~> 1.3", ">= 1.0.0"
+  s.add_dependency             "nokogiri", "~> 1", ">= 1.0.0"
+  s.add_development_dependency "json", "~> 1", ">= 1.0.0"
+  s.add_development_dependency "yard", "~> 0.8"
+  s.add_development_dependency "bundler", "~> 1.3"
   if RUBY_ENGINE == 'rbx'
     s.add_development_dependency "rubysl-bigdecimal", "~> 2.0"
     s.add_development_dependency "rubysl-singleton", "~> 2.0"
