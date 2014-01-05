@@ -1,0 +1,48 @@
+== Overall Approach
+- Extract APIs and Caches into separate Gems
+- Divide Money and Currency into two classes
+- The Helper does not really make sense
+- Do not use floats anywhere!
+
+== Testing
+- DRY it up
+- Change to minitest?
+- Integration Tests!
+
+== Base Module
+- Extract Version into a single file
+
+== Money
+- Extract Currency into a class
+- Make it possible to combine APIs seamlessly and select newest rates
+- Handle temporarily unavailable APIs via asynchronous threads
+
+== Typecasting
+- Adapt exchange-rails specifically to rails with generators?
+
+== Core Extensions
+- Convert all Core Extensions to Refinements
+
+== Cache
+- Cache Key Generation feels unelegant
+- The file cache is needed by the ECB API to store large historic files. It's not really a beautiful caching option though:
+  - Clean it up
+  - Make the cache directory configurable
+  
+== External API
+- Rewrite Call
+  - Use Net/HTTP
+  - Make it care about errors in a better way
+- Make historic conversion ability configurable
+- Make it possible to write custom APIs for XML / JSON / HTML by a configurable proc
+
+== ISO
+- Get more complete information:
+  - Pegging
+  - Complete List of Symbols
+  - Names of subunits
+  - Circulating Denominations
+- Make subunit an exponential since there are currencies with 1/5 smaller denominations
+- Do not use floats anywhere!
+- Cleanup rounding operation install and allow for rounding to denominations
+

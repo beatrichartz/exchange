@@ -3,21 +3,16 @@ NIO:
   subunits:
     -
       exponential: 2
-      name: 
-        latin: 
-          string: centavo
-          html: centavo
-        unicode: 
-          string: centavo
-          html: centavo
+      name: centavo
+      symbols:
+        -
+          string: ¢
+          html: "&#162;"
+          leading: false
   origin: Nicaraguan
-  name: 
-    latin: 
-      string: córdoba
-      html: 'c&oacute;rdoba'
-    unicode: 
-      string: córdoba
-      html: 'c&#243;rdoba'
+  names:
+    string: córdoba
+    html: 'c&#243;rdoba'
   wiki: en.wikipedia.org/wiki/Nicaraguan_c%C3%B3rdoba
   denominations:
     - 0.05
@@ -32,15 +27,11 @@ NIO:
     - 100
     - 200
     - 500
-  symbols: 
-    latin: 
-      -
-        string: C$
-        html: 'C&dollar;'
-    unicode:
-      -
-        string: C$
-        html: 'C&#36;'
+  symbols:
+    -
+      string: C$
+      html: 'C&#36;'
+      leading: true
 LAK:
   subunits:
     -
