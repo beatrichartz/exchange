@@ -21,7 +21,7 @@ module Exchange
         # @private
         # @macro [attach] install_operations
       
-        def install_operation op      
+        def install_operation op
           self.class_eval <<-EOV
             def #{op} amount, currency, precision=nil, opts={}
               minor = definitions[currency][:minor_unit]
@@ -111,7 +111,7 @@ module Exchange
     # @example Convert a currency to a string without the currency
     #   Exchange::ISO.stringif(34.34, :omr, :amount_only => true) #=> "34.340"
     #
-    def stringify amount, currency, opts={}    
+    def stringify amount, currency, opts={}
       definition    = definitions[currency]
       separators    = definition[:separators] || {}
       format        = "%.#{definition[:minor_unit]}f"
@@ -130,7 +130,7 @@ module Exchange
     # @param currency The currency to return the symbol for
     # @return [String, NilClass] The symbol or nil
     # 
-    def symbol currency      
+    def symbol currency
       definitions[currency][:symbol]
     end
     
@@ -172,8 +172,8 @@ module Exchange
     def symbolize_keys hsh
       new_hsh = Hash.new
       
-      hsh.each_pair do |k,v| 
-        v = symbolize_keys v if v.is_a?(Hash)        
+      hsh.each_pair do |k,v|
+        v = symbolize_keys v if v.is_a?(Hash)
         new_hsh[k.downcase.to_sym] = v
       end
       

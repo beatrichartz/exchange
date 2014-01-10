@@ -62,6 +62,23 @@ describe "Exchange::Typecasting" do
         subject.price.value.should == 0.77
       end
     end
+    context "when the currency is nil" do
+      before(:each) do
+        subject.manager.currency = nil
+      end
+      it "should raise an error" do
+        lambda { subject.price }.should raise_error(Exchange::NoCurrencyError, "No currency is given for typecasting price. Make sure a currency is present")
+      end
+    end
+    context "when the value is nil" do
+      before(:each) do
+        subject.price = nil
+        subject.manager.currency = :usd
+      end
+      it "should return nil" do
+        subject.price.should be_nil
+      end
+    end
   end
   
   describe "set" do

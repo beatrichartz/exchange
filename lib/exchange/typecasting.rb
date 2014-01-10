@@ -56,13 +56,15 @@ module Exchange
       define_method :"#{attribute}_with_exchange_typecasting" do
         currency = evaluate_money_option(options[:currency]) if options[:currency]
         
-        test_for_currency_error(currency)
+        test_for_currency_error(currency, attribute)
         
         time     = evaluate_money_option(options[:at]) if options[:at]
         
-        Exchange::Money.new(send(:"#{attribute}_without_exchange_typecasting")) do |c|
-          c.currency = currency
-          c.time     = time if time
+        if value = send(:"#{attribute}_without_exchange_typecasting")
+          Exchange::Money.new(value) do |c|
+            c.currency = currency
+            c.time     = time if time
+          end
         end
       end
       exchange_typecasting_alias_method_chain attribute
@@ -111,7 +113,7 @@ module Exchange
     #   @method test_for_currency_error
     #
     def install_currency_error_tester
-      define_method :test_for_currency_error do |currency|
+      define_method :test_for_currency_error do |currency, attribute|
         raise NoCurrencyError.new("No currency is given for typecasting #{attribute}. Make sure a currency is present") unless currency
       end
     end
