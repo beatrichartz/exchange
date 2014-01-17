@@ -77,15 +77,17 @@ module Exchange
     #
     def install_money_setter attribute, options={}
       define_method :"#{attribute}_with_exchange_typecasting=" do |data|
-        att = send(attribute)
+        att      = send(attribute)
+        currency = evaluate_money_option(options[:currency])
+        
         attribute_setter = :"#{attribute}_without_exchange_typecasting="
         
         send(attribute_setter, if !data.respond_to?(:currency)
           data
-        elsif att.currency == data.currency
+        elsif currency == data.currency
           data.value
-        elsif att.currency != data.currency
-          data.to(att.currency).value
+        elsif currency != data.currency
+          data.to(currency).value
         end)
       end
       exchange_typecasting_alias_method_chain attribute, '='
