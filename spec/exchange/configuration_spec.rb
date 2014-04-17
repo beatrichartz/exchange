@@ -4,24 +4,24 @@ require 'spec_helper'
 describe "Exchange::Configuration" do
   let(:subject) { Exchange::Configuration.new }
   it "should have a standard configuration" do
-    subject.api.retries.should == 7
-    subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
-    subject.cache.subclass.should == Exchange::Cache::Memory
-    subject.cache.host.should be_nil
-    subject.cache.port.should be_nil
-    subject.cache.expire.should == :daily
+    expect(subject.api.retries).to eq(7)
+    expect(subject.api.subclass).to eq(Exchange::ExternalAPI::XavierMedia)
+    expect(subject.cache.subclass).to eq(Exchange::Cache::Memory)
+    expect(subject.cache.host).to be_nil
+    expect(subject.cache.port).to be_nil
+    expect(subject.cache.expire).to eq(:daily)
   end
   it "should respond to all configuration getters and setters" do
     [:api, :implicit_conversions, :cache].each do |k|
-      subject.should be_respond_to(k)
-      subject.should be_respond_to(:"#{k}=")
+      expect(subject).to be_respond_to(k)
+      expect(subject).to be_respond_to(:"#{k}=")
     end
   end
   it 'should respond to nested getters and setters for the api and the cache' do
     {:api => [:subclass, :retries], :cache => [:subclass, :host, :port, :expire]}.each do |k,m|
       m.each do |meth|
-        subject.send(k).should be_respond_to(meth)
-        subject.send(k).should be_respond_to(:"#{meth}=")
+        expect(subject.send(k)).to be_respond_to(meth)
+        expect(subject.send(k)).to be_respond_to(:"#{meth}=")
       end
     end
   end
@@ -36,18 +36,18 @@ describe "Exchange::Configuration" do
         :subclass => :redis
       }
     }
-    Exchange.configuration.api.subclass.should == Exchange::ExternalAPI::XavierMedia
-    Exchange.configuration.api.retries.should == 60
-    Exchange.configuration.api.fallback.should == [Exchange::ExternalAPI::OpenExchangeRates]
-    Exchange.configuration.cache.subclass.should == Exchange::Cache::Redis
+    expect(Exchange.configuration.api.subclass).to eq(Exchange::ExternalAPI::XavierMedia)
+    expect(Exchange.configuration.api.retries).to eq(60)
+    expect(Exchange.configuration.api.fallback).to eq([Exchange::ExternalAPI::OpenExchangeRates])
+    expect(Exchange.configuration.cache.subclass).to eq(Exchange::Cache::Redis)
   end
   it "should allow to be set directly" do
     subject.api = {
       :subclass => :ecb,
       :retries => 1
     }
-    subject.api.subclass.should == Exchange::ExternalAPI::Ecb
-    subject.api.retries.should == 1
+    expect(subject.api.subclass).to eq(Exchange::ExternalAPI::Ecb)
+    expect(subject.api.retries).to eq(1)
   end
   describe "reset" do
     Exchange.configuration = Exchange::Configuration.new {|c|
@@ -66,15 +66,15 @@ describe "Exchange::Configuration" do
     }
     it "should restore the defaults" do
       subject.reset
-      subject.api.subclass.should == Exchange::ExternalAPI::XavierMedia
-      subject.api.retries.should == 7
-      subject.api.app_id.should be_nil
-      subject.api.fallback.should == [Exchange::ExternalAPI::Ecb]
-      subject.cache.subclass.should == Exchange::Cache::Memory
-      subject.cache.host.should be_nil
-      subject.cache.port.should be_nil
-      subject.cache.path.should be_nil
-      subject.implicit_conversions.should be_true
+      expect(subject.api.subclass).to eq(Exchange::ExternalAPI::XavierMedia)
+      expect(subject.api.retries).to eq(7)
+      expect(subject.api.app_id).to be_nil
+      expect(subject.api.fallback).to eq([Exchange::ExternalAPI::Ecb])
+      expect(subject.cache.subclass).to eq(Exchange::Cache::Memory)
+      expect(subject.cache.host).to be_nil
+      expect(subject.cache.port).to be_nil
+      expect(subject.cache.path).to be_nil
+      expect(subject.implicit_conversions).to be_true
     end
   end
   after(:all) do

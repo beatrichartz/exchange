@@ -6,7 +6,7 @@ describe "Exchange::Cachify" do
   describe "cachify" do
     subject { ["hello", 23, :world ] }
     it "should marshal dump" do
-      subject.cachify.should == Marshal.dump(subject)
+      expect(subject.cachify).to eq(Marshal.dump(subject))
     end
   end
   

@@ -9,8 +9,8 @@ if Exchange::BROKEN_BIG_DECIMAL_DIVISION
       subject { BigDecimal.new("0.7") }
       let(:other) { BigDecimal.new("0.5") }
       it "should patch BigDecimal division for BigDecimals below 1" do
-        (subject / other).should == BigDecimal.new("1.4")
-        (subject.div(other)).should == BigDecimal.new("1.4")
+        expect(subject / other).to eq(BigDecimal.new("1.4"))
+        expect(subject.div(other)).to eq(BigDecimal.new("1.4"))
       end
     end
   

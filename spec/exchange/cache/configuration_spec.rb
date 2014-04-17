@@ -8,10 +8,10 @@ describe "Exchange::Cache::Configuration" do
   describe "attr_readers" do
     [:subclass, :expire, :host, :port, :path].each do |reader|
       it "should respond to #{reader}" do
-        subject.should be_respond_to(reader)
+        expect(subject).to be_respond_to(reader)
       end
       it "should respond to #{reader}=" do
-        subject.should be_respond_to(:"#{reader}=")
+        expect(subject).to be_respond_to(:"#{reader}=")
       end
     end
   end
@@ -20,7 +20,7 @@ describe "Exchange::Cache::Configuration" do
     it "should automatically constantize the subclass" do
       subject.subclass = :no_cache
       
-      subject.subclass.should == Exchange::Cache::NoCache
+      expect(subject.subclass).to eq(Exchange::Cache::NoCache)
     end
   end
   
@@ -29,14 +29,14 @@ describe "Exchange::Cache::Configuration" do
       @return = subject.set :subclass => :no_cache, :expire => :daily, :host => 'localhost', :port => 112211, :path => "PATH"
     end
     it "should set the options given" do
-      subject.subclass.should == Exchange::Cache::NoCache
-      subject.expire.should == :daily
-      subject.host.should == 'localhost'
-      subject.port.should == 112211
-      subject.path.should == 'PATH'
+      expect(subject.subclass).to eq(Exchange::Cache::NoCache)
+      expect(subject.expire).to eq(:daily)
+      expect(subject.host).to eq('localhost')
+      expect(subject.port).to eq(112211)
+      expect(subject.path).to eq('PATH')
     end
     it "should return self" do
-      @return.should == subject
+      expect(@return).to eq(subject)
     end
   end
   
@@ -51,18 +51,18 @@ describe "Exchange::Cache::Configuration" do
         subject.subclass = :no_cache
       end
       it "should do so for the host" do
-        subject.subclass.client.should_not be_nil
+        expect(subject.subclass.client).not_to be_nil
         subject.subclass.client
-        subject.subclass.instance.instance_variable_get("@client").should_not be_nil
+        expect(subject.subclass.instance.instance_variable_get("@client")).not_to be_nil
         subject.host = 'new'
-        subject.subclass.instance.instance_variable_get("@client").should be_nil
+        expect(subject.subclass.instance.instance_variable_get("@client")).to be_nil
       end
       it "should do so for the port" do
-        subject.subclass.client.should_not be_nil
+        expect(subject.subclass.client).not_to be_nil
         subject.subclass.client
-        subject.subclass.instance.instance_variable_get("@client").should_not be_nil
+        expect(subject.subclass.instance.instance_variable_get("@client")).not_to be_nil
         subject.port = 112
-        subject.subclass.instance.instance_variable_get("@client").should be_nil
+        expect(subject.subclass.instance.instance_variable_get("@client")).to be_nil
       end
     end
     context "without a wipeable client" do
@@ -71,11 +71,11 @@ describe "Exchange::Cache::Configuration" do
       end
       it "should not fail for the host" do
         subject.host = 'new'
-        subject.host.should == 'new'
+        expect(subject.host).to eq('new')
       end
       it "should not fail for the port" do
         subject.port = 11
-        subject.port.should == 11
+        expect(subject.port).to eq(11)
       end
     end
   end
@@ -86,11 +86,11 @@ describe "Exchange::Cache::Configuration" do
     end
     it "should restore the defaults" do
       subject.reset
-      subject.subclass.should == Exchange::Cache::Memory
-      subject.expire.should == :daily
-      subject.host.should be_nil
-      subject.port.should be_nil
-      subject.path.should be_nil
+      expect(subject.subclass).to eq(Exchange::Cache::Memory)
+      expect(subject.expire).to eq(:daily)
+      expect(subject.host).to be_nil
+      expect(subject.port).to be_nil
+      expect(subject.path).to be_nil
     end
   end
   

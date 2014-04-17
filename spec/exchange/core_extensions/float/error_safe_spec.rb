@@ -17,41 +17,41 @@ describe "Exchange::ErrorSafe" do
   describe "money safe calculation" do
     describe "*" do
       it "should calculate correctly with exchange money" do
-        (0.29 * 50.in(:usd)).round.should == 15
+        expect((0.29 * 50.in(:usd)).round).to eq(15)
       end
       it "should not touch other operations" do
-        (0.29 * 50).round.should == 14
+        expect((0.29 * 50).round).to eq(14)
       end
     end
     describe "/" do
       it "should calculate correctly with exchange money" do
-        (((1829.82 / 12.in(:usd)) * 100).round.to_f / 100).to_f.should == 152.49
+        expect((((1829.82 / 12.in(:usd)) * 100).round.to_f / 100).to_f).to eq(152.49)
       end
       it "should not touch other operations" do
-        (((1829.82 / 12) * 100).round.to_f / 100).should == 152.48
+        expect(((1829.82 / 12) * 100).round.to_f / 100).to eq(152.48)
       end
     end
     describe "+" do
       it "should calculate correctly with exchange money" do
-        (1.0e+25 + BigDecimal.new("9999999999999999900000000").in(:usd)).round.to_f.should == 2.0e+25
+        expect((1.0e+25 + BigDecimal.new("9999999999999999900000000").in(:usd)).round.to_f).to eq(2.0e+25)
       end
       it "should not touch other operations" do
         if is_mri_21
-          (1.0e+25 + BigDecimal.new("9999999999999999900000000")).round.should == BigDecimal.new("0.199999999999999999E26")
+          expect((1.0e+25 + BigDecimal.new("9999999999999999900000000")).round).to eq(BigDecimal.new("0.199999999999999999E26"))
         else
-          (1.0e+25 + BigDecimal.new("9999999999999999900000000")).round.should == 20000000000000001811939328
+          expect((1.0e+25 + BigDecimal.new("9999999999999999900000000")).round).to eq(20000000000000001811939328)
         end
       end
     end
     describe "-" do
       it "should calculate correctly with exchange money" do
-        (1.0e+25 - BigDecimal.new("9999999999999999900000000").in(:usd)).round.should == 100000000
+        expect((1.0e+25 - BigDecimal.new("9999999999999999900000000").in(:usd)).round).to eq(100000000)
       end
       it "should not touch other operations" do
         if is_mri_21
-          (1.0e+25 - BigDecimal.new("9999999999999999900000000")).should == BigDecimal.new("0.1E9")
+          expect(1.0e+25 - BigDecimal.new("9999999999999999900000000")).to eq(BigDecimal.new("0.1E9"))
         else
-          (1.0e+25 - BigDecimal.new("9999999999999999900000000")).should == 0
+          expect(1.0e+25 - BigDecimal.new("9999999999999999900000000")).to eq(0)
         end
       end
     end

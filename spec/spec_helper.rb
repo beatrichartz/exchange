@@ -22,7 +22,7 @@ module HelperMethods
   
   def mock_api(adress, response, count=1)
     @uri_mock = double('uri', :open => double('opened_uri', :read => response))
-    URI.should_receive(:parse).with(adress).at_most(count).times.and_return(@uri_mock)
+    expect(URI).to receive(:parse).with(adress).at_most(count).times.and_return(@uri_mock)
   end
 end
 

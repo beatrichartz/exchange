@@ -6,7 +6,7 @@ describe "Exchange::ISO" do
   let(:subject) { Exchange::ISO }
   describe "self.definitions" do
     it "should be a hash of exactly the ISO standard definitions loaded from the yaml file" do
-      subject.definitions.should === {
+      expect(subject.definitions).to be === {
         :nio=>{:minor_unit=>2, :currency=>"Cordoba Oro", :symbol=>"C$"}, 
         :lak=>{:minor_unit=>2, :currency=>"Kip", :symbol=>"₭"}, 
         :sar=>{:separators=>{:major=>",", :minor=>"."}, :minor_unit=>2, :currency=>"Saudi Riyal", :symbol=>"﷼"}, 
@@ -175,7 +175,7 @@ describe "Exchange::ISO" do
   end
   describe "self.country_map" do
     it "should deliver a complete map of country abbreviations to currencies" do
-      subject.country_map.should == {
+      expect(subject.country_map).to eq({
         :abw => :awg,
         :ad => :eur,
         :ae => :aed,
@@ -668,49 +668,49 @@ describe "Exchange::ISO" do
         :zmb => :zmk,
         :zw => :zwl,
         :zwe => :zwl
-      }
+      })
     end
   end
   describe "self.currencies" do
     it "should be an array of currency symbols" do
-      subject.currencies.should == %W(nio lak sar nok usd rub xcd omr amd cdf kpw cny kes khr pln mvr gtq clp inr bzd myr hkd cop dkk sek byr lyd ron dzd bif ars gip uyi bob ssp ngn pgk std xof aed ern mwk cup usn gmd cve tzs cou btn zwl ugx syp mad mnt lsl xaf shp htg rsd mga top mzn lvl fkp uss bwp hnl eur egp chf ils pyg lbp ang kzt gyd wst npr kmf thb irr srd jpy brl uyu mop bmd szl etb jod idr mdl xpf mro yer bam awg nzd pen aoa kyd sll try vef isk gnf bsd djf huf ltl mxn scr sgd lkr tjs tnd dop fjd gel sdg vuv bbd lrd krw mmk mur php zar kgs gbp bgn iqd tmt uah vnd zmk bov hrk ttd bhd clf rwf mkd aud crc pkr twd uzs czk azn bdt nad afn mxv cuc pab qar sos chw cad jmd bnd all svc sbd ghs kwd).sort.map(&:to_sym)
+      expect(subject.currencies).to eq(%W(nio lak sar nok usd rub xcd omr amd cdf kpw cny kes khr pln mvr gtq clp inr bzd myr hkd cop dkk sek byr lyd ron dzd bif ars gip uyi bob ssp ngn pgk std xof aed ern mwk cup usn gmd cve tzs cou btn zwl ugx syp mad mnt lsl xaf shp htg rsd mga top mzn lvl fkp uss bwp hnl eur egp chf ils pyg lbp ang kzt gyd wst npr kmf thb irr srd jpy brl uyu mop bmd szl etb jod idr mdl xpf mro yer bam awg nzd pen aoa kyd sll try vef isk gnf bsd djf huf ltl mxn scr sgd lkr tjs tnd dop fjd gel sdg vuv bbd lrd krw mmk mur php zar kgs gbp bgn iqd tmt uah vnd zmk bov hrk ttd bhd clf rwf mkd aud crc pkr twd uzs czk azn bdt nad afn mxv cuc pab qar sos chw cad jmd bnd all svc sbd ghs kwd).sort.map(&:to_sym))
     end
   end
   describe "self.defines?" do
     context "with a defined currency" do
       it "should return true" do
         subject.currencies.each do |curr|
-          subject.should be_defines(curr)
+          expect(subject).to be_defines(curr)
         end
       end
     end
     context "with a defined country" do
       it "should return true" do
         subject.country_map.each do |country, currency|
-          subject.should be_defines(country)
+          expect(subject).to be_defines(country)
         end
       end
     end
     context "with an undefined currency" do
       it "should return false" do
-        subject.should_not be_defines(:xxx)
+        expect(subject).not_to be_defines(:xxx)
       end
     end
   end
   describe "self.assert_currency" do
     context "with a currency" do
       it "should return the currency itself" do
-        subject.assert_currency!(:eur).should == :eur
+        expect(subject.assert_currency!(:eur)).to eq(:eur)
       end
     end
     context "with a country" do
       it "should return the matching currency for the country" do
-        subject.assert_currency!(:de).should == :eur
+        expect(subject.assert_currency!(:de)).to eq(:eur)
       end
     end
     context "with a non-currency" do
       it "should raise an error" do
-        lambda { subject.assert_currency!(:xxx) }.should raise_error(Exchange::NoCurrencyError, "xxx is not a currency nor a country code matchable to a currency")
+        expect { subject.assert_currency!(:xxx) }.to raise_error(Exchange::NoCurrencyError, "xxx is not a currency nor a country code matchable to a currency")
       end
     end
   end
@@ -718,153 +718,153 @@ describe "Exchange::ISO" do
     context "given a float or an integer" do
       context "with bigger precision than the definition" do
         it "should instantiate a big decimal with the given precision" do
-          BigDecimal.should_receive(:new).with('23.2345', 6).and_return('INSTANCE')
-          subject.instantiate(23.2345, :tnd).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with('22223.2323444', 12).and_return('INSTANCE')
-          subject.instantiate(22223.2323444, :sar).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with('23.23', 4).and_return('INSTANCE')
-          subject.instantiate(23.23, :clp).should == 'INSTANCE'
+          expect(BigDecimal).to receive(:new).with('23.2345', 6).and_return('INSTANCE')
+          expect(subject.instantiate(23.2345, :tnd)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with('22223.2323444', 12).and_return('INSTANCE')
+          expect(subject.instantiate(22223.2323444, :sar)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with('23.23', 4).and_return('INSTANCE')
+          expect(subject.instantiate(23.23, :clp)).to eq('INSTANCE')
         end
       end
       context "with smaller precision than the definition" do
         it "should instantiate a big decimal with the defined precision" do
-          BigDecimal.should_receive(:new).with('23382343.1',11).and_return('INSTANCE')
-          subject.instantiate(23382343.1, :tnd).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with('23',4).and_return('INSTANCE')
-          subject.instantiate(23, :sar).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with('23.2',5).and_return('INSTANCE')
-          subject.instantiate(23.2, :omr).should == 'INSTANCE'
+          expect(BigDecimal).to receive(:new).with('23382343.1',11).and_return('INSTANCE')
+          expect(subject.instantiate(23382343.1, :tnd)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with('23',4).and_return('INSTANCE')
+          expect(subject.instantiate(23, :sar)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with('23.2',5).and_return('INSTANCE')
+          expect(subject.instantiate(23.2, :omr)).to eq('INSTANCE')
         end
       end
     end
     context "given a float with scientific notation" do
       context "with bigger precision than the definition" do
         it "should instantiate a big decimal with the given precision" do
-          BigDecimal.should_receive(:new).with("6.0e-05",6).and_return('INSTANCE')
-          subject.instantiate(6.0e-05, :tnd).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with("600000.0",8).and_return('INSTANCE')
-          subject.instantiate(6.0e05, :sar).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with("1.456e-08",12).and_return('INSTANCE')
-          subject.instantiate(1.456e-08, :omr).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with("145600000.0",12).and_return('INSTANCE')
-          subject.instantiate(1.456e08, :omr).should == 'INSTANCE'
+          expect(BigDecimal).to receive(:new).with("6.0e-05",6).and_return('INSTANCE')
+          expect(subject.instantiate(6.0e-05, :tnd)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with("600000.0",8).and_return('INSTANCE')
+          expect(subject.instantiate(6.0e05, :sar)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with("1.456e-08",12).and_return('INSTANCE')
+          expect(subject.instantiate(1.456e-08, :omr)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with("145600000.0",12).and_return('INSTANCE')
+          expect(subject.instantiate(1.456e08, :omr)).to eq('INSTANCE')
         end
       end
       context "with smaller precision than the definition" do
         it "should instantiate a big decimal with the defined precision" do
-          BigDecimal.should_receive(:new).with("0.6",4).and_return('INSTANCE')
-          subject.instantiate(6.0e-01, :tnd).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with("60.0",4).and_return('INSTANCE')
-          subject.instantiate(6.0e01, :sar).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with("0.14",4).and_return('INSTANCE')
-          subject.instantiate(1.4e-01, :omr).should == 'INSTANCE'
-          BigDecimal.should_receive(:new).with("14.56",5).and_return('INSTANCE')
-          subject.instantiate(1.456e01, :omr).should == 'INSTANCE'
+          expect(BigDecimal).to receive(:new).with("0.6",4).and_return('INSTANCE')
+          expect(subject.instantiate(6.0e-01, :tnd)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with("60.0",4).and_return('INSTANCE')
+          expect(subject.instantiate(6.0e01, :sar)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with("0.14",4).and_return('INSTANCE')
+          expect(subject.instantiate(1.4e-01, :omr)).to eq('INSTANCE')
+          expect(BigDecimal).to receive(:new).with("14.56",5).and_return('INSTANCE')
+          expect(subject.instantiate(1.456e01, :omr)).to eq('INSTANCE')
         end
       end
     end
     context "given a big decimal" do
       let!(:bigdecimal) { BigDecimal.new("23.23") }
       it "should instantiate a big decimal according to the iso standards" do
-        BigDecimal.should_receive(:new).never
-        subject.instantiate(bigdecimal, :tnd).should == bigdecimal
+        expect(BigDecimal).to receive(:new).never
+        expect(subject.instantiate(bigdecimal, :tnd)).to eq(bigdecimal)
       end
     end
   end
   describe "self.round" do
     it "should round a currency according to ISO 4217 Definitions" do
-      subject.round(BigDecimal.new("23.232524"), :tnd).should == BigDecimal.new("23.233")
-      subject.round(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.23")
-      subject.round(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("23")
+      expect(subject.round(BigDecimal.new("23.232524"), :tnd)).to eq(BigDecimal.new("23.233"))
+      expect(subject.round(BigDecimal.new("23.232524"), :sar)).to eq(BigDecimal.new("23.23"))
+      expect(subject.round(BigDecimal.new("23.232524"), :clp)).to eq(BigDecimal.new("23"))
     end
     it "should round psychologically if asked" do
-      subject.round(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true}).should == BigDecimal.new("22.999")
-      subject.round(BigDecimal.new("23.232524"), :sar, nil, {:psych => true}).should == BigDecimal.new("22.99")
-      subject.round(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("19")
+      expect(subject.round(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true})).to eq(BigDecimal.new("22.999"))
+      expect(subject.round(BigDecimal.new("23.232524"), :sar, nil, {:psych => true})).to eq(BigDecimal.new("22.99"))
+      expect(subject.round(BigDecimal.new("23.232524"), :clp, nil, {:psych => true})).to eq(BigDecimal.new("19"))
     end
   end
   describe "self.ceil" do
     it "should ceil a currency according to ISO 4217 Definitions" do
-      subject.ceil(BigDecimal.new("23.232524"), :tnd).should == BigDecimal.new("23.233")
-      subject.ceil(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.24")
-      subject.ceil(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("24")
+      expect(subject.ceil(BigDecimal.new("23.232524"), :tnd)).to eq(BigDecimal.new("23.233"))
+      expect(subject.ceil(BigDecimal.new("23.232524"), :sar)).to eq(BigDecimal.new("23.24"))
+      expect(subject.ceil(BigDecimal.new("23.232524"), :clp)).to eq(BigDecimal.new("24"))
     end
     it "should ceil psychologically if asked" do
-      subject.ceil(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true}).should == BigDecimal.new("23.999")
-      subject.ceil(BigDecimal.new("23.232524"), :sar, nil, {:psych => true}).should == BigDecimal.new("23.99")
-      subject.ceil(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("29")
+      expect(subject.ceil(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true})).to eq(BigDecimal.new("23.999"))
+      expect(subject.ceil(BigDecimal.new("23.232524"), :sar, nil, {:psych => true})).to eq(BigDecimal.new("23.99"))
+      expect(subject.ceil(BigDecimal.new("23.232524"), :clp, nil, {:psych => true})).to eq(BigDecimal.new("29"))
     end
   end
   describe "self.floor" do
     it "should floor a currency according to ISO 4217 Definitions" do
-      subject.floor(BigDecimal.new("23.232524"), :tnd).should == BigDecimal.new("23.232")
-      subject.floor(BigDecimal.new("23.232524"), :sar).should == BigDecimal.new("23.23")
-      subject.floor(BigDecimal.new("23.232524"), :clp).should == BigDecimal.new("23")
+      expect(subject.floor(BigDecimal.new("23.232524"), :tnd)).to eq(BigDecimal.new("23.232"))
+      expect(subject.floor(BigDecimal.new("23.232524"), :sar)).to eq(BigDecimal.new("23.23"))
+      expect(subject.floor(BigDecimal.new("23.232524"), :clp)).to eq(BigDecimal.new("23"))
     end
     it "should floor psychologically if asked" do
-      subject.floor(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true}).should == BigDecimal.new("22.999")
-      subject.floor(BigDecimal.new("23.232524"), :sar, nil, {:psych => true}).should == BigDecimal.new("22.99")
-      subject.floor(BigDecimal.new("23.232524"), :clp, nil, {:psych => true}).should == BigDecimal.new("19")
+      expect(subject.floor(BigDecimal.new("23.232524"), :tnd, nil, {:psych => true})).to eq(BigDecimal.new("22.999"))
+      expect(subject.floor(BigDecimal.new("23.232524"), :sar, nil, {:psych => true})).to eq(BigDecimal.new("22.99"))
+      expect(subject.floor(BigDecimal.new("23.232524"), :clp, nil, {:psych => true})).to eq(BigDecimal.new("19"))
     end
   end
   describe "self.symbol" do
     context "with a symbol present" do
       it "should return the symbol" do
-        subject.symbol(:usd).should == '$'
-        subject.symbol(:gbp).should == '£'
-        subject.symbol(:eur).should == '€'
+        expect(subject.symbol(:usd)).to eq('$')
+        expect(subject.symbol(:gbp)).to eq('£')
+        expect(subject.symbol(:eur)).to eq('€')
       end
     end
     context "with no symbol present" do
       it "should return nil" do
-        subject.symbol(:chf).should be_nil
-        subject.symbol(:etb).should be_nil
-        subject.symbol(:tnd).should be_nil
+        expect(subject.symbol(:chf)).to be_nil
+        expect(subject.symbol(:etb)).to be_nil
+        expect(subject.symbol(:tnd)).to be_nil
       end
     end
   end
   describe "self.stringify" do
     it "should stringify a currency according to ISO 4217 Definitions" do
-      subject.stringify(BigDecimal.new("23234234.232524"), :tnd).should == "TND 23234234.233"
-      subject.stringify(BigDecimal.new("23234234.232524"), :sar).should == "SAR 23,234,234.23"
-      subject.stringify(BigDecimal.new("2323434223.232524"), :clp).should == "CLP 2.323.434.223"
-      subject.stringify(BigDecimal.new("232344.2"), :tnd).should == "TND 232344.200"
-      subject.stringify(BigDecimal.new("233432434.4"), :sar).should == "SAR 233,432,434.40"
-      subject.stringify(BigDecimal.new("23234234.0"), :clp).should == "CLP 23.234.234"
+      expect(subject.stringify(BigDecimal.new("23234234.232524"), :tnd)).to eq("TND 23234234.233")
+      expect(subject.stringify(BigDecimal.new("23234234.232524"), :sar)).to eq("SAR 23,234,234.23")
+      expect(subject.stringify(BigDecimal.new("2323434223.232524"), :clp)).to eq("CLP 2.323.434.223")
+      expect(subject.stringify(BigDecimal.new("232344.2"), :tnd)).to eq("TND 232344.200")
+      expect(subject.stringify(BigDecimal.new("233432434.4"), :sar)).to eq("SAR 233,432,434.40")
+      expect(subject.stringify(BigDecimal.new("23234234.0"), :clp)).to eq("CLP 23.234.234")
     end
     context "amount only" do
       it "should not render the currency" do
-        subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :amount).should == "23.233"
-        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :amount).should == "223'423'432'343.23"
-        subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :amount).should == "23"
-        subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :amount).should == "23.200"
-        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :amount).should == "25,645,645,663.40"
-        subject.stringify(BigDecimal.new("23.0"), :clp, :format => :amount).should == "23"
+        expect(subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :amount)).to eq("23.233")
+        expect(subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :amount)).to eq("223'423'432'343.23")
+        expect(subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :amount)).to eq("23")
+        expect(subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :amount)).to eq("23.200")
+        expect(subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :amount)).to eq("25,645,645,663.40")
+        expect(subject.stringify(BigDecimal.new("23.0"), :clp, :format => :amount)).to eq("23")
       end
     end
     context "plain amount" do
       it "should not render the currency or separators" do
-        subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :plain).should == "23.233"
-        subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :plain).should == "223423432343.23"
-        subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :plain).should == "23"
-        subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :plain).should == "23.200"
-        subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :plain).should == "25645645663.40"
-        subject.stringify(BigDecimal.new("23.0"), :clp, :format => :plain).should == "23"
+        expect(subject.stringify(BigDecimal.new("23.232524"), :tnd, :format => :plain)).to eq("23.233")
+        expect(subject.stringify(BigDecimal.new("223423432343.232524"), :chf, :format => :plain)).to eq("223423432343.23")
+        expect(subject.stringify(BigDecimal.new("23.232524"), :clp, :format => :plain)).to eq("23")
+        expect(subject.stringify(BigDecimal.new("23.2"), :tnd, :format => :plain)).to eq("23.200")
+        expect(subject.stringify(BigDecimal.new("25645645663.4"), :sar, :format => :plain)).to eq("25645645663.40")
+        expect(subject.stringify(BigDecimal.new("23.0"), :clp, :format => :plain)).to eq("23")
       end
     end
     context "symbol" do
       context "with a symbol present" do
         it "should render a symbol for the currency" do
-          subject.stringify(BigDecimal.new("23.232524"), :usd, :format => :symbol).should == "$23.23"
-          subject.stringify(BigDecimal.new("23.232524"), :irr, :format => :symbol).should == "﷼23.23"
-          subject.stringify(BigDecimal.new("345543453453.232524"), :gbp, :format => :symbol).should == "£345,543,453,453.23"
-          subject.stringify(BigDecimal.new("23.232524"), :eur, :format => :symbol).should == "€23.23"
+          expect(subject.stringify(BigDecimal.new("23.232524"), :usd, :format => :symbol)).to eq("$23.23")
+          expect(subject.stringify(BigDecimal.new("23.232524"), :irr, :format => :symbol)).to eq("﷼23.23")
+          expect(subject.stringify(BigDecimal.new("345543453453.232524"), :gbp, :format => :symbol)).to eq("£345,543,453,453.23")
+          expect(subject.stringify(BigDecimal.new("23.232524"), :eur, :format => :symbol)).to eq("€23.23")
         end
       end
       context "without a symbol present" do
         it "should render the currency abbreviation" do
-          subject.stringify(BigDecimal.new("32741393.232524"), :chf, :format => :symbol).should == "CHF 32'741'393.23"
-          subject.stringify(BigDecimal.new("23.232524"), :etb, :format => :symbol).should == "ETB 23.23"
+          expect(subject.stringify(BigDecimal.new("32741393.232524"), :chf, :format => :symbol)).to eq("CHF 32'741'393.23")
+          expect(subject.stringify(BigDecimal.new("23.232524"), :etb, :format => :symbol)).to eq("ETB 23.23")
         end
       end
     end

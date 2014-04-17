@@ -15,10 +15,10 @@ describe "Exchange::Cache::NoCache" do
   end
   describe "cached" do
     it "should directly call the block" do
-      subject.cached('API_CLASS') { 'something' }.should == 'something'
+      expect(subject.cached('API_CLASS') { 'something' }).to eq('something')
     end
     it "should raise an error if no block was given" do
-      lambda { subject.cached('API_CLASS') }.should raise_error(Exchange::Cache::CachingWithoutBlockError)
+      expect { subject.cached('API_CLASS') }.to raise_error(Exchange::Cache::CachingWithoutBlockError)
     end
   end
 end

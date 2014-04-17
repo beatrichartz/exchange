@@ -23,11 +23,11 @@ describe "Exchange::ExternalAPI::Ecb" do
     end
     it "should call the api and yield a block with the result" do
       subject.update
-      subject.base.should == :eur
+      expect(subject.base).to eq(:eur)
     end
     it "should set a unix timestamp from the api file" do
       subject.update
-      subject.timestamp.should == 1328227200
+      expect(subject.timestamp).to eq(1328227200)
     end
   end
   describe "conversion" do
@@ -36,13 +36,13 @@ describe "Exchange::ExternalAPI::Ecb" do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml", fixture('api_responses/example_ecb_xml_90d.xml'))
     end
     it "should convert right" do
-      subject.convert(80, :eur, :usd).round(2).should == 105.28
+      expect(subject.convert(80, :eur, :usd).round(2)).to eq(105.28)
     end
     it "should convert negative numbers right" do
-      subject.convert(-70, :chf, :usd).round(2).should == BigDecimal.new("-76.45")
+      expect(subject.convert(-70, :chf, :usd).round(2)).to eq(BigDecimal.new("-76.45"))
     end
     it "should convert when given symbols" do
-      subject.convert(70, :sek, :usd).round(2).should == 10.41
+      expect(subject.convert(70, :sek, :usd).round(2)).to eq(10.41)
     end
   end
   describe "historic conversion" do
@@ -51,13 +51,13 @@ describe "Exchange::ExternalAPI::Ecb" do
       mock_api("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml", fixture('api_responses/example_ecb_xml_history.xml'))
     end
     it "should convert and be able to use history" do
-      subject.convert(70, :eur, :usd, :at => Time.gm(2011,9,9)).round(2).should == 91.66
+      expect(subject.convert(70, :eur, :usd, :at => Time.gm(2011,9,9)).round(2)).to eq(91.66)
     end
     it "should convert negative numbers right" do
-      subject.convert(-70, :chf, :usd, :at => Time.gm(2011,9,9)).round(2).should == BigDecimal.new("-76.08")
+      expect(subject.convert(-70, :chf, :usd, :at => Time.gm(2011,9,9)).round(2)).to eq(BigDecimal.new("-76.08"))
     end
     it "should convert when given symbols" do
-      subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2).should == 10.35
+      expect(subject.convert(70, :sek, :usd, :at => Time.gm(2011,9,9)).round(2)).to eq(10.35)
     end
   end
 end

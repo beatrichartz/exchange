@@ -17,24 +17,24 @@ describe "Exchange::ExternalAPI::Base" do
   end
   describe "rate" do
     it "should put out an exchange rate for the two currencies" do
-      subject.should_receive(:update).once
-      subject.rate(:eur, :chf).round(3).should == 1.613
+      expect(subject).to receive(:update).once
+      expect(subject.rate(:eur, :chf).round(3)).to eq(1.613)
     end
     it "should put out an exchange rate for the two currencies and pass on opts" do
       time = Time.now
-      subject.should_receive(:update).with(:at => time).once
-      subject.rate(:eur, :chf, :at => time).round(3).should == 1.613
+      expect(subject).to receive(:update).with(:at => time).once
+      expect(subject.rate(:eur, :chf, :at => time).round(3)).to eq(1.613)
     end
   end
   describe "convert" do
     it "should convert according to the given rates" do
-      subject.should_receive(:update).once
-      subject.convert(80,:chf, :eur).round(2).should == 49.6
+      expect(subject).to receive(:update).once
+      expect(subject.convert(80,:chf, :eur).round(2)).to eq(49.6)
     end
     it "should convert according to the given rates and pass opts" do
       time = Time.now
-      subject.should_receive(:update).with(:at => time).once
-      subject.convert(80,:chf, :eur, :at => time).round(2).should == 49.6
+      expect(subject).to receive(:update).with(:at => time).once
+      expect(subject.convert(80,:chf, :eur, :at => time).round(2)).to eq(49.6)
     end
   end
 end
