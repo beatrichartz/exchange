@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe "Exchange::ErrorSafe" do
-  let(:is_mri_21) { (RUBY_VERSION == '2.1.0' && RUBY_ENGINE == 'ruby') }
+  let(:is_mri_21) { (RUBY_VERSION =~ /\A2.1/ && RUBY_ENGINE == 'ruby') }
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :no_cache } }
   end
