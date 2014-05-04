@@ -10,7 +10,7 @@ module Exchange
     
     # The error that gets thrown if a needed gem is not available or loadable
     #
-    GemNotFoundError  = Class.new LoadError
+    GemNotFoundError  = Class.new UsageError
 
     # initialize the loader with a gem name. 
     # @param [string] gem The gem to require

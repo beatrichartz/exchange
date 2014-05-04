@@ -405,6 +405,6 @@ module Exchange
   
   # The error that will get thrown when implicit conversions take place and are not allowed
   #
-  ImplicitConversionError = Class.new StandardError
+  ImplicitConversionError = Class.new Error
   
 end
