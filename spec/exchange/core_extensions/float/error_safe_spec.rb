@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe "Exchange::ErrorSafe" do
-  let(:is_mri_21) { (RUBY_VERSION =~ /\A2.1/ && RUBY_ENGINE == 'ruby') }
+  let(:is_mri_21_or_greater) { ((RUBY_VERSION =~ /\A2.1/ || RUBY_VERSION =~ /\A2.2/) && RUBY_ENGINE == 'ruby') }
   let(:time) { Time.gm(2012,8,27) }
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :no_cache } }
@@ -36,7 +36,7 @@ describe "Exchange::ErrorSafe" do
         expect((1.0e+25 + BigDecimal.new("9999999999999999900000000").in(:usd)).round.to_f).to eq(2.0e+25)
       end
       it "should not touch other operations" do
-        if is_mri_21
+        if is_mri_21_or_greater
           expect((1.0e+25 + BigDecimal.new("9999999999999999900000000")).round).to eq(BigDecimal.new("0.199999999999999999E26"))
         else
           expect((1.0e+25 + BigDecimal.new("9999999999999999900000000")).round).to eq(20000000000000001811939328)
@@ -48,7 +48,7 @@ describe "Exchange::ErrorSafe" do
         expect((1.0e+25 - BigDecimal.new("9999999999999999900000000").in(:usd)).round).to eq(100000000)
       end
       it "should not touch other operations" do
-        if is_mri_21
+        if is_mri_21_or_greater
           expect(1.0e+25 - BigDecimal.new("9999999999999999900000000")).to eq(BigDecimal.new("0.1E9"))
         else
           expect(1.0e+25 - BigDecimal.new("9999999999999999900000000")).to eq(0)
