@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe "Exchange::ExternalAPI::Ecb" do
+  let(:time) { Time.gm(2012,2,3) }
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new { |c|
       c.cache = {
@@ -13,8 +14,7 @@ describe "Exchange::ExternalAPI::Ecb" do
     Exchange.configuration.reset
   end
   before(:each) do
-    time = Time.gm(2012,2,3)
-    Time.stub :now => time
+    allow(Time).to receive(:now).and_return time
   end
   describe "updating rates" do
     subject { Exchange::ExternalAPI::Ecb.new }

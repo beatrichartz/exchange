@@ -74,10 +74,10 @@ describe "Exchange::Configuration" do
       expect(subject.cache.host).to be_nil
       expect(subject.cache.port).to be_nil
       expect(subject.cache.path).to be_nil
-      expect(subject.implicit_conversions).to be_true
+      expect(subject.implicit_conversions).to eq(true)
     end
   end
   after(:all) do
     Exchange.configuration.reset
-  end  
+  end
 end

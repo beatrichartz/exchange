@@ -6,7 +6,7 @@ describe "Exchange::Helper" do
   describe "assure_time" do
     before(:each) do
       time = Time.now
-      Time.stub :now => time
+      allow(Time).to receive(:now).and_return time
     end
     context "with a time object" do
       it "should return that time object" do

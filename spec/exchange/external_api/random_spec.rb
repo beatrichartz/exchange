@@ -23,7 +23,7 @@ describe "Exchange::ExternalAPI::OpenExchangeRates" do
     end
     it "should set the timestamp from time.now" do
       time = Time.now
-      time.stub :now => time
+      allow(Time).to receive(:now).and_return time
       subject.update
       expect(subject.timestamp).to eq(time.to_i)
     end

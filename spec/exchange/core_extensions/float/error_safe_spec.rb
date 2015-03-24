@@ -3,17 +3,17 @@ require 'spec_helper'
 
 describe "Exchange::ErrorSafe" do
   let(:is_mri_21) { (RUBY_VERSION =~ /\A2.1/ && RUBY_ENGINE == 'ruby') }
+  let(:time) { Time.gm(2012,8,27) }
   before(:all) do
     Exchange.configuration = Exchange::Configuration.new { |c| c.cache = { :subclass => :no_cache } }
   end
   before(:each) do
-    @time = Time.gm(2012,8,27)
-    Time.stub :now => @time
+    allow(Time).to receive(:now).and_return time
   end
   after(:all) do
     Exchange.configuration.reset
   end
-  
+
   describe "money safe calculation" do
     describe "*" do
       it "should calculate correctly with exchange money" do

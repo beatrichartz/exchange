@@ -33,7 +33,7 @@ describe "Exchange::Money" do
         c.currency = :usd
         c.time     = Time.gm(2012,9,9)
       end
-      
+
       expect(currency.value).to eq(40)
       expect(currency.currency).to eq(:usd)
       expect(currency.time).to eq(Time.gm(2012,9,9))
@@ -92,7 +92,7 @@ describe "Exchange::Money" do
     context "with a 'to' currency not provided by the given api" do
       context "but provided by a fallback api" do
         it "should use the fallback" do
-          subject.api::CURRENCIES.stub :include? => false
+          allow(subject.api::CURRENCIES).to receive(:include?).and_return(false)
           mock_api("http://api.finance.xaviermedia.com/api/#{Time.now.strftime("%Y/%m/%d")}.xml", fixture('api_responses/example_xml_api.xml'), 3)
           expect(subject.to(:chf).value.round(2)).to eq(36.36)
           expect(subject.to(:chf).currency).to eq(:chf)
@@ -101,9 +101,9 @@ describe "Exchange::Money" do
       end
       context "but not provided by any fallback api" do
         it "should raise the no rate error" do
-          Exchange::ExternalAPI::OpenExchangeRates::CURRENCIES.stub :include? => false
-          Exchange::ExternalAPI::XavierMedia::CURRENCIES.stub :include? => false
-          Exchange::ExternalAPI::Ecb::CURRENCIES.stub :include? => false
+          allow(Exchange::ExternalAPI::OpenExchangeRates::CURRENCIES).to receive(:include?).and_return false
+          allow(Exchange::ExternalAPI::XavierMedia::CURRENCIES).to receive(:include?).and_return false
+          allow(Exchange::ExternalAPI::Ecb::CURRENCIES).to receive(:include?).and_return false
           expect { subject.to(:xaf) }.to raise_error Exchange::NoRateError
         end
       end
@@ -439,22 +439,22 @@ describe "Exchange::Money" do
       end
       context "with identical currencies" do
         it "should be true if the currency and the value is the same" do
-          expect(subject == comp1).to be_true
+          expect(subject == comp1).to eq(true)
         end
         it "should be false if the value is different" do
-          expect(subject == comp2).to be_false
+          expect(subject == comp2).to eq(false)
         end
       end
       context "with different currencies" do
         it "should be true if the converted value is the same" do
-          expect(comp3 == comp5).to be_true
+          expect(comp3 == comp5).to eq(true)
         end
         it "should be false if the converted value is different" do
-          expect(subject == comp4).to be_false
+          expect(subject == comp4).to eq(false)
         end
         it "should be false if the currency is defined historic and the converted value is different" do
           mock_api("http://openexchangerates.org/api/historical/2011-01-01.json?app_id=", fixture('api_responses/example_historic_json.json'), 2)
-          expect(comp3 == comp6).to be_false
+          expect(comp3 == comp6).to eq(false)
         end
         context "with implicit conversion turned off" do
           before(:each) do
