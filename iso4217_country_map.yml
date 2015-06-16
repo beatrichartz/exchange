@@ -89,8 +89,8 @@ CF: :xaf
 CAF: :xaf
 TD: :xaf
 TCD: :xaf
-CL: :clf
-CHL: :clf
+CL: :clp
+CHL: :clp
 CN: :cny
 CHN: :cny
 CX: :aud
@@ -131,8 +131,8 @@ EC: :usd
 ECU: :usd
 EG: :egp
 EGY: :egp
-SV: :svc
-SLV: :svc
+SV: :usd
+SLV: :usd
 GQ: :xaf
 GNQ: :xaf
 ER: :ern
@@ -431,8 +431,8 @@ SZ: :szl
 SWZ: :szl
 SE: :sek
 SWE: :sek
-CH: :che
-CHE: :che
+CH: :chf
+CHE: :chf
 SY: :syp
 SYR: :syp
 TW: :twd
@@ -473,8 +473,8 @@ GB: :gbp
 GBR: :gbp
 US: :usd
 USA: :usd
-UY: :uyi
-URY: :uyi
+UY: :uyu
+URY: :uyu
 UZ: :uzs
 UZB: :uzs
 VU: :vuv
