@@ -1,9 +1,7 @@
+= MAINTENANCE DISCONTINUED - LOOKING FOR A NEW MAINTAINER
+*This project has not seen any major updates since a year, and maintenance will not be continued. If you would like to take on maintenance of this gem, please tweet @beatrichartz*
+
 = exchange {<img src="https://secure.travis-ci.org/beatrichartz/exchange.png?branch=master" />}[http://travis-ci.org/beatrichartz/exchange] {<img src="https://gemnasium.com/beatrichartz/exchange.png" alt="Dependency Status" />}[https://gemnasium.com/beatrichartz/exchange] {<img src="https://codeclimate.com/github/beatrichartz/exchange.png" />}[https://codeclimate.com/github/beatrichartz/exchange] {<img src="https://d2weczhvl823v0.cloudfront.net/beatrichartz/exchange/trend.png"/>}[https://bitdeli.com/free]
-
-= DISCONTINUED - LOOKING FOR A NEW MAINTAINER
-**This project has not seen any major updates since a year, and maintenance will not be continued. If you would like to take on maintenance of this gem, please tweet @beatrichartz**
-
-
 
 The Exchange Gem gives you easy access to currency functions directly on your Numbers. {It is tested against}[http://travis-ci.org/beatrichartz/exchange]: ruby 2.0, 1.9, ree and rubinius (1.9 and 2.0 mode). Exchange will in future versions take advantage of 2.1 features like refinements, be sure to check this page for updates!
 
