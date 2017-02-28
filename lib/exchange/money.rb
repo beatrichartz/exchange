@@ -84,6 +84,8 @@ module Exchange
     #   Exchange::Money.new(40,:nok).to(:sek, :at => Time.gm(2012,2,2))
     #
     def to other, options={}
+      return 1 if currency == other # don't call API if conversion is not needed
+      
       other = ISO.assert_currency!(other)
 
       if api_supports_currency?(currency) && api_supports_currency?(other)
