@@ -84,7 +84,7 @@ KHR:
   symbol: ៛
 PLN:
   separators:
-    major: ' '
+    major: '.'
     minor: ','
   minor_unit: 2
   currency: Zloty
@@ -390,7 +390,7 @@ PYG:
   symbol: Gs
 LBP:
   separators:
-    major: ' '
+    major: ','
     minor: '.'
   minor_unit: 2
   currency: Lebanese Pound
@@ -601,7 +601,7 @@ HUF:
   symbol: Ft
 LTL:
   separators:
-    major: ' '
+    major: '.'
     minor: ','
   minor_unit: 2
   currency: Lithuanian Litas
@@ -695,7 +695,7 @@ PHP:
   symbol: ₱
 ZAR:
   separators:
-    major: ' '
+    major: ','
     minor: '.'
   minor_unit: 2
   currency: Rand
@@ -725,7 +725,7 @@ TMT:
   symbol: 
 UAH:
   separators:
-    major: ' '
+    major: '.'
     minor: ','
   minor_unit: 2
   currency: Hryvnia
@@ -779,7 +779,7 @@ MKD:
   symbol: ден
 AUD:
   separators:
-    major: ' '
+    major: ','
     minor: '.'
   minor_unit: 2
   currency: Australian Dollar
